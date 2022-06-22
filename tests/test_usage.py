@@ -2,7 +2,6 @@ import os
 import importlib
 import pytest
 
-
 def create_usage_test(dash_duo, filename, dir_name='usage'):
     app = importlib.import_module(filename).app
 
@@ -26,12 +25,11 @@ def create_usage_test(dash_duo, filename, dir_name='usage'):
         filename + '.png'
     ))
 
-
 @pytest.mark.parametrize('name', [
     'usage-advanced', 'demos.usage-animated-bfs',
     'demos.usage-breadthfirst-layout', 'demos.usage-compound-nodes', 'usage-events',
     'usage-elements', 'demos.usage-pie-style', 'usage', 'usage-stylesheet',
     'demos.usage-initialisation', 'demos.usage-linkout-example', 'demos.usage-image-export',
-    'demos.usage-responsive-graph'])
+    'demos.usage-responsive-graph', 'demos.usage-ctxmenu'])
 def test_cyug001_usage(name, dash_duo):
     create_usage_test(dash_duo, name)
