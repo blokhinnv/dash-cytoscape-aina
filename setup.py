@@ -23,6 +23,7 @@ setup(
     url='https://dash.plotly.com/cytoscape',
     install_requires=[
         'dash',
+        'dash-bootstrap-components',
     ],
     classifiers=[
         'Environment :: Web Environment',
