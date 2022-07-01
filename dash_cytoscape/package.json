@@ -38,6 +38,7 @@
         "cytoscape-klay": "^3.1.2",
         "cytoscape-spread": "^3.0.0",
         "cytoscape-svg": "0.2.0",
+        "cytoscape": "^3.2.19",
         "lodash": "^4.17.11",
         "ramda": "^0.25.0",
         "react": "^16.14.0",
