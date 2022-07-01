@@ -29,6 +29,7 @@
     "author-email": "cytoscape@plotly.com",
     "license": "MIT",
     "dependencies": {
+        "cytoscape": "^3.21.2",
         "cytoscape-cola": "^2.3.0",
         "cytoscape-context-menus": "^4.1.0",
         "cytoscape-cose-bilkent": "^4.0.0",
@@ -38,7 +39,6 @@
         "cytoscape-klay": "^3.1.2",
         "cytoscape-spread": "^3.0.0",
         "cytoscape-svg": "0.2.0",
-        "cytoscape": "^3.2.19",
         "lodash": "^4.17.11",
         "ramda": "^0.25.0",
         "react": "^16.14.0",
