@@ -794,6 +794,40 @@
         "required": false,
         "description": "The list of data dictionaries of all selected edges (e.g. using\nShift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only."
       },
+      "grabNodeData": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "node": {
+              "name": "object",
+              "required": false
+            },
+            "oldCoords": {
+              "name": "object",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "grab - \u0442\u043e\u043b\u044c\u043a\u043e \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438, drag - \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438 \u0438 \u043f\u0435\u0440\u0435\u0442\u0430\u0441\u043a\u0438\u0432\u0430\u0435\u043c"
+      },
+      "dragNodeData": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "node": {
+              "name": "object",
+              "required": false
+            },
+            "newCoords": {
+              "name": "object",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
       "generateImage": {
         "type": {
           "name": "shape",
@@ -880,6 +914,90 @@
           "value": "false",
           "computed": false
         }
+      },
+      "contextmenu": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "exact",
+            "value": {
+              "id": {
+                "name": "string",
+                "description": "ID associated with option.",
+                "required": false
+              },
+              "selector": {
+                "name": "string",
+                "description": "Determines which Cytoscape elements the option is attached to. Takes in a Cytoscape selector\n(see Cytoscape documentation for more information). Examples of valid selectors include node,\nedge, and core.",
+                "required": false
+              },
+              "content": {
+                "name": "string",
+                "description": "Label assigned to option.",
+                "required": false
+              },
+              "tooltipText": {
+                "name": "string",
+                "description": "Hover tooltip text assigned to option.",
+                "required": false
+              },
+              "disabled": {
+                "name": "bool",
+                "description": "Toggles option disabled (greyed out).",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "Displays a context menu on right click. Requires extra layouts loaded.\nAccepts a list of dictionaries, each of which describes a context\nmenu option. Options are rendered in the order presented."
+      },
+      "contextmenuData": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "id": {
+              "name": "string",
+              "description": "ID associated with option selected.",
+              "required": false
+            },
+            "position": {
+              "name": "exact",
+              "value": {
+                "x": {
+                  "name": "number",
+                  "required": false
+                },
+                "y": {
+                  "name": "number",
+                  "required": false
+                }
+              },
+              "description": "Position associated with option selected.",
+              "required": false
+            },
+            "timestamp": {
+              "name": "number",
+              "description": "Time the option was selected.",
+              "required": false
+            },
+            "target": {
+              "name": "object",
+              "description": "Dictionary containing information about the selected item. Information provided varies depending\non the type of the selected item (node, edge, core, etc.).",
+              "required": false
+            },
+            "coordinates": {
+              "name": "arrayOf",
+              "value": {
+                "name": "number"
+              },
+              "description": "Array containing latitude and longitude where context menu was opened if leaflet is enabled.",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "Dictionary returned when a context menu option is selected. Read-only."
       }
     }
   }

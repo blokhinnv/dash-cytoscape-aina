@@ -12,11 +12,12 @@ A Component Library for Dash aimed at facilitating network visualization in Pyth
 \usage{
 cytoCytoscape(id=NULL, autoRefreshLayout=NULL, autolock=NULL,
 autoungrabify=NULL, autounselectify=NULL,
-boxSelectionEnabled=NULL, className=NULL, elements=NULL,
-generateImage=NULL, imageData=NULL, layout=NULL,
-maxZoom=NULL, minZoom=NULL, mouseoverEdgeData=NULL,
-mouseoverNodeData=NULL, pan=NULL, panningEnabled=NULL,
-responsive=NULL, selectedEdgeData=NULL,
+boxSelectionEnabled=NULL, className=NULL, contextmenu=NULL,
+contextmenuData=NULL, dragNodeData=NULL, elements=NULL,
+generateImage=NULL, grabNodeData=NULL, imageData=NULL,
+layout=NULL, maxZoom=NULL, minZoom=NULL,
+mouseoverEdgeData=NULL, mouseoverNodeData=NULL, pan=NULL,
+panningEnabled=NULL, responsive=NULL, selectedEdgeData=NULL,
 selectedNodeData=NULL, style=NULL, stylesheet=NULL,
 tapEdge=NULL, tapEdgeData=NULL, tapNode=NULL,
 tapNodeData=NULL, userPanningEnabled=NULL,
@@ -42,6 +43,35 @@ to select) is enabled. If enabled, the user must taphold to pan the graph.}
 
 \item{className}{Character. Sets the class name of the element (the value of an element's html
 class attribute).}
+
+\item{contextmenu}{List of lists containing elements 'id', 'selector', 'content', 'tooltiptext', 'disabled'.
+those elements have the following types:
+  - id (character; optional): id associated with option.
+  - selector (character; optional): determines which cytoscape elements the option is attached to. takes in a cytoscape selector
+(see cytoscape documentation for more information). examples of valid selectors include node,
+edge, and core.
+  - content (character; optional): label assigned to option.
+  - tooltiptext (character; optional): hover tooltip text assigned to option.
+  - disabled (logical; optional): toggles option disabled (greyed out).s. Displays a context menu on right click. Requires extra layouts loaded.
+Accepts a list of dictionaries, each of which describes a context
+menu option. Options are rendered in the order presented.}
+
+\item{contextmenuData}{Lists containing elements 'id', 'position', 'timestamp', 'target', 'coordinates'.
+those elements have the following types:
+  - id (character; optional): id associated with option selected.
+  - position (optional): position associated with option selected.. position has the following type: lists containing elements 'x', 'y'.
+those elements have the following types:
+  - x (numeric; optional)
+  - y (numeric; optional)
+  - timestamp (numeric; optional): time the option was selected.
+  - target (named list; optional): dictionary containing information about the selected item. information provided varies depending
+on the type of the selected item (node, edge, core, etc.).
+  - coordinates (list of numerics; optional): array containing latitude and longitude where context menu was opened if leaflet is enabled.. Dictionary returned when a context menu option is selected. Read-only.}
+
+\item{dragNodeData}{Lists containing elements 'node', 'newcoords'.
+those elements have the following types:
+  - node (named list; optional)
+  - newcoords (named list; optional). }
 
 \item{elements}{List of lists containing elements 'group', 'data', 'position', 'selected', 'selectable', 'locked', 'grabbable', 'classes'.
 those elements have the following types:
@@ -90,6 +120,11 @@ a callback after it has been rendered.
 If the app does not need the image data server side and/or it will only be used to download
 the image, it may be prudent to invoke `'download'` for `action` instead of
 `'store'` to improve performance by preventing transfer of data to the server.}
+
+\item{grabNodeData}{Lists containing elements 'node', 'oldcoords'.
+those elements have the following types:
+  - node (named list; optional)
+  - oldcoords (named list; optional). grab - только схватили, drag - схватили и перетаскиваем}
 
 \item{imageData}{Character. String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.}

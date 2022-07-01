@@ -22,6 +22,4 @@ CytoscapeJS.use(spread);
 CytoscapeJS.use(svg);
 CytoscapeJS.use(contextMenus);
 
-export {
-    Cytoscape
-};
+export {Cytoscape};

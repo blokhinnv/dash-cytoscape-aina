@@ -40,6 +40,7 @@
     "dot-location": ["off"],
     "dot-notation": ["error"],
     "eqeqeq": ["error"],
+    "no-eq-null": ["error"],
     "guard-for-in": ["off"],
     "import/named": ["off"],
     "import/no-duplicates": ["error"],
@@ -47,13 +48,15 @@
     "new-cap": ["error"],
     "no-alert": [1],
     "no-caller": ["error"],
-    "no-case-declarations": ["error"],
+    "no-mixed-spaces-and-tabs": ["error"],
+    "no-trailing-spaces": ["error"],
+    "space-infix-ops": ["error"],
+    // "object-curly-spacing":["error", "always"], // TODO: turn on after disabling conflicting rule
     "no-console": ["off"],
     "no-div-regex": ["error"],
     "no-dupe-keys": ["error"],
     "no-else-return": ["error"],
     "no-empty-pattern": ["error"],
-    "no-eq-null": ["error"],
     "no-eval": ["error"],
     "no-extend-native": ["error"],
     "no-extra-bind": ["error"],
@@ -82,7 +85,7 @@
     "no-sequences": ["error"],
     "no-shadow": ["off"],
     "no-throw-literal": ["error"],
-    "no-undefined": ["error"],
+    "no-undefined": 0,
     "no-unused-expressions": ["error"],
     "no-use-before-define": ["error", "nofunc"],
     "no-useless-call": ["error"],
@@ -104,7 +107,7 @@
     "yoda": ["error"],
     "spaced-comment": ["error", "always", {
       "block": {
-        exceptions: ["*"]
+        "exceptions": ["*"]
       }
     }],
     "no-unused-vars": ["error", {

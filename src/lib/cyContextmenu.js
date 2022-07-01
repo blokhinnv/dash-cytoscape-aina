@@ -31,12 +31,12 @@ export default class cyContextmenu {
         const {setProps, contextmenu} = props;
         this.setProps = setProps;
 
-        if(typeof contextmenu !== 'object' || !this.cy || !this.cy.contextMenus) {
+        if (typeof contextmenu !== 'object' || !this.cy || !this.cy.contextMenus) {
             return;
         }
 
         const contextmenuHashNew = JSON.stringify(contextmenu);
-        if(contextmenuHashNew !== this.contextmenuHash) {
+        if (contextmenuHashNew !== this.contextmenuHash) {
             this.initializeCxtmenu();
             this.populateBilkentCxtmenu(contextmenu);
             this.contextmenuHash = contextmenuHashNew;
@@ -44,7 +44,7 @@ export default class cyContextmenu {
     }
 
     initializeCxtmenu() {
-        if(this.bilkentInstance) {
+        if (this.bilkentInstance) {
             this.bilkentInstance.destroy();
         }
 
@@ -77,12 +77,12 @@ export default class cyContextmenu {
                     target: e.target.json(),
                     coordinates: undefined,
                 };
-                if(leaf) {
+                if (leaf) {
                     const ll = leaf.map.containerPointToLatLng(leaf.L.point([e.position.x, e.position.y]));
                     contextmenuData.coordinates = [ll.lat, ll.lng];
                 }
-                this.setProps({ contextmenuData });
-            }
+                this.setProps({contextmenuData});
+            },
         });
     }
 }
