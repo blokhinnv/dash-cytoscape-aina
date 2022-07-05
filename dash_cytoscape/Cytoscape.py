@@ -38,6 +38,69 @@ Keyword arguments:
     Sets the class name of the element (the value of an element's html
     class attribute).
 
+- contextmenu (list of dicts; optional):
+    Displays a context menu on right click. Requires extra layouts
+    loaded. Accepts a list of dictionaries, each of which describes a
+    context menu option. Options are rendered in the order presented.
+
+    `contextmenu` is a list of dicts with keys:
+
+    - content (string; optional):
+        Label assigned to option.
+
+    - disabled (boolean; optional):
+        Toggles option disabled (greyed out).
+
+    - id (string; optional):
+        ID associated with option.
+
+    - selector (string; optional):
+        Determines which Cytoscape elements the option is attached to.
+        Takes in a Cytoscape selector (see Cytoscape documentation for
+        more information). Examples of valid selectors include node,
+        edge, and core.
+
+    - tooltipText (string; optional):
+        Hover tooltip text assigned to option.
+
+- contextmenuData (dict; optional):
+    Dictionary returned when a context menu option is selected.
+    Read-only.
+
+    `contextmenuData` is a dict with keys:
+
+    - coordinates (list of numbers; optional):
+        Array containing latitude and longitude where context menu was
+        opened if leaflet is enabled.
+
+    - id (string; optional):
+        ID associated with option selected.
+
+    - position (dict; optional):
+        Position associated with option selected.
+
+        `position` is a dict with keys:
+
+        - x (number; optional)
+
+        - y (number; optional)
+
+    - target (dict; optional):
+        Dictionary containing information about the selected item.
+        Information provided varies depending on the type of the
+        selected item (node, edge, core, etc.).
+
+    - timestamp (number; optional):
+        Time the option was selected.
+
+- dragNodeData (dict; optional)
+
+    `dragNodeData` is a dict with keys:
+
+    - newCoords (dict; optional)
+
+    - node (dict; optional)
+
 - elements (list of dicts; optional):
     A list of dictionaries representing the elements of the networks.
     Each dictionary describes an element, and specifies its purpose.
@@ -146,6 +209,15 @@ Keyword arguments:
 
     - type (a value equal to: 'svg', 'png', 'jpg', 'jpeg'; optional):
         File type to output.
+
+- grabNodeData (dict; optional):
+    grab - только схватили, drag - схватили и перетаскиваем.
+
+    `grabNodeData` is a dict with keys:
+
+    - node (dict; optional)
+
+    - oldCoords (dict; optional)
 
 - imageData (string; optional):
     String representation of the image requested with generateImage.
@@ -413,12 +485,6 @@ Keyword arguments:
     The data dictionary of a node returned when you tap or click it.
     Read-only.
 
-- grabNodeData - Когда узел удерживают (схватили).
-    Данные об узле и его координаты на момент захвата - старые координаты, словарь
-
-- dragNodeData - Когда узел перетаскивают
-    Данные об узле и его текущие координаты - новые координаты, словарь
-
 - userPanningEnabled (boolean; default True):
     Whether user events (e.g. dragging the graph background) are
     allowed to pan the graph.
@@ -434,17 +500,19 @@ Keyword arguments:
 - zoomingEnabled (boolean; default True):
     Whether zooming the graph is enabled (i.e., the zoom level of the
     graph is mutable overall)."""
+    _children_props = []
+    _base_nodes = ['children']
+    _namespace = 'dash_cytoscape'
+    _type = 'Cytoscape'
     @_explicitize_args
-    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'elements', 'generateImage', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'dragNodeData', 'grabNodeData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
-        self._type = 'Cytoscape'
-        self._namespace = 'dash_cytoscape'
+    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'elements', 'generateImage', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'dragNodeData', 'grabNodeData' 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()
-        _locals.update(kwargs)  # For wildcard attrs
+        _locals.update(kwargs)  # For wildcard attrs and excess named props
         args = {k: _locals[k] for k in _explicit_args if k != 'children'}
         for k in []:
             if k not in args:

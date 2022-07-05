@@ -64,7 +64,7 @@ default_stylesheet = [
       "selector": "[weight > 50]",
       "style": {
             "mid-target-arrow-color": "red",
-            "mid-target-arrow-shape": f"tee-{1}"
+            "mid-target-arrow-shape": f"tee-{5}"
       }
     },
 {
@@ -139,7 +139,7 @@ app.layout = html.Div([
                 drc.NamedDropdown(
                     name='Засечка',
                     id='dropdown-edge-arrow',
-                    value='tee-1',
+                    value='tee-4',
                     clearable=False,
                     options=drc.DropdownOptionsList(
                         'triangle',
