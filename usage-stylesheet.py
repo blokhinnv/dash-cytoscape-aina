@@ -64,7 +64,7 @@ default_stylesheet = [
       "selector": "[weight > 50]",
       "style": {
             "mid-target-arrow-color": "red",
-            "mid-target-arrow-shape": f"tee-{5}"
+            "mid-target-arrow-shape": f"tee-{1}"
       }
     },
 {
@@ -79,7 +79,7 @@ default_stylesheet = [
 styles = {
     'json-output': {
         'overflow-y': 'scroll',
-        'height': 'calc(50% - 25px)',
+        'height': 'calc(100% - 25px)',
         'border': 'thin lightgrey solid'
     },
     'tab': {
@@ -93,7 +93,7 @@ app.layout = html.Div([
             id='cytoscape',
             elements=cy_edges + cy_nodes,
             style={
-                'height': '95vh',
+            'height': '95vh',
                 'width': '100%'
             },
         )
@@ -139,7 +139,7 @@ app.layout = html.Div([
                 drc.NamedDropdown(
                     name='Засечка',
                     id='dropdown-edge-arrow',
-                    value='tee-4',
+                    value='tee-1',
                     clearable=False,
                     options=drc.DropdownOptionsList(
                         'triangle',
@@ -193,11 +193,13 @@ app.layout = html.Div([
 
 @app.callback(Output('drag-node-json-output', 'children'),
               [Input('cytoscape', 'grabNodeData'),
-               Input('cytoscape', 'dragNodeData')])
-def display_drag_node(dragData, grabData):
-    data = {}
+               Input('cytoscape', 'dragNodeData'),
+               ])
+def display_drag_node(grabData, dragData):
+    data = []
     if grabData and dragData:
-        data = {**grabData, **dragData}
+        # data = {**grabData, **dragData}
+        data = [*grabData, *dragData]
     print(data)
     return json.dumps(data, indent=2)
 
