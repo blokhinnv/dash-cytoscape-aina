@@ -212,8 +212,15 @@ class Cytoscape extends Component {
         cy.on('grab', 'node', event => {
             const nodeObject = this.generateNode(event);
 
-            const grabData = {node: nodeObject.data,
-                              oldCoords: nodeObject.relativePosition}
+            let grabData;
+            if (selectedNodes.length > 0) {
+                grabData = selectedNodes.map(el => {
+                    return {node: el.data(), oldCoords: el.relativePosition()}
+                });
+            } else {
+                grabData = [{node: nodeObject.data,
+                                  oldCoords: nodeObject.relativePosition}]
+            }
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
@@ -222,11 +229,19 @@ class Cytoscape extends Component {
             }
         });
 
-        cy.on('drag', 'node', event => {
+
+        cy.on('dragfree', 'node', (event) => {
             const nodeObject = this.generateNode(event);
 
-            const dragData = {node: nodeObject.data,
-                              newCoords: nodeObject.relativePosition}
+            let dragData;
+            if (selectedNodes.length > 0) {
+                dragData = selectedNodes.map(el => {
+                    return {node: el.data(), newCoords: el.relativePosition()}
+                });
+            } else {
+                dragData = [{node: nodeObject.data,
+                             newCoords: nodeObject.relativePosition}]
+            }
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
@@ -902,15 +917,9 @@ Cytoscape.propTypes = {
     /**
      * grab - только схватили, drag - схватили и перетаскиваем
      */
-     grabNodeData: PropTypes.exact({
-        node: PropTypes.object,
-        oldCoords: PropTypes.object
-    }),
+    grabNodeData: PropTypes.array,
 
-    dragNodeData: PropTypes.exact({
-        node: PropTypes.object,
-        newCoords: PropTypes.object
-    }),
+    dragNodeData: PropTypes.array,
 
     /**
      * Dictionary specifying options to generate an image of the current cytoscape graph.
