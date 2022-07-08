@@ -29,6 +29,7 @@
   "author-email": "cytoscape@plotly.com",
   "license": "MIT",
   "dependencies": {
+    "@rollup/plugin-node-resolve": "^13.3.0",
     "all": "^0.0.0",
     "cytoscape-cola": "^2.3.0",
     "cytoscape-context-menus": "^4.1.0",
@@ -43,9 +44,15 @@
     "ramda": "^0.25.0",
     "react": ">=0.14",
     "react-cytoscapejs": "1.2.1",
-    "react-dom": ">=0.14"
+    "react-dom": ">=0.14",
+    "rollup": "^2.76.0",
+    "rollup-plugin-license": "^2.8.1",
+    "rollup-plugin-size-snapshot": "^0.12.0"
   },
   "devDependencies": {
+    "@rollup/plugin-babel": "^5.3.1",
+    "@rollup/plugin-commonjs": "^22.0.1",
+    "@rollup/plugin-replace": "^4.0.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-loader": "^7.1.4",
@@ -59,6 +66,8 @@
     "eslint-plugin-react": "^7.9.1",
     "npm": "^6.14.4",
     "react-docgen": "^5.3.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
     "style-loader": "^0.21.0",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1",

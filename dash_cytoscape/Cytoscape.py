@@ -93,13 +93,7 @@ Keyword arguments:
     - timestamp (number; optional):
         Time the option was selected.
 
-- dragNodeData (dict; optional)
-
-    `dragNodeData` is a dict with keys:
-
-    - newCoords (dict; optional)
-
-    - node (dict; optional)
+- dragNodeData (list; optional)
 
 - elements (list of dicts; optional):
     A list of dictionaries representing the elements of the networks.
@@ -210,14 +204,8 @@ Keyword arguments:
     - type (a value equal to: 'svg', 'png', 'jpg', 'jpeg'; optional):
         File type to output.
 
-- grabNodeData (dict; optional):
+- grabNodeData (list; optional):
     grab - только схватили, drag - схватили и перетаскиваем.
-
-    `grabNodeData` is a dict with keys:
-
-    - node (dict; optional)
-
-    - oldCoords (dict; optional)
 
 - imageData (string; optional):
     String representation of the image requested with generateImage.
