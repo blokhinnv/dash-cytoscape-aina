@@ -68,10 +68,7 @@ those elements have the following types:
 on the type of the selected item (node, edge, core, etc.).
   - coordinates (list of numerics; optional): array containing latitude and longitude where context menu was opened if leaflet is enabled.. Dictionary returned when a context menu option is selected. Read-only.}
 
-\item{dragNodeData}{Lists containing elements 'node', 'newcoords'.
-those elements have the following types:
-  - node (named list; optional)
-  - newcoords (named list; optional). }
+\item{dragNodeData}{Unnamed list. }
 
 \item{elements}{List of lists containing elements 'group', 'data', 'position', 'selected', 'selectable', 'locked', 'grabbable', 'classes'.
 those elements have the following types:
@@ -121,10 +118,7 @@ If the app does not need the image data server side and/or it will only be used 
 the image, it may be prudent to invoke `'download'` for `action` instead of
 `'store'` to improve performance by preventing transfer of data to the server.}
 
-\item{grabNodeData}{Lists containing elements 'node', 'oldcoords'.
-those elements have the following types:
-  - node (named list; optional)
-  - oldcoords (named list; optional). grab - только схватили, drag - схватили и перетаскиваем}
+\item{grabNodeData}{Unnamed list. grab - только схватили, drag - схватили и перетаскиваем}
 
 \item{imageData}{Character. String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.}

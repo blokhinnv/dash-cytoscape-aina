@@ -796,34 +796,14 @@
       },
       "grabNodeData": {
         "type": {
-          "name": "exact",
-          "value": {
-            "node": {
-              "name": "object",
-              "required": false
-            },
-            "oldCoords": {
-              "name": "object",
-              "required": false
-            }
-          }
+          "name": "array"
         },
         "required": false,
         "description": "grab - \u0442\u043e\u043b\u044c\u043a\u043e \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438, drag - \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438 \u0438 \u043f\u0435\u0440\u0435\u0442\u0430\u0441\u043a\u0438\u0432\u0430\u0435\u043c"
       },
       "dragNodeData": {
         "type": {
-          "name": "exact",
-          "value": {
-            "node": {
-              "name": "object",
-              "required": false
-            },
-            "newCoords": {
-              "name": "object",
-              "required": false
-            }
-          }
+          "name": "array"
         },
         "required": false,
         "description": ""

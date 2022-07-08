@@ -43,10 +43,7 @@ Those elements have the following types:
   - `target` (Dict; optional): Dictionary containing information about the selected item. Information provided varies depending
 on the type of the selected item (node, edge, core, etc.).
   - `coordinates` (Array of Reals; optional): Array containing latitude and longitude where context menu was opened if leaflet is enabled.
-- `dragNodeData` (optional): . dragNodeData has the following type: lists containing elements 'node', 'newCoords'.
-Those elements have the following types:
-  - `node` (Dict; optional)
-  - `newCoords` (Dict; optional)
+- `dragNodeData` (Array; optional)
 - `elements` (optional): A list of dictionaries representing the elements of the networks. Each dictionary describes an element, and
 specifies its purpose. The [official Cytoscape.js documentation](https://js.cytoscape.org/#notation/elements-json)
 offers an extensive overview and examples of element declaration.
@@ -93,10 +90,7 @@ in `imageData` and invokes server-side Dash callbacks. `'download'`: Downloads t
 as a file with all data handling done client-side. No `imageData` callbacks are fired.
 `'both'`: Stores image data and downloads image as file. The default is `'store'`
   - `filename` (String; optional): Name for the file to be downloaded. Default: 'cyto'.
-- `grabNodeData` (optional): grab - только схватили, drag - схватили и перетаскиваем. grabNodeData has the following type: lists containing elements 'node', 'oldCoords'.
-Those elements have the following types:
-  - `node` (Dict; optional)
-  - `oldCoords` (Dict; optional)
+- `grabNodeData` (Array; optional): grab - только схватили, drag - схватили и перетаскиваем
 - `imageData` (String; optional): String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.
 - `layout` (optional): A dictionary specifying how to set the position of the elements in your
