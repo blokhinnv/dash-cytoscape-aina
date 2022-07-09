@@ -43,7 +43,7 @@ Those elements have the following types:
   - `target` (Dict; optional): Dictionary containing information about the selected item. Information provided varies depending
 on the type of the selected item (node, edge, core, etc.).
   - `coordinates` (Array of Reals; optional): Array containing latitude and longitude where context menu was opened if leaflet is enabled.
-- `dragNodeData` (Array; optional)
+- `dragNodeData` (Array; optional): drag - схватили и перетаскиваем
 - `elements` (optional): A list of dictionaries representing the elements of the networks. Each dictionary describes an element, and
 specifies its purpose. The [official Cytoscape.js documentation](https://js.cytoscape.org/#notation/elements-json)
 offers an extensive overview and examples of element declaration.
@@ -90,7 +90,7 @@ in `imageData` and invokes server-side Dash callbacks. `'download'`: Downloads t
 as a file with all data handling done client-side. No `imageData` callbacks are fired.
 `'both'`: Stores image data and downloads image as file. The default is `'store'`
   - `filename` (String; optional): Name for the file to be downloaded. Default: 'cyto'.
-- `grabNodeData` (Array; optional): grab - только схватили, drag - схватили и перетаскиваем
+- `grabNodeData` (Array; optional): grab - только схватили
 - `imageData` (String; optional): String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.
 - `layout` (optional): A dictionary specifying how to set the position of the elements in your
@@ -147,6 +147,7 @@ Those elements have the following types:
 - `panningEnabled` (Bool; optional): Whether panning the graph is enabled (i.e., the position of the graph is
 mutable overall).
 - `responsive` (Bool; optional): Toggles intelligent responsive resize of Cytoscape graph with viewport size change
+- `scrollZoom` (Real; optional): значение зума при зумировании колесиком мыши
 - `selectedEdgeData` (Array; optional): The list of data dictionaries of all selected edges (e.g. using
 Shift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only.
 - `selectedNodeData` (Array; optional): The list of data dictionaries of all selected nodes (e.g. using
@@ -219,7 +220,7 @@ to pan the graph.
 is mutable overall).
 """
 function cyto_cytoscape(; kwargs...)
-        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
+        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
         wild_props = Symbol[]
         return Component("cyto_cytoscape", "Cytoscape", "dash_cytoscape", available_props, wild_props; kwargs...)
 end

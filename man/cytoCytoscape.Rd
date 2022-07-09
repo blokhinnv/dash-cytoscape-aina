@@ -17,10 +17,10 @@ contextmenuData=NULL, dragNodeData=NULL, elements=NULL,
 generateImage=NULL, grabNodeData=NULL, imageData=NULL,
 layout=NULL, maxZoom=NULL, minZoom=NULL,
 mouseoverEdgeData=NULL, mouseoverNodeData=NULL, pan=NULL,
-panningEnabled=NULL, responsive=NULL, selectedEdgeData=NULL,
-selectedNodeData=NULL, style=NULL, stylesheet=NULL,
-tapEdge=NULL, tapEdgeData=NULL, tapNode=NULL,
-tapNodeData=NULL, userPanningEnabled=NULL,
+panningEnabled=NULL, responsive=NULL, scrollZoom=NULL,
+selectedEdgeData=NULL, selectedNodeData=NULL, style=NULL,
+stylesheet=NULL, tapEdge=NULL, tapEdgeData=NULL,
+tapNode=NULL, tapNodeData=NULL, userPanningEnabled=NULL,
 userZoomingEnabled=NULL, zoom=NULL, zoomingEnabled=NULL)
 }
 
@@ -68,7 +68,7 @@ those elements have the following types:
 on the type of the selected item (node, edge, core, etc.).
   - coordinates (list of numerics; optional): array containing latitude and longitude where context menu was opened if leaflet is enabled.. Dictionary returned when a context menu option is selected. Read-only.}
 
-\item{dragNodeData}{Unnamed list. }
+\item{dragNodeData}{Unnamed list. drag - схватили и перетаскиваем}
 
 \item{elements}{List of lists containing elements 'group', 'data', 'position', 'selected', 'selectable', 'locked', 'grabbable', 'classes'.
 those elements have the following types:
@@ -118,7 +118,7 @@ If the app does not need the image data server side and/or it will only be used 
 the image, it may be prudent to invoke `'download'` for `action` instead of
 `'store'` to improve performance by preventing transfer of data to the server.}
 
-\item{grabNodeData}{Unnamed list. grab - только схватили, drag - схватили и перетаскиваем}
+\item{grabNodeData}{Unnamed list. grab - только схватили}
 
 \item{imageData}{Character. String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.}
@@ -184,6 +184,8 @@ following keys are accepted:}
 mutable overall).}
 
 \item{responsive}{Logical. Toggles intelligent responsive resize of Cytoscape graph with viewport size change}
+
+\item{scrollZoom}{Numeric. значение зума при зумировании колесиком мыши}
 
 \item{selectedEdgeData}{Unnamed list. The list of data dictionaries of all selected edges (e.g. using
 Shift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only.}

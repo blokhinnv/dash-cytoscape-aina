@@ -799,14 +799,21 @@
           "name": "array"
         },
         "required": false,
-        "description": "grab - \u0442\u043e\u043b\u044c\u043a\u043e \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438, drag - \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438 \u0438 \u043f\u0435\u0440\u0435\u0442\u0430\u0441\u043a\u0438\u0432\u0430\u0435\u043c"
+        "description": "grab - \u0442\u043e\u043b\u044c\u043a\u043e \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438"
       },
       "dragNodeData": {
         "type": {
           "name": "array"
         },
         "required": false,
-        "description": ""
+        "description": "drag - \u0441\u0445\u0432\u0430\u0442\u0438\u043b\u0438 \u0438 \u043f\u0435\u0440\u0435\u0442\u0430\u0441\u043a\u0438\u0432\u0430\u0435\u043c"
+      },
+      "scrollZoom": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "\u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 \u0437\u0443\u043c\u0430 \u043f\u0440\u0438 \u0437\u0443\u043c\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u0438 \u043a\u043e\u043b\u0435\u0441\u0438\u043a\u043e\u043c \u043c\u044b\u0448\u0438"
       },
       "generateImage": {
         "type": {
