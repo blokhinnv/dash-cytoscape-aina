@@ -320,6 +320,14 @@ class Cytoscape extends Component {
             refreshLayout();
         });
 
+        cy.on('zoom', event => {
+            if (typeof this.props.setProps === 'function') {
+                this.props.setProps({
+                    scrollZoom: Math.floor(event.target.zoom() * 100) / 100,
+                });
+            }
+        });
+
         this.cyResponsiveClass = new CyResponsive(cy);
         this.cyResponsiveClass.toggle(this.props.responsive);
 
@@ -915,11 +923,19 @@ Cytoscape.propTypes = {
     selectedEdgeData: PropTypes.array,
 
     /**
-     * grab - только схватили, drag - схватили и перетаскиваем
+     * grab - только схватили
      */
     grabNodeData: PropTypes.array,
 
+    /**
+     * drag - схватили и перетаскиваем
+     */
     dragNodeData: PropTypes.array,
+
+    /**
+     * значение зума при зумировании колесиком мыши
+     */
+    scrollZoom: PropTypes.number,
 
     /**
      * Dictionary specifying options to generate an image of the current cytoscape graph.

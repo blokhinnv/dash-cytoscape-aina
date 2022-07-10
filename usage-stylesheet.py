@@ -98,7 +98,7 @@ app.layout = html.Div([
             },
         )
     ]),
-
+    html.Div(id="some_output"),
     html.Div(className='four columns', children=[
         dcc.Tabs(id='tabs', children=[
             dcc.Tab(label='Control Panel', children=[
@@ -276,6 +276,15 @@ def generate_stylesheet(node, follower_color, following_color, edge_arrow, node_
             })
 
     return stylesheet
+
+
+@app.callback(
+    Output('some_output', 'children'),
+    Input('cytoscape', 'scrollZoom')
+)
+def display_scroll_zoom(scrollzoom):
+    print(scrollzoom)
+    return ""
 
 
 if __name__ == '__main__':
