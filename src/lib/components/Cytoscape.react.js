@@ -9,6 +9,7 @@ import _ from 'lodash';
 
 import CyResponsive from '../cyResponsive.js';
 import CyCxtMenu from '../cyContextmenu.js';
+import CyPopper from '../cyPopper.js';
 
 /**
 A Component Library for Dash aimed at facilitating network visualization in
@@ -23,6 +24,7 @@ class Cytoscape extends Component {
         this.handleImageGeneration = this.handleImageGeneration.bind(this);
         this.cyResponsiveClass = false;
         this.cyCxtMenuClass = false;
+        this.cyPopperClass = false;
     }
 
     generateNode(event) {
@@ -333,6 +335,8 @@ class Cytoscape extends Component {
 
         this.cyCxtMenuClass = new CyCxtMenu(cy);
         this.cyCxtMenuClass.update(this.props);
+
+        this.cyPopperClass = new CyPopper(cy);
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
