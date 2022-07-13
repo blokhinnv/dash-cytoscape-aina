@@ -11,6 +11,8 @@ import spread from 'cytoscape-spread';
 import svg from 'cytoscape-svg';
 import contextMenus from 'cytoscape-context-menus';
 import 'cytoscape-context-menus/cytoscape-context-menus.css';
+import popper from 'cytoscape-popper';
+import './popper.css';
 
 CytoscapeJS.use(coseBilkent);
 CytoscapeJS.use(fcose);
@@ -21,6 +23,7 @@ CytoscapeJS.use(klay);
 CytoscapeJS.use(spread);
 CytoscapeJS.use(svg);
 CytoscapeJS.use(contextMenus);
+CytoscapeJS.use(popper);
 
 export {
     Cytoscape
