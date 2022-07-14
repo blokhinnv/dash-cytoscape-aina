@@ -17,9 +17,9 @@ elements = [
             "tooltip": "<table><thead><tr><th>Заголовок 1</th><th>Заголовок 2</th></tr></thead><tbody><tr><td>Строка 1. Ячейка 1.</td><td>Строка 1. Ячейка 2.</td></tr><tr><td>Строка 2. Ячейка 1.</td><td>Строка 2. Ячейка 2.</td></tr></tbody></table>",
         }
     },
-    {"data": {"id": "k", "name": "Node3"}},
-    {"data": {"id": "g", "name": "Node4", "tooltip": "Node 4"}},
-    {"data": {"source": "j", "target": "e", "tooltip": "Edge 1"}},
+    {"data": {"id": "k", "name": "Node3", "tooltip_fixed": "Node 3 (fixed)"}},
+    {"data": {"id": "g", "name": "Node4", "tooltip": "Node 4", "tooltip_fixed": "Node 4 (fixed)"}},
+    {"data": {"source": "j", "target": "e", "tooltip": "Edge 1", "tooltip_fixed":"Fixed tooltip for edge 1"}},
     {"data": {"source": "j", "target": "k", "tooltip": "Edge 2"}},
     {"data": {"source": "j", "target": "g", "tooltip": "Edge 3"}},
     {"data": {"source": "e", "target": "j", "tooltip": "Edge 4"}},
@@ -116,10 +116,10 @@ def update_elements(n_clicks):
                     "tooltip": "<table><thead><tr><th>Заголовок 1</th><th>Заголовок 2</th></tr></thead><tbody><tr><td>Строка 1. Ячейка 1.</td><td>Строка 1. Ячейка 2.</td></tr><tr><td>Строка 2. Ячейка 1.</td><td>Строка 2. Ячейка 2.</td></tr></tbody></table>",
                 }
             },
-            {"data": {"id": "k", "name": "Node3", "tooltip": "Node 3 (new tooltip)"}},
-            {"data": {"id": "g", "name": "Node4", "tooltip": "Node 4"}},
-            {"data": {"id": "m", "name": "Node4", "tooltip": "Node 4 (new element)"}},
-            {"data": {"source": "j", "target": "e", "tooltip": "Edge 1"}},
+            {"data": {"id": "k", "name": "Node3", "tooltip": "Node 3 (new tooltip)", "tooltip_fixed": ""}},
+            {"data": {"id": "g", "name": "Node4", "tooltip": "Node 4", "tooltip_fixed": "Node 4 (fixed) (new)"}},
+            {"data": {"id": "m", "name": "Node5", "tooltip": "Node 5 (new element)", "tooltip_fixed":"Fixed tooltip for node 5"}},
+            {"data": {"source": "j", "target": "e", "tooltip": "Edge 1", "tooltip_fixed":"Updated fixed tooltip for edge 1"}},
             {"data": {"source": "j", "target": "k", "tooltip": "Edge 2"}},
             {"data": {"source": "j", "target": "g", "tooltip": "Edge 3"}},
             {"data": {"source": "e", "target": "j", "tooltip": "Edge 4"}},
@@ -127,7 +127,7 @@ def update_elements(n_clicks):
             {"data": {"source": "k", "target": "j", "tooltip": "Edge 6"}},
             {"data": {"source": "k", "target": "e", "tooltip": "Edge 7"}},
             {"data": {"source": "k", "target": "g", "tooltip": "Edge 8"}},
-            {"data": {"source": "g", "target": "j", "tooltip": "Edge 9"}},
+            {"data": {"source": "g", "target": "j", "tooltip": "Edge 9", "tooltip_fixed": "Edge 9 (fixed)"}},
             {"data": {"source": "k", "target": "m", "tooltip": "Edge 10 (new element)"}},
         ]
     return []
