@@ -1,10 +1,21 @@
+function updateConnectedEdges(node) {
+    node.connectedEdges().forEach(edge => {
+        // timeout to wait until the new position of the edge has been correctly calculated
+        setTimeout(() => {
+            if (edge.popper && edge.popperRefObj) {
+                edge.popperRefObj.update();
+            }
+        }, 10);
+    });
+}
+
 export default class cyPopper {
     constructor(cy) {
         this.cy = cy;
-        let self = this;
+        const self = this;
 
         // навешиваем фиксированный tooltip при инициализации графа
-        cy.one('render', function(event) {
+        cy.one('render', function() {
             for (const element of cy.elements('*[tooltip_fixed]')) {
                 self.destroyPopper(element);
                 self.createPopper(element, 'tooltip_fixed');
@@ -47,7 +58,7 @@ export default class cyPopper {
     }
 
     createPopper(element, attr) {
-        if (element.data()[attr] != "") {
+        if (element.data()[attr] !== "") {
             element.popperRefObj = element.popper({
                 content: () => {
                     const content = document.createElement("div");
@@ -63,21 +74,19 @@ export default class cyPopper {
         }
 
         const update = () => {
-            if (element.data()[attr] != "")
+            if (element.data()[attr] !== "") {
                 element.popperRefObj.update();
-            if (element.isNode()) {
-                element.connectedEdges().forEach(edge => {
-                    // timeout to wait until the new position of the edge has been correctly calculated
-                    setTimeout(() => {
-                        if (edge.popper && edge.popperRefObj) {
-                            edge.popperRefObj.update();
-                        }
-                    }, 10);
-                });
             }
+            updateConnectedEdges(element);
         };
 
-        element.on('position', update);
+        if (element.isNode()) {
+            element.on('position', update);
+        } else if (element.isEdge()) {
+            element.connectedNodes().forEach(node => {
+                node.on('position', update);
+            });
+        }
 
         this.cy.on('pan zoom resize', update);
     }
