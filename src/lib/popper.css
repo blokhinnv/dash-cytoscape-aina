@@ -1,12 +1,54 @@
 .popper-div {
   position: relative;
-  background-color: #333;
-  color: #fff;
-  border-radius: 4px;
+  background-color: rgb(254,255,156);
+  border-radius: 15px;
   font-size: 14px;
   line-height: 1.4;
   outline: 0;
   padding: 5px 9px;
+  text-align: center;
+}
+
+textarea {
+    background-color: rgb(254,255,156);
+    padding-top: 10px;
+    outline: none;
+    border: none;
+    border-radius: 15px;
+    text-align: center;
+    vertical-align: center;
+}
+
+.remove_popper_core {
+  font-size: 12px;
+  letter-spacing: 1px;
+  outline: 0;
+  border: 1px solid black;
+  border-radius: 15px;
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+.remove_popper_core:after {
+  content: "";
+  background-color: #ffe54c;
+  border-radius: 15px;
+  width: 100%;
+  z-index: -1;
+  position: absolute;
+  height: 100%;
+  top: 7px;
+  left: 7px;
+  transition: 0.2s;
+}
+
+.remove_popper_core:hover:after {
+  top: 0px;
+  left: 0px;
 }
 
 .popper-div[data-popper-placement^='top'] {
@@ -44,6 +86,7 @@
 .popper-div > div[data-popper-arrow],
 .popper-div > div[data-popper-arrow]::before {
   position: absolute;
+  padding-right: 8px;
   width: 8px;
   height: 8px;
   z-index: -1;
