@@ -215,13 +215,13 @@ class Cytoscape extends Component {
             const nodeObject = this.generateNode(event);
 
             let grabData;
-            if (selectedNodes.length > 0) {
+            if (nodeObject.selected && selectedNodes.length) {
                 grabData = selectedNodes.map(el => {
                     return {node: el.data(), oldCoords: el.relativePosition()}
                 });
             } else {
                 grabData = [{node: nodeObject.data,
-                                  oldCoords: nodeObject.relativePosition}]
+                             oldCoords: nodeObject.relativePosition}]
             }
 
             if (typeof this.props.setProps === 'function') {
@@ -236,7 +236,7 @@ class Cytoscape extends Component {
             const nodeObject = this.generateNode(event);
 
             let dragData;
-            if (selectedNodes.length > 0) {
+            if (nodeObject.selected && selectedNodes.length) {
                 dragData = selectedNodes.map(el => {
                     return {node: el.data(), newCoords: el.relativePosition()}
                 });
