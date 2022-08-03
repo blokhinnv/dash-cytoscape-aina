@@ -10,6 +10,7 @@ import _ from 'lodash';
 import CyResponsive from '../cyResponsive.js';
 import CyCxtMenu from '../cyContextmenu.js';
 import CyPopper from '../cyPopper.js';
+import CyTooltips from '../cyTooltips.js';
 
 /**
 A Component Library for Dash aimed at facilitating network visualization in
@@ -25,6 +26,7 @@ class Cytoscape extends Component {
         this.cyResponsiveClass = false;
         this.cyCxtMenuClass = false;
         this.cyPopperClass = false;
+        this.cyTooltipsClass = false;
     }
 
     generateNode(event) {
@@ -337,6 +339,9 @@ class Cytoscape extends Component {
         this.cyCxtMenuClass.update(this.props);
 
         this.cyPopperClass = new CyPopper(cy);
+
+        this.cyTooltipsClass = new CyTooltips(cy);
+        this.cyTooltipsClass.update(this.props);
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
@@ -511,6 +516,10 @@ class Cytoscape extends Component {
 
         if (this.cyCxtMenuClass) {
             this.cyCxtMenuClass.update(this.props);
+        }
+
+        if (this.cyTooltipsClass) {
+            this.cyTooltipsClass.update(this.props);
         }
 
         return (
@@ -1024,7 +1033,51 @@ Cytoscape.propTypes = {
         target: PropTypes.object,
         /** Array containing latitude and longitude where context menu was opened if leaflet is enabled. */
         coordinates: PropTypes.arrayOf(PropTypes.number),
-    })
+    }),
+
+    /**
+     * Содержит полную информацию о всех тултипах; список словарей.
+     */
+    tooltips: PropTypes.arrayOf(
+        PropTypes.exact({
+            /** Необязательный. Идентификатор тултипа; при передаче пустого значения генерируется автоматически. */
+            id: PropTypes.string,
+            /** Необязательный. Идентификатор элемента графа, обязательно для создания привязанного тултипа. */
+            cy_el_id: PropTypes.string,
+            /**
+             * Обязательный. Содержимое тултипа. Может содержать любой html. В случае передаче тега textarea,
+             * при изменении текста в textarea или изменении размеров (ширины и высоты) textarea
+             * будут изменяться и tooltip, и tooltipsData.
+             */
+            content: PropTypes.string,
+            /**
+             * Необязательный. Позиция свободного тултипа в координатах cytoscape.
+             * У привязанного тултипа такого поля нет.
+             */
+            position: PropTypes.exact({
+                x: PropTypes.number,
+                y: PropTypes.number,
+            }),
+            /**
+             * Время последнего обновления в unix формате.
+             * Игнорируется при попытки обновления этого свойства с бекенда.
+             * */
+            last_update_time: PropTypes.number,
+        })
+    ),
+
+    /**
+     * Перечень тултипов, данные которых изменились последний раз.
+     * Можно использовать для обновления конкретных тултипов, а не передавать весь список, как в случае с tooltips.
+     */
+    tooltipsData: PropTypes.arrayOf(
+        PropTypes.exact({
+            /** Информация о типе совершенного изменения. Возможные значения: add, update, delete. */
+            event: PropTypes.string,
+            /** Cодержит данные, описывающие тултип, имеет тот же формат, что и элемент списка tooltips. */
+            data: PropTypes.object,
+        }),
+    ),
 };
 
 Cytoscape.defaultProps = {
@@ -1046,7 +1099,9 @@ Cytoscape.defaultProps = {
     generateImage: {},
     imageData: null,
     responsive: false,
-    elements: []
+    elements: [],
+    tooltips: [],
+    tooltipsData: []
 };
 
 export default Cytoscape;
