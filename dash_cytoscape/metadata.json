@@ -1064,5 +1064,51 @@
         }
       }
     }
+  },
+  "src/lib/components/UndoRedoList.react.js": {
+    "description": "The component is showing list of items. \nElements above hover are highlighted too.\nExpected usage is for undo/redo list demonstration.",
+    "displayName": "UndoRedoList",
+    "methods": [],
+    "props": {
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The ID used to identify this component in Dash callbacks."
+      },
+      "actions": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "string"
+          }
+        },
+        "required": false,
+        "description": "An array of history actions",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "undo_index": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Index of event, start of which we will undo",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "setProps": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Dash-assigned callback that should be called to report property changes\nto Dash, to make them available for callbacks."
+      }
+    }
   }
 }

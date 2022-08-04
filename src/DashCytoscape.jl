@@ -6,6 +6,7 @@ const resources_path = realpath(joinpath( @__DIR__, "..", "deps"))
 const version = "0.3.0"
 
 include("jl/cyto_cytoscape.jl")
+include("jl/cyto_undoredolist.jl")
 
 function __init__()
     DashBase.register_package(

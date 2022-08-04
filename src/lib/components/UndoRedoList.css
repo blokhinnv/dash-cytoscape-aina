@@ -1,0 +1,20 @@
+.undoredo_list .dropdown-menu {
+  max-height: 90vh;
+  overflow: scroll;
+}
+
+.undoredo_list .dropdown button.dropdown-item.highlighted, 
+.undoredo_list .dropdown button.dropdown-item.highlighted:hover {
+  background-color: #f8dcdc !important;
+  color: black !important;
+}
+
+.undoredo_list .dropdown-item:hover {
+  background-color: inherit !important;
+  color: black !important;
+}
+
+.undoredo_list .dropdown-item:focus {
+  background-color: inherit !important;
+  outline: 1px solid #737272;
+}
