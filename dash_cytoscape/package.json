@@ -32,6 +32,7 @@
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "all": "^0.0.0",
+    "bootstrap": "^5.2.0",
     "cross-env": "^7.0.3",
     "cytoscape-cola": "^2.3.0",
     "cytoscape-context-menus": "^4.1.0",
@@ -46,6 +47,7 @@
     "lodash": "^4.17.11",
     "ramda": "^0.25.0",
     "react": ">=0.14",
+    "react-bootstrap": "^2.4.0",
     "react-cytoscapejs": "1.2.1",
     "react-dom": ">=0.14",
     "rollup": "^2.76.0",
