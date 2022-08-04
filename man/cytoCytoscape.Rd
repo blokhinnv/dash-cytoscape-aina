@@ -20,7 +20,8 @@ mouseoverEdgeData=NULL, mouseoverNodeData=NULL, pan=NULL,
 panningEnabled=NULL, responsive=NULL, scrollZoom=NULL,
 selectedEdgeData=NULL, selectedNodeData=NULL, style=NULL,
 stylesheet=NULL, tapEdge=NULL, tapEdgeData=NULL,
-tapNode=NULL, tapNodeData=NULL, userPanningEnabled=NULL,
+tapNode=NULL, tapNodeData=NULL, tooltips=NULL,
+tooltipsData=NULL, userPanningEnabled=NULL,
 userZoomingEnabled=NULL, zoom=NULL, zoomingEnabled=NULL)
 }
 
@@ -256,6 +257,27 @@ those elements have the following types:
   - relativeposition (named list; optional): item for compound nodes. The complete node dictionary returned when you tap or click it. Read-only.}
 
 \item{tapNodeData}{Named list. The data dictionary of a node returned when you tap or click it. Read-only.}
+
+\item{tooltips}{List of lists containing elements 'id', 'cy_el_id', 'content', 'position', 'last_update_time'.
+those elements have the following types:
+  - id (character; optional): необязательный. идентификатор тултипа; при передаче пустого значения генерируется автоматически.
+  - cy_el_id (character; optional): необязательный. идентификатор элемента графа, обязательно для создания привязанного тултипа.
+  - content (character; optional): обязательный. содержимое тултипа. может содержать любой html. в случае передаче тега textarea,
+при изменении текста в textarea или изменении размеров (ширины и высоты) textarea
+будут изменяться и tooltip, и tooltipsdata.
+  - position (optional): необязательный. позиция свободного тултипа в координатах cytoscape.
+у привязанного тултипа такого поля нет.. position has the following type: lists containing elements 'x', 'y'.
+those elements have the following types:
+  - x (numeric; optional)
+  - y (numeric; optional)
+  - last_update_time (numeric; optional): время последнего обновления в unix формате.
+игнорируется при попытки обновления этого свойства с бекенда.s. Содержит полную информацию о всех тултипах; список словарей.}
+
+\item{tooltipsData}{List of lists containing elements 'event', 'data'.
+those elements have the following types:
+  - event (character; optional): информация о типе совершенного изменения. возможные значения: add, update, delete.
+  - data (named list; optional): cодержит данные, описывающие тултип, имеет тот же формат, что и элемент списка tooltips.s. Перечень тултипов, данные которых изменились последний раз.
+Можно использовать для обновления конкретных тултипов, а не передавать весь список, как в случае с tooltips.}
 
 \item{userPanningEnabled}{Logical. Whether user events (e.g. dragging the graph background) are allowed to
 pan the graph.}

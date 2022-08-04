@@ -210,6 +210,25 @@ Those elements have the following types:
   - `isOrphan` (Bool; optional): Item for compound nodes
   - `relativePosition` (Dict; optional): Item for compound nodes
 - `tapNodeData` (Dict; optional): The data dictionary of a node returned when you tap or click it. Read-only.
+- `tooltips` (optional): Содержит полную информацию о всех тултипах; список словарей.. tooltips has the following type: Array of lists containing elements 'id', 'cy_el_id', 'content', 'position', 'last_update_time'.
+Those elements have the following types:
+  - `id` (String; optional): Необязательный. Идентификатор тултипа; при передаче пустого значения генерируется автоматически.
+  - `cy_el_id` (String; optional): Необязательный. Идентификатор элемента графа, обязательно для создания привязанного тултипа.
+  - `content` (String; optional): Обязательный. Содержимое тултипа. Может содержать любой html. В случае передаче тега textarea,
+при изменении текста в textarea или изменении размеров (ширины и высоты) textarea
+будут изменяться и tooltip, и tooltipsData.
+  - `position` (optional): Необязательный. Позиция свободного тултипа в координатах cytoscape.
+У привязанного тултипа такого поля нет.. position has the following type: lists containing elements 'x', 'y'.
+Those elements have the following types:
+  - `x` (Real; optional)
+  - `y` (Real; optional)
+  - `last_update_time` (Real; optional): Время последнего обновления в unix формате.
+Игнорируется при попытки обновления этого свойства с бекенда.s
+- `tooltipsData` (optional): Перечень тултипов, данные которых изменились последний раз.
+Можно использовать для обновления конкретных тултипов, а не передавать весь список, как в случае с tooltips.. tooltipsData has the following type: Array of lists containing elements 'event', 'data'.
+Those elements have the following types:
+  - `event` (String; optional): Информация о типе совершенного изменения. Возможные значения: add, update, delete.
+  - `data` (Dict; optional): Cодержит данные, описывающие тултип, имеет тот же формат, что и элемент списка tooltips.s
 - `userPanningEnabled` (Bool; optional): Whether user events (e.g. dragging the graph background) are allowed to
 pan the graph.
 - `userZoomingEnabled` (Bool; optional): Whether user events (e.g. dragging the graph background) are allowed
@@ -220,7 +239,7 @@ to pan the graph.
 is mutable overall).
 """
 function cyto_cytoscape(; kwargs...)
-        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
+        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :tooltips, :tooltipsData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
         wild_props = Symbol[]
         return Component("cyto_cytoscape", "Cytoscape", "dash_cytoscape", available_props, wild_props; kwargs...)
 end
