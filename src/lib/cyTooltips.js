@@ -57,7 +57,7 @@ export default class cyTooltips {
             });
         });
 
-        // перемещаем все свободный тултипы при зумировании холста
+        // перемещаем все свободные тултипы при зумировании холста
         this.cytoscape_container = cy.container();
         this.containerOffsetTop = this.cytoscape_container.offsetTop;
         this.containerOffsetLeft = this.cytoscape_container.offsetLeft;
@@ -451,9 +451,9 @@ export default class cyTooltips {
 
         let tooltip = popperRefObj.state.elements.popper;
         setTimeout(() => {
-            tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
+                tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
             },
-        100);
+            10);
         let textarea = tooltip.querySelector('textarea');
         if (textarea != undefined) {
             if (textarea != undefined) {
