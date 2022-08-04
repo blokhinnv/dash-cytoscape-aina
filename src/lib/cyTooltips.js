@@ -133,7 +133,10 @@ export default class cyTooltips {
             }.bind(this, tooltip))
         }.bind(this));
 
-        // слушаем событие удаления элементов
+        // удаляем tooltip при удаляем элемента из графа
+        cy.on('remove', 'node, edge', function(event) {
+            this.setRemoveProps('', event.target.data().id);
+        }.bind(this));
     }
 
     update(props) {
@@ -612,18 +615,32 @@ export default class cyTooltips {
         }.bind(this));
     }
 
-    setRemoveTooltipProps(tooltip_id) {
+    setRemoveTooltipProps(tooltip_id = '', cy_el_id = '') {
         let tooltips = this.tooltips;
         tooltips.forEach(function (tooltip_data, index) {
-            if (tooltip_data.id == tooltip_id) {
+            if (tooltip_id != '' && tooltip_data.id == tooltip_id ||
+                cy_el_id != '' && tooltip_data.cy_el_id == cy_el_id) {
                 let last_update_time = new Date().getTime();
                 const tooltipsData = [{
-                    event: 'delete',
+                    event: 'remove',
                     data: {
-                        id: tooltip_id,
+                        id: tooltip_data.id,
                         last_update_time: last_update_time
                     }
                 }]
+                if (cy_el_id != '') {
+                    tooltipsData[0]['data']['cy_el_id'] = cy_el_id;
+                    let element = this.cy.$id(cy_el_id);
+                    if (element && element.popper && element.popperRefObj) {
+                        element.popperRefObj.state.elements.popper.remove();
+                        element.popperRefObj.destroy();
+                    } else {
+                        let tooltip = document.querySelector('[data-tooltip-cy-el-id="' + cy_el_id + '"]');
+                        if (tooltip != undefined) {
+                            tooltip.remove();
+                        }
+                    }
+                }
                 this.tooltipsDataHash = JSON.stringify(tooltipsData);
                 this.setProps({tooltipsData});
 
