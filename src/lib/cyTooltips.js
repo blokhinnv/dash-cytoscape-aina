@@ -24,7 +24,6 @@ export default class cyTooltips {
     constructor(cy) {
         this.updateTooltips = this.update.bind(this);
         this.addConnected = this.addConnectedTooltip.bind(this);
-        this.addConnected = this.addConnectedTooltip.bind(this);
         this.updateConnected = this.updateConnectedTooltip.bind(this);
         this.removeConnected = this.removeConnectedTooltip.bind(this);
         this.addFree = this.addFreeTooltip.bind(this);
@@ -36,6 +35,7 @@ export default class cyTooltips {
         this.addObserverToTextArea = this.addObserverToTooltipTextArea.bind(this);
         this.addTextChangeListener = this.addTextChangeTooltipListener.bind(this);
         this.setUpdateProps = this.setUpdateTooltipProps.bind(this);
+        this.setRemoveProps = this.setRemoveTooltipProps.bind(this);
 
         this.cy = cy;
         this.tooltips = [];
@@ -63,7 +63,7 @@ export default class cyTooltips {
         this.containerOffsetLeft = this.cytoscape_container.offsetLeft;
         cy.on('zoom', function (event) {
             document.querySelectorAll('.popper-core').forEach(tooltip => {
-                let {x, y} = parseXYFromTransform(tooltip.style.transform)
+                let {x, y} = parseXYFromTransform(tooltip.style.transform);
                 const lastPanX = parseFloat(tooltip.getAttribute('lastPanX'));
                 const lastPanY = parseFloat(tooltip.getAttribute('lastPanY'));
                 const lastZoom = parseFloat(tooltip.getAttribute('lastZoom'));
@@ -74,14 +74,17 @@ export default class cyTooltips {
                 tooltip.setAttribute('lastZoom', cy.zoom());
                 tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
             });
-        });
+        }.bind(this));
 
         // удаляем свободный тултип по нажатию на кнопку
         document.body.addEventListener('click', function (event) {
             if (event.target.className == 'remove_popper_core') {
+                let tooltip_id = event.target.parentNode.dataset.tooltipId;
                 event.target.parentNode.remove();
+                // инициируем обновление коллбеков
+                this.setRemoveProps(tooltip_id);
             }
-        });
+        }.bind(this));
 
         // перемещаем свободный тултип методом drag & drop
         document.body.addEventListener('mousedown', function (event) {
@@ -122,9 +125,15 @@ export default class cyTooltips {
             // отпускаем всплывающую подсказку, удаляем ненужные обработчики
             tooltip.addEventListener('mouseup', function(tooltip) {
                 document.removeEventListener('mousemove', onMouseMove);
-                this.setUpdateProps(tooltip);
+                // если изменился размер textarea, то инициируем коллбек
+                if (tooltip.getAttribute('lastwidth') != tooltip.offsetWidth ||
+                    tooltip.getAttribute('lastheight') != tooltip.offsetHeight) {
+                    this.setUpdateProps(tooltip);
+                }
             }.bind(this, tooltip))
         }.bind(this));
+
+        // слушаем событие удаления элементов
     }
 
     update(props) {
@@ -139,45 +148,48 @@ export default class cyTooltips {
         // если нам передели конкретные строки, то обновляем только их
         if (tooltipsDataHashNew !== this.tooltipsDataHash) {
             tooltipsData.forEach(tooltipsDataItem => {
-                let tooltip_data = this.addTooltipsDataItem(tooltipsDataItem);
+                let tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
+                if (tooltipEventData == undefined) {
+                    return;
+                }
                 if (tooltipsDataItem.event == 'remove') {
                     tooltips.forEach(function (tooltip_data, index) {
-                        if (tooltip_data.id == tooltip_data.id) {
+                        if (tooltipEventData.data.id == tooltipsDataItem.data.id) {
                             tooltips.splice(index, 1);
-                        } else if (tooltip_data.cy_el_id == tooltipsDataItem.data.cy_el_id) {
+                        } else if (tooltipEventData.data.cy_el_id == tooltipsDataItem.data.cy_el_id) {
                             tooltips.splice(index, 1);
                         }
                     });
-                } else if (tooltipsDataItem.event == 'add') {
-                    if (tooltip_data.cy_el_id != undefined) {
+                } else if (tooltipEventData.event == 'add') {
+                    if (tooltipEventData.data.cy_el_id != undefined) {
                         const new_tooltip = {
-                            id: tooltip_data.id,
-                            cy_el_id: tooltip_data.cy_el_id,
-                            content: tooltip_data.content,
+                            id: tooltipEventData.data.id,
+                            cy_el_id: tooltipEventData.data.cy_el_id,
+                            content: tooltipEventData.data.content,
                             last_update_time: new Date().getTime()
                         }
                         tooltips.push(new_tooltip);
                         this.setProps({tooltips});
                     } else {
                         const new_tooltip = {
-                            id: tooltip_data.id,
-                            content: tooltip_data.content,
-                            position: tooltip_data.position,
+                            id: tooltipEventData.data.id,
+                            content: tooltipEventData.data.content,
+                            position: tooltipEventData.data.position,
                             last_update_time: new Date().getTime()
                         }
                         tooltips.push(new_tooltip);
                         this.setProps({tooltips});
                     }
-                } else if (tooltipsDataItem.event == 'update') {
+                } else if (tooltipEventData.event == 'update') {
                     tooltips.forEach(function (tooltip_data, index) {
-                        if (tooltip_data.id == tooltip_data.id) {
-                            tooltips[index].content = tooltip_data.content;
-                            tooltips[index].position = tooltip_data.position;
+                        if (tooltip_data.cy_el_id == tooltipEventData.data.cy_el_id) {
+                            tooltips[index].id = tooltipEventData.data.id;
+                            tooltips[index].content = tooltipEventData.data.content;
                             tooltips[index].last_update_time = new Date().getTime();
                             this.setProps({tooltips});
-                        } else if (tooltip_data.cy_el_id == tooltipsDataItem.data.cy_el_id) {
-                            tooltips[index].id = tooltip_data.id;
-                            tooltips[index].content = tooltip_data.content;
+                        } else if (tooltip_data.id == tooltipEventData.data.id) {
+                            tooltips[index].content = tooltipEventData.data.content;
+                            tooltips[index].position = tooltipEventData.data.position;
                             tooltips[index].last_update_time = new Date().getTime();
                             this.setProps({tooltips});
                         }
@@ -185,6 +197,9 @@ export default class cyTooltips {
                 }
             });
             this.tooltipsDataHash = tooltipsDataHashNew;
+
+            this.tooltipsHash = JSON.stringify(tooltips);
+            this.tooltips = tooltips;
             return;
         }
 
@@ -193,10 +208,60 @@ export default class cyTooltips {
             return;
         }
         this.tooltipsHash = tooltipsHashNew;
+
+        // нам передали весь массив тултипов
+        // нужно понять, что изменилось и соответственно добавить, обновить, удалить
+        let toAdd = [];
+        let toUpdate = [];
+        // обходим новые элементы
+        tooltips.forEach(function (tooltipsNewItem, newIndex) {
+            let isOld = false;
+            this.tooltips.forEach(function (tooltipsOldItem, oldIndex) {
+                // обновляем элемент
+                if (tooltipsOldItem.cy_el_id == tooltipsNewItem.cy_el_id) {
+                    isOld = true;
+                    toUpdate.push(tooltipsNewItem);
+                    this.tooltips.splice(oldIndex, 1);
+                } else if (tooltipsOldItem.id == tooltipsNewItem.id) {
+                    isOld = true;
+                    toUpdate.push(tooltipsNewItem);
+                    this.tooltips.splice(oldIndex, 1);
+                }
+            }.bind(this));
+            if (!isOld) {
+                toAdd.push(tooltipsNewItem);
+            }
+        }.bind(this));
+
+        //в this.tooltips остались только элементы, подлежащие удалению
+        this.tooltips.forEach(function (tooltipsItem, index) {
+            let tooltipsDataItem = {
+                event: 'remove',
+                data: tooltipsItem
+            }
+            this.applyTooltipsDataItem(tooltipsDataItem);
+        }.bind(this));
+
+        toAdd.forEach(function (tooltipsItem, index) {
+            let tooltipsDataItem = {
+                event: 'add',
+                data: tooltipsItem
+            }
+            this.applyTooltipsDataItem(tooltipsDataItem);
+        }.bind(this));
+
+        toUpdate.forEach(function (tooltipsItem, index) {
+            let tooltipsDataItem = {
+                event: 'update',
+                data: tooltipsItem
+            }
+            this.applyTooltipsDataItem(tooltipsDataItem);
+        }.bind(this));
+
         this.tooltips = tooltips;
     }
 
-    addTooltipsDataItem(tooltipsDataItem) {
+    applyTooltipsDataItem(tooltipsDataItem) {
         const {event, data} = tooltipsDataItem;
         const {id, cy_el_id, content, position, last_update_time} = data;
         // если передан id
@@ -207,7 +272,7 @@ export default class cyTooltips {
                 if (tooltip.dataset.tooltipCyElId == undefined) {
                     // если event = delete, то удаляем tooltip
                     if (event == 'remove') {
-                        this.removeFree(tooltip);
+                        return this.removeFree(tooltip);
                     } else {
                         if (this.getContent(tooltip) !== content || this.getPosition(tooltip) !== position) {
                             // обновляем данные тултипа
@@ -217,7 +282,7 @@ export default class cyTooltips {
                 } else {
                     // если event = delete, то удаляем этот привязанный tooltip
                     if (event == 'remove') {
-                        this.removeConnected(tooltip);
+                        return this.removeConnected(tooltip);
                     } else {
                         if (this.getContent(tooltip) !== content) {
                             // устанавливаем новый контент
@@ -241,7 +306,7 @@ export default class cyTooltips {
             if (tooltip != undefined) {
                 // если event = delete, то удаляем этот привязанный tooltip
                 if (event == 'remove') {
-                    this.removeConnected(tooltip);
+                    return this.removeConnected(tooltip);
                 } else {
                     if (this.getContent(tooltip) !== content) {
                         // устанавливаем новый контент
@@ -309,12 +374,15 @@ export default class cyTooltips {
             this.addObserverToTextArea(textarea)
         }
 
-        const tooltip_data = {
-            id: id,
-            cy_el_id: cy_el_id,
-            content: content
+        const tooltipEventData = {
+            event: 'add',
+            data: {
+                id: id,
+                cy_el_id: cy_el_id,
+                content: content
+            }
         }
-        return tooltip_data
+        return tooltipEventData
     }
 
     updateConnectedTooltip(tooltip, content) {
@@ -328,16 +396,21 @@ export default class cyTooltips {
             this.addObserverToTextArea(textarea)
         }
 
-        const tooltip_data = {
-            id: tooltip.getAttribute('data-tooltip-id'),
-            cy_el_id: tooltip.getAttribute('data-tooltip-cy-el-id'),
-            content: content
+        const tooltipEventData = {
+            event: 'update',
+            data: {
+                id: tooltip.getAttribute('data-tooltip-id'),
+                cy_el_id: tooltip.getAttribute('data-tooltip-cy-el-id'),
+                content: content
+            }
         }
-        return tooltip_data
+        return tooltipEventData
     }
 
     removeConnectedTooltip(tooltip) {
-        let element = this.cy.$id(tooltip.getAttribute('data-tooltip-cy-el-id'));
+        let tooltip_id = tooltip.getAttribute('data-tooltip-id');
+        let cy_el_id = tooltip.getAttribute('data-tooltip-cy-el-id');
+        let element = this.cy.$id(cy_el_id);
         if (!element.isNode() && !element.isEdge()) {
             return;
         }
@@ -345,6 +418,15 @@ export default class cyTooltips {
             element.popperRefObj.state.elements.popper.remove();
             element.popperRefObj.destroy();
         }
+
+        const tooltipEventData = {
+            event: 'remove',
+            data: {
+                id: tooltip_id,
+                cy_el_id: cy_el_id
+            }
+        }
+        return tooltipEventData
     }
 
     addFreeTooltip(id, content, position) {
@@ -382,12 +464,15 @@ export default class cyTooltips {
             }
         }
 
-        const tooltip_data = {
-            id: id,
-            content: content,
-            position: position
+        const tooltipEventData = {
+            event: 'add',
+            data: {
+                id: id,
+                content: content,
+                position: position
+            }
         }
-        return tooltip_data
+        return tooltipEventData
     }
 
     updateFreeTooltip(tooltip, content, position) {
@@ -412,16 +497,29 @@ export default class cyTooltips {
             this.addObserverToTextArea(textarea)
         }
 
-        const tooltip_data = {
-            id: tooltip.getAttribute('data-tooltip-id'),
-            content: content,
-            position: position
+        const tooltipEventData = {
+            event: 'update',
+            data: {
+                id: tooltip.getAttribute('data-tooltip-id'),
+                content: content,
+                position: position
+            }
         }
-        return tooltip_data
+        return tooltipEventData
     }
 
     removeFreeTooltip(tooltip) {
+        let tooltip_id = tooltip.getAttribute('data-tooltip-id');
+
         tooltip.remove();
+
+        const tooltipEventData = {
+            event: 'remove',
+            data: {
+                id: tooltip_id
+            }
+        }
+        return tooltipEventData
     }
 
     getTooltipContent(tooltip) {
@@ -514,6 +612,28 @@ export default class cyTooltips {
         }.bind(this));
     }
 
+    setRemoveTooltipProps(tooltip_id) {
+        let tooltips = this.tooltips;
+        tooltips.forEach(function (tooltip_data, index) {
+            if (tooltip_data.id == tooltip_id) {
+                let last_update_time = new Date().getTime();
+                const tooltipsData = [{
+                    event: 'delete',
+                    data: {
+                        id: tooltip_id,
+                        last_update_time: last_update_time
+                    }
+                }]
+                this.tooltipsDataHash = JSON.stringify(tooltipsData);
+                this.setProps({tooltipsData});
+
+                tooltips.splice(index, 1);
+                this.tooltipsHash = JSON.stringify(tooltips);
+                this.setProps({tooltips});
+            }
+        }.bind(this));
+    }
+
     // отслеживание изменений размеров textarea
     logTooltipTextAreaSizes(textarea) {
         let tooltip = textarea.parentNode.parentNode;
@@ -563,8 +683,5 @@ export default class cyTooltips {
         }
         tooltip.setAttribute('lastWidth', width);
         tooltip.setAttribute('lastHeight', height);
-
-        // инициируем коллбек на бекенд
-        this.setUpdateProps(tooltip);
     }
 }

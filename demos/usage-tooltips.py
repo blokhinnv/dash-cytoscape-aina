@@ -35,10 +35,15 @@ app.layout = html.Div(
                 "zIndex": "10",
             },
             children=[
-                html.Button("Обновить тултип", id="update-button"),
+                html.Button("Обновить тултип", id="update-desired-tooltip"),
                 html.Br(),
                 html.Br(),
-                html.Div(id="status-bar"),
+                html.Div(id="desired-status-bar"),
+                html.Br(),
+                html.Button("Обновить все тултипы", id="update-all-tooltip"),
+                html.Br(),
+                html.Br(),
+                html.Div(id="all-status-bar"),
             ],
         ),
         cyto.Cytoscape(
@@ -99,7 +104,7 @@ app.layout = html.Div(
 
 @app.callback(
     Output("cytoscape", "tooltipsData"),
-    Input("update-button", "n_clicks"),
+    Input("update-desired-tooltip", "n_clicks"),
     prevent_initial_call=True,
 )
 def update_elements(n_clicks):
@@ -143,7 +148,7 @@ def update_elements(n_clicks):
                 "data": {
                     "id": "test", # необязательный
                     "content": '<textarea spellcheck="false"></textarea><br>',
-                    "position": {"x": 300, "y": 100}
+                    "position": {"x": 500, "y": 100}
                 }
             }
         ]
@@ -173,13 +178,47 @@ def update_elements(n_clicks):
     return []
 
 @app.callback(
-    Output("status-bar", "children"),
+    Output("cytoscape", "tooltips"),
+    Input("update-all-tooltip", "n_clicks"),
+    prevent_initial_call=True,
+)
+def update_elements(n_clicks):
+    if n_clicks == 1:
+        return [
+            {
+                "cy_el_id": "node1",
+                "content": '<textarea spellcheck="false">12345</textarea>'
+            },
+            {
+                "cy_el_id": "node2",
+                "content": '<textarea spellcheck="false">54321</textarea>'
+            },
+            {
+                "id": "test2",
+                "content": '<textarea spellcheck="false">54321</textarea>',
+                "position": {'x': 500, 'y': 50}
+            }
+        ]
+    return []
+
+
+@app.callback(
+    Output("desired-status-bar", "children"),
     Input("cytoscape", "tooltipsData"),
     prevent_initial_call=True,
 )
-def hangle_tooltips(tooltipsDataEvent):
+def hangle_desired_tooltips(tooltipsDataEvent):
     print(tooltipsDataEvent)
     return 'Тултип обновился! (timestamp: ' + str(time.time()) + ')'
+
+@app.callback(
+    Output("all-status-bar", "children"),
+    Input("cytoscape", "tooltipsData"),
+    prevent_initial_call=True,
+)
+def hangle_all_tooltips(tooltipsDataEvent):
+    print(tooltipsDataEvent)
+    return 'Все тултипы обновились! (timestamp: ' + str(time.time()) + ')'
 
 if __name__ == "__main__":
     app.run_server(debug=True)
