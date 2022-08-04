@@ -147,7 +147,7 @@ export default class cyTooltips {
             return;
         }
 
-        const tooltipsDataHashNew = JSON.stringify(tooltipsData);
+        let tooltipsDataHashNew = JSON.stringify(tooltipsData);
         // если нам передели конкретные строки, то обновляем только их
         if (tooltipsDataHashNew !== this.tooltipsDataHash) {
             tooltipsData.forEach(tooltipsDataItem => {
@@ -165,23 +165,13 @@ export default class cyTooltips {
                     });
                 } else if (tooltipEventData.event == 'add') {
                     if (tooltipEventData.data.cy_el_id != undefined) {
-                        const new_tooltip = {
-                            id: tooltipEventData.data.id,
-                            cy_el_id: tooltipEventData.data.cy_el_id,
-                            content: tooltipEventData.data.content,
-                            last_update_time: new Date().getTime()
-                        }
-                        tooltips.push(new_tooltip);
+                        tooltips.push(tooltipEventData.data);
                         this.setProps({tooltips});
+                        this.setProps({tooltipsData: [tooltipEventData]});
                     } else {
-                        const new_tooltip = {
-                            id: tooltipEventData.data.id,
-                            content: tooltipEventData.data.content,
-                            position: tooltipEventData.data.position,
-                            last_update_time: new Date().getTime()
-                        }
-                        tooltips.push(new_tooltip);
+                        tooltips.push(tooltipEventData.data);
                         this.setProps({tooltips});
+                        this.setProps({tooltipsData: [tooltipEventData]});
                     }
                 } else if (tooltipEventData.event == 'update') {
                     tooltips.forEach(function (tooltip_data, index) {
@@ -382,7 +372,8 @@ export default class cyTooltips {
             data: {
                 id: id,
                 cy_el_id: cy_el_id,
-                content: content
+                content: content,
+                last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
@@ -404,7 +395,8 @@ export default class cyTooltips {
             data: {
                 id: tooltip.getAttribute('data-tooltip-id'),
                 cy_el_id: tooltip.getAttribute('data-tooltip-cy-el-id'),
-                content: content
+                content: content,
+                last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
@@ -426,7 +418,8 @@ export default class cyTooltips {
             event: 'remove',
             data: {
                 id: tooltip_id,
-                cy_el_id: cy_el_id
+                cy_el_id: cy_el_id,
+                last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
@@ -472,7 +465,8 @@ export default class cyTooltips {
             data: {
                 id: id,
                 content: content,
-                position: position
+                position: position,
+                last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
@@ -505,7 +499,8 @@ export default class cyTooltips {
             data: {
                 id: tooltip.getAttribute('data-tooltip-id'),
                 content: content,
-                position: position
+                position: position,
+                last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
@@ -519,7 +514,8 @@ export default class cyTooltips {
         const tooltipEventData = {
             event: 'remove',
             data: {
-                id: tooltip_id
+                id: tooltip_id,
+                last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
