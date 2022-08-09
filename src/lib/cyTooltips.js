@@ -39,8 +39,8 @@ export default class cyTooltips {
 
         this.cy = cy;
         this.tooltips = [];
-        this.tooltipsHash = '';
-        this.tooltipsDataHash = '';
+        this.tooltipsHash = JSON.stringify(this.tooltips);
+        this.tooltipsDataHash = JSON.stringify([]);
         this.setProps = null;
 
         // перемещаем все свободный тултипы при перемещении по холсту
@@ -94,8 +94,8 @@ export default class cyTooltips {
                 }
                 var tooltip = event.target.parentNode.parentNode;
                 var textarea = event.target;
-                if (event.clientX > tooltip.getBoundingClientRect().right - 20 ||
-                    event.clientY > textarea.getBoundingClientRect().bottom - 20) {
+                if (event.clientX > tooltip.getBoundingClientRect().right - 25 &&
+                    event.clientY > textarea.getBoundingClientRect().bottom - 25) {
                     return;
                 }
             } else if (event.target.className == 'popper-div popper-core') {
@@ -133,7 +133,7 @@ export default class cyTooltips {
             }.bind(this, tooltip))
         }.bind(this));
 
-        // удаляем tooltip при удаляем элемента из графа
+        // удаляем tooltip при удалении элемента из графа
         cy.on('remove', 'node, edge', function(event) {
             this.setRemoveProps('', event.target.data().id);
         }.bind(this));
@@ -146,10 +146,10 @@ export default class cyTooltips {
         if (typeof tooltips !== 'object' || !this.cy) {
             return;
         }
-
         let tooltipsDataHashNew = JSON.stringify(tooltipsData);
         // если нам передели конкретные строки, то обновляем только их
         if (tooltipsDataHashNew !== this.tooltipsDataHash) {
+            let newTooltipsData = [];
             tooltipsData.forEach(tooltipsDataItem => {
                 let tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
                 if (tooltipEventData == undefined) {
@@ -159,40 +159,43 @@ export default class cyTooltips {
                     tooltips.forEach(function (tooltip_data, index) {
                         if (tooltipEventData.data.id == tooltipsDataItem.data.id) {
                             tooltips.splice(index, 1);
+                            newTooltipsData.push(tooltipEventData);
                         } else if (tooltipEventData.data.cy_el_id == tooltipsDataItem.data.cy_el_id) {
                             tooltips.splice(index, 1);
+                            newTooltipsData.push(tooltipEventData);
                         }
                     });
                 } else if (tooltipEventData.event == 'add') {
                     if (tooltipEventData.data.cy_el_id != undefined) {
                         tooltips.push(tooltipEventData.data);
-                        this.setProps({tooltips});
-                        this.setProps({tooltipsData: [tooltipEventData]});
+                        newTooltipsData.push(tooltipEventData);
                     } else {
                         tooltips.push(tooltipEventData.data);
-                        this.setProps({tooltips});
-                        this.setProps({tooltipsData: [tooltipEventData]});
+                        newTooltipsData.push(tooltipEventData);
                     }
                 } else if (tooltipEventData.event == 'update') {
                     tooltips.forEach(function (tooltip_data, index) {
                         if (tooltip_data.cy_el_id == tooltipEventData.data.cy_el_id) {
-                            tooltips[index].id = tooltipEventData.data.id;
-                            tooltips[index].content = tooltipEventData.data.content;
-                            tooltips[index].last_update_time = new Date().getTime();
-                            this.setProps({tooltips});
+                            tooltips[index]['id'] = tooltipEventData.data.id;
+                            tooltips[index]['content'] = tooltipEventData.data.content;
+                            tooltips[index]['last_update_time'] = new Date().getTime();
                         } else if (tooltip_data.id == tooltipEventData.data.id) {
-                            tooltips[index].content = tooltipEventData.data.content;
-                            tooltips[index].position = tooltipEventData.data.position;
-                            tooltips[index].last_update_time = new Date().getTime();
-                            this.setProps({tooltips});
+                            tooltips[index]['content'] = tooltipEventData.data.content;
+                            tooltips[index]['position'] = tooltipEventData.data.position;
+                            tooltips[index]['last_update_time'] = new Date().getTime();
                         }
                     }.bind(this));
                 }
             });
-            this.tooltipsDataHash = tooltipsDataHashNew;
-
+            this.tooltipsDataHash = JSON.stringify(newTooltipsData);
             this.tooltipsHash = JSON.stringify(tooltips);
             this.tooltips = tooltips;
+            if (newTooltipsData.length > 0) {
+                this.setProps({tooltipsData: newTooltipsData});
+            }
+            if (tooltips != this.tooltips) {
+                this.setProps({tooltips});
+            }
             return;
         }
 
@@ -227,12 +230,14 @@ export default class cyTooltips {
         }.bind(this));
 
         //в this.tooltips остались только элементы, подлежащие удалению
+        let newTooltipsData = [];
         this.tooltips.forEach(function (tooltipsItem, index) {
             let tooltipsDataItem = {
                 event: 'remove',
                 data: tooltipsItem
             }
-            this.applyTooltipsDataItem(tooltipsDataItem);
+            let tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
+            newTooltipsData.push(tooltipEventData);
         }.bind(this));
 
         toAdd.forEach(function (tooltipsItem, index) {
@@ -240,7 +245,8 @@ export default class cyTooltips {
                 event: 'add',
                 data: tooltipsItem
             }
-            this.applyTooltipsDataItem(tooltipsDataItem);
+            let tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
+            newTooltipsData.push(tooltipEventData);
         }.bind(this));
 
         toUpdate.forEach(function (tooltipsItem, index) {
@@ -248,10 +254,19 @@ export default class cyTooltips {
                 event: 'update',
                 data: tooltipsItem
             }
-            this.applyTooltipsDataItem(tooltipsDataItem);
+            let tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
+            newTooltipsData.push(tooltipEventData);
         }.bind(this));
 
-        this.tooltips = tooltips;
+        if (newTooltipsData.length > 0) {
+            this.tooltipsDataHash = JSON.stringify(newTooltipsData);
+            this.setProps({tooltipsData: newTooltipsData});
+        }
+        if (tooltips != this.tooltips) {
+            this.tooltipsHash = JSON.stringify(tooltips);
+            this.tooltips = tooltips;
+            this.setProps({tooltips});
+        }
     }
 
     applyTooltipsDataItem(tooltipsDataItem) {
@@ -481,9 +496,9 @@ export default class cyTooltips {
         let y = position.y * this.cy.zoom() + this.cy.pan().y;
         tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
         setTimeout(() => {
-            tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
-        },
-        100);
+                tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
+            },
+            100);
 
         // отслеживаем изменение размера textarea
         let textarea = tooltip.querySelector('textarea');
@@ -576,13 +591,12 @@ export default class cyTooltips {
                             last_update_time: last_update_time
                         }
                     }]
+                    tooltips[index]['id'] = tooltip.getAttribute('data-tooltip-id');
+                    tooltips[index]['content'] = this.getContent(tooltip);
+                    tooltips[index]['last_update_time'] = last_update_time;
                     this.tooltipsDataHash = JSON.stringify(tooltipsData);
-                    this.setProps({tooltipsData});
-
-                    tooltips[index].id = tooltip.getAttribute('data-tooltip-id');
-                    tooltips[index].content = this.getContent(tooltip);
-                    tooltips[index].last_update_time = last_update_time;
                     this.tooltipsHash = JSON.stringify(tooltips);
+                    this.setProps({tooltipsData});
                     this.setProps({tooltips});
                 }
             } else if (tooltip_data.id == tooltip.getAttribute('data-tooltip-id')) {
@@ -598,13 +612,12 @@ export default class cyTooltips {
                             last_update_time: last_update_time
                         }
                     }]
+                    tooltips[index]['content'] = this.getContent(tooltip);
+                    tooltips[index]['position'] = this.getPosition(tooltip);
+                    tooltips[index]['last_update_time'] = last_update_time;
                     this.tooltipsDataHash = JSON.stringify(tooltipsData);
-                    this.setProps({tooltipsData});
-
-                    tooltips[index].content = this.getContent(tooltip);
-                    tooltips[index].position = this.getPosition(tooltip);
-                    tooltips[index].last_update_time = last_update_time;
                     this.tooltipsHash = JSON.stringify(tooltips);
+                    this.setProps({tooltipsData});
                     this.setProps({tooltips});
                 }
             }
@@ -637,11 +650,10 @@ export default class cyTooltips {
                         }
                     }
                 }
-                this.tooltipsDataHash = JSON.stringify(tooltipsData);
-                this.setProps({tooltipsData});
-
                 tooltips.splice(index, 1);
+                this.tooltipsDataHash = JSON.stringify(tooltipsData);
                 this.tooltipsHash = JSON.stringify(tooltips);
+                this.setProps({tooltipsData});
                 this.setProps({tooltips});
             }
         }.bind(this));
