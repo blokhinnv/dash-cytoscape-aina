@@ -23,7 +23,8 @@
     "build:js-all": "npm run build:js && npm run build:js-dev && npm run build:js-dev-extra && npm run build:js-extra",
     "build:backends": "dash-generate-components ./src/lib/components dash_cytoscape --r-prefix 'cyto' --jl-prefix 'cyto'",
     "build:all": "npm run build:js-all && npm run build:backends",
-    "build:all-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:all)"
+    "build:all-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:all)",
+    "watch": "webpack --config webpack.dev.extra.config.js --watch"
   },
   "author": "The Plotly Team <cytoscape@plotly.com>",
   "author-email": "cytoscape@plotly.com",
@@ -31,6 +32,7 @@
   "dependencies": {
     "@rollup/plugin-node-resolve": "^13.3.0",
     "all": "^0.0.0",
+    "bootstrap": "^5.2.0",
     "cross-env": "^7.0.3",
     "cytoscape-cola": "^2.3.0",
     "cytoscape-context-menus": "^4.1.0",
@@ -45,6 +47,7 @@
     "lodash": "^4.17.11",
     "ramda": "^0.25.0",
     "react": ">=0.14",
+    "react-bootstrap": "^2.4.0",
     "react-cytoscapejs": "1.2.1",
     "react-dom": ">=0.14",
     "rollup": "^2.76.0",

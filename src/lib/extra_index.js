@@ -13,6 +13,8 @@ import contextMenus from 'cytoscape-context-menus';
 import 'cytoscape-context-menus/cytoscape-context-menus.css';
 import popper from 'cytoscape-popper';
 import './popper.css';
+import UndoRedoList from './components/UndoRedoList.react';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 CytoscapeJS.use(coseBilkent);
 CytoscapeJS.use(fcose);
@@ -26,5 +28,6 @@ CytoscapeJS.use(contextMenus);
 CytoscapeJS.use(popper);
 
 export {
-    Cytoscape
+    Cytoscape,
+    UndoRedoList
 };

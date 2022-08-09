@@ -477,6 +477,54 @@ Keyword arguments:
     The data dictionary of a node returned when you tap or click it.
     Read-only.
 
+- tooltips (list of dicts; optional):
+    Содержит полную информацию о всех тултипах; список словарей.
+
+    `tooltips` is a list of dicts with keys:
+
+    - content (string; optional):
+        Обязательный. Содержимое тултипа. Может содержать любой html.
+        В случае передаче тега textarea, при изменении текста в
+        textarea или изменении размеров (ширины и высоты) textarea
+        будут изменяться и tooltip, и tooltipsData.
+
+    - cy_el_id (string; optional):
+        Необязательный. Идентификатор элемента графа, обязательно для
+        создания привязанного тултипа.
+
+    - id (string; optional):
+        Необязательный. Идентификатор тултипа; при передаче пустого
+        значения генерируется автоматически.
+
+    - last_update_time (number; optional):
+        Время последнего обновления в unix формате. Игнорируется при
+        попытки обновления этого свойства с бекенда.
+
+    - position (dict; optional):
+        Необязательный. Позиция свободного тултипа в координатах
+        cytoscape. У привязанного тултипа такого поля нет.
+
+        `position` is a dict with keys:
+
+        - x (number; optional)
+
+        - y (number; optional)
+
+- tooltipsData (list of dicts; optional):
+    Перечень тултипов, данные которых изменились последний раз. Можно
+    использовать для обновления конкретных тултипов, а не передавать
+    весь список, как в случае с tooltips.
+
+    `tooltipsData` is a list of dicts with keys:
+
+    - data (dict; optional):
+        Cодержит данные, описывающие тултип, имеет тот же формат, что
+        и элемент списка tooltips.
+
+    - event (string; optional):
+        Информация о типе совершенного изменения. Возможные значения:
+        add, update, delete.
+
 - userPanningEnabled (boolean; default True):
     Whether user events (e.g. dragging the graph background) are
     allowed to pan the graph.
@@ -497,10 +545,10 @@ Keyword arguments:
     _namespace = 'dash_cytoscape'
     _type = 'Cytoscape'
     @_explicitize_args
-    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()
