@@ -9,7 +9,6 @@ import _ from 'lodash';
 
 import CyResponsive from '../cyResponsive.js';
 import CyCxtMenu from '../cyContextmenu.js';
-import CyPopper from '../cyPopper.js';
 import CyTooltips from '../cyTooltips.js';
 
 /**
@@ -25,7 +24,6 @@ class Cytoscape extends Component {
         this.handleImageGeneration = this.handleImageGeneration.bind(this);
         this.cyResponsiveClass = false;
         this.cyCxtMenuClass = false;
-        this.cyPopperClass = false;
         this.cyTooltipsClass = false;
     }
 
@@ -337,8 +335,6 @@ class Cytoscape extends Component {
 
         this.cyCxtMenuClass = new CyCxtMenu(cy);
         this.cyCxtMenuClass.update(this.props);
-
-        this.cyPopperClass = new CyPopper(cy);
 
         this.cyTooltipsClass = new CyTooltips(cy);
         this.cyTooltipsClass.update(this.props);
