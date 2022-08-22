@@ -37,13 +37,13 @@ app.layout = html.Div(
             children=[
                 html.Button("Обновить тултип", id="update-desired-tooltip"),
                 html.Br(),
-                html.Br(),
                 html.Div(id="desired-status-bar"),
                 html.Br(),
                 html.Button("Обновить все тултипы", id="update-all-tooltip"),
                 html.Br(),
-                html.Br(),
                 html.Div(id="all-status-bar"),
+                html.Br(),
+                html.Button("Сохранить как изображение", id="save-as-img"),
             ],
         ),
         cyto.Cytoscape(
@@ -219,6 +219,29 @@ def hangle_desired_tooltips(tooltipsDataEvent):
 def hangle_all_tooltips(tooltipsDataEvent):
     print(tooltipsDataEvent)
     return 'Все тултипы обновились! (timestamp: ' + str(time.time()) + ')'
+
+
+@app.callback(
+    Output("cytoscape", "generateImage"),
+    Input("save-as-img", "n_clicks"),
+    prevent_initial_call=True,
+)
+def save_as_img(btn):
+    ftype = "png"
+    action = "download"
+    filename = "cytograph"
+
+    output = dict()
+
+    if btn:
+        output = {
+            "type": ftype,
+            "action": action,
+            "filename": filename,
+            "options": {"full": True, "scale": 5, "quality": 1},
+        }
+
+    return output
 
 if __name__ == "__main__":
     app.run_server(debug=True)
