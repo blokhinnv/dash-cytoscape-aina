@@ -351,17 +351,6 @@ class Cytoscape extends Component {
             }
         });
 
-        //console.log(cy);
-        //cy("core", "nodeHtmlLabel", function (optArr, options) {
-        //   return cyNodeHtmlLabel(this, optArr, options);
-        //});
-        //cyNodeHtmlLabel(cy);
-        //console.log(this._cy);
-        //console.log(cy);
-        //console.log(window.cy);
-        //console.log(window.cytoscape);
-        //cyNodeHtmlLabel(cy);
-
         this.cyResponsiveClass = new CyResponsive(cy);
         this.cyResponsiveClass.toggle(this.props.responsive);
 
@@ -370,20 +359,6 @@ class Cytoscape extends Component {
 
         this.cyTooltipsClass = new CyTooltips(cy);
         this.cyTooltipsClass.update(this.props);
-
-        // cy.nodeHtmlLabel([
-        //     {
-        //         query: 'node', // cytoscape query selector
-        //         halign: 'center', // title vertical position. Can be 'left',''center, 'right'
-        //         valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
-        //         halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
-        //         valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
-        //         cssClass: '', // any classes will be as attribute of <div> container for every title
-        //         tpl(data) {
-        //             return '<span>' + data.id + '</span>'; // your html template here
-        //         }
-        //     }
-        // ]);
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
