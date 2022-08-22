@@ -10,6 +10,27 @@ import _ from 'lodash';
 import CyResponsive from '../cyResponsive.js';
 import CyCxtMenu from '../cyContextmenu.js';
 import CyTooltips from '../cyTooltips.js';
+import html2canvas from 'html2canvas';
+
+function dataURItoBlob(dataURI) {
+    // convert base64/URLEncoded data component to raw binary data held in a string
+    var byteString;
+    if (dataURI.split(',')[0].indexOf('base64') >= 0)
+        byteString = atob(dataURI.split(',')[1]);
+    else
+        byteString = unescape(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to a typed array
+    var ia = new Uint8Array(byteString.length);
+    for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+
+    return new Blob([ia], {type:mimeString});
+}
 
 /**
 A Component Library for Dash aimed at facilitating network visualization in
@@ -398,7 +419,61 @@ class Cytoscape extends Component {
             }
 
             if (imageType !== 'svg') {
-                this.downloadBlob(output, fName + '.' + imageType);
+                if (this.cyTooltipsClass && this.cyTooltipsClass.tooltips.length > 0) {
+                    let canvas = document.createElement('canvas');
+                    let ctx = canvas.getContext('2d');
+                    let bbox = cy.elements().boundingBox();
+                    let minX1 = 0, minY1 = 0, maxX2 = bbox.w * 10, maxY2 = bbox.h * 10;
+                    // рассчитыаем необходимые размеры холста
+                    let tooltipList = document.querySelectorAll(".popper-div");
+                    for (let i = 0; i < tooltipList.length; i++) {
+                        let tooltip = tooltipList[i];
+                        let position = this.cyTooltipsClass.getTooltipPosition(tooltip);
+                        let x1 = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10;
+                        let y1 = (position.y - bbox.y1) * 10;
+                        let x2 = x1 + tooltip.offsetWidth * 10;
+                        let y2 = y1 + tooltip.offsetHeight * 10;
+
+                        if (x1 < minX1) {
+                            minX1 = x1;
+                        }
+                        if (y1 < minY1) {
+                            minY1 = y1;
+                        }
+                        if (x2 > maxX2) {
+                            maxX2 = x2;
+                        }
+                        if (y2 > maxY2) {
+                            maxY2 = y2;
+                        }
+                    }
+                    canvas.width = Math.abs(minX1 - maxX2);
+                    canvas.height = Math.abs(minY1 - maxY2);
+                    let img = new Image();
+                    img.onload = function(event) {
+                        URL.revokeObjectURL(event.target.src);
+                        ctx.drawImage(event.target, Math.abs(minX1), Math.abs(minY1), bbox.w * 10, bbox.h * 10);
+
+                        let tooltipList = document.querySelectorAll(".popper-div");
+                        for (let i = 0; i < tooltipList.length; i++) {
+                            let tooltip = tooltipList[i];
+                            let position = this.cyTooltipsClass.getTooltipPosition(tooltip);
+
+                            html2canvas(tooltip, {scale: 10, backgroundColor: null}).then(function (tooltipCanvas) {
+                                ctx.drawImage(tooltipCanvas, (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10 + Math.abs(minX1), (position.y - bbox.y1) * 10 + Math.abs(minY1));
+                            }.bind(this));
+                        }
+
+                        setTimeout(function() {
+                            let output_base64 = canvas.toDataURL("image/png");
+                            let blob = dataURItoBlob(output_base64);
+                            this.downloadBlob(blob, fName + '.' + imageType);
+                        }.bind(this), 500);
+                    }.bind(this)
+                    img.src = URL.createObjectURL(output);
+                } else {
+                    this.downloadBlob(output, fName + '.' + imageType);
+                }
             } else {
                 const blob = new Blob([output], {
                     type: 'image/svg+xml;charset=utf-8'
