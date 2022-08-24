@@ -351,17 +351,6 @@ class Cytoscape extends Component {
             }
         });
 
-        console.log('123', cy);
-        cy.nodeHtmlLabel([{
-            query: 'node', // cytoscape query selector
-            halign: 'center', // title vertical position. Can be 'left',''center, 'right'
-            valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
-            halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
-            valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
-            cssClass: '', // any classes will be as attribute of <div> container for every title
-            tpl: function(data){return '<span>' + data + '</span>';} // your html template here
-        }]);
-
         this.cyResponsiveClass = new CyResponsive(cy);
         this.cyResponsiveClass.toggle(this.props.responsive);
 
@@ -370,6 +359,20 @@ class Cytoscape extends Component {
 
         this.cyTooltipsClass = new CyTooltips(cy);
         this.cyTooltipsClass.update(this.props);
+        
+        // extension is activating when extra config was used (cyto.load_extra_layouts())
+        if (cy.nodeHtmlLabel) {
+            const regex = new RegExp('\\.marked[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
+            cy.nodeHtmlLabel([{ 
+                query: '.marked1, .marked2, .marked3, .marked4, .marked5, .marked6, .marked7, .marked8, .marked9, .marked10,', // cytoscape query selector 
+                halign: 'center', // title vertical position. Can be 'left',''center, 'right'
+                valign: 'top', // title vertical position. Can be 'top',''center, 'bottom'
+                halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
+                valignBox: 'top', // title relative box vertical position. Can be 'top',''center, 'bottom'
+                cssClass: '', // any classes will be as attribute of <div> container for every title
+                tpl: function(data){return '<span>' + data.extra.mark_desc + '</span>';} // your html template here
+            }]);
+        }
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
