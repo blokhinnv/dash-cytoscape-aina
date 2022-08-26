@@ -30,13 +30,13 @@ app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
 cyto.load_extra_layouts()
 elements = [
-    {'data': {'extra': {'mark_desc': 'first'}}, 'classes': 'marked1'},
-    {'data': {'extra': {'mark_desc': 'second'}}, 'classes': 'marked2'},
-    {'data': {'extra': {'mark_desc': 'third'}}, 'classes': 'marked3'},
+    {'data': {'extra': {'mark_desc': 'first'}}, 'classes': 'mark1'},
+    {'data': {'extra': {'mark_desc': 'second'}}, 'classes': 'mark2'},
+    {'data': {'extra': {'mark_desc': 'third'}}, 'classes': 'test'},
 
-    {'data': {'extra': {'mark_desc': 'second'}}, 'classes': 'marked2'},
-    {'data': {'extra': {'mark_desc': 'first'}}, 'classes': 'marked1'},
-    {'data': {'extra': {'mark_desc': '44'}}, 'classes': 'marked44'},
+    {'data': {'extra': {'mark_desc': '&#9917;'}}, 'classes': 'mark2'},
+    {'data': {'extra': {'mark_desc': 'first'}}, 'classes': ''},
+    {'data': {'extra': {'mark_desc': '44'}}, 'classes': 'noclass'},
 ]
 
 # App

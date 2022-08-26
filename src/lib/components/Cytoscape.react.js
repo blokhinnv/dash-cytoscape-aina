@@ -362,15 +362,17 @@ class Cytoscape extends Component {
         
         // extension is activating when extra config was used (cyto.load_extra_layouts())
         if (cy.nodeHtmlLabel) {
-            const regex = new RegExp('\\.marked[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
+            const regex = new RegExp('\\.mark[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
             cy.nodeHtmlLabel([{ 
-                query: '.marked1, .marked2, .marked3, .marked4, .marked5, .marked6, .marked7, .marked8, .marked9, .marked10,', // cytoscape query selector 
+                query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', // cytoscape query selector 
                 halign: 'center', // title vertical position. Can be 'left',''center, 'right'
                 valign: 'top', // title vertical position. Can be 'top',''center, 'bottom'
                 halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
                 valignBox: 'top', // title relative box vertical position. Can be 'top',''center, 'bottom'
                 cssClass: '', // any classes will be as attribute of <div> container for every title
-                tpl: function(data){return '<span>' + data.extra.mark_desc + '</span>';} // your html template here
+                tpl: function(data) {
+                    if (data.extra.mark_desc) return '<span>' + data.extra.mark_desc + '</span>';
+                }
             }]);
         }
     }
