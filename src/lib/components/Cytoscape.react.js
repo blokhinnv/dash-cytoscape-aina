@@ -365,13 +365,13 @@ class Cytoscape extends Component {
             const regex = new RegExp('\\.mark[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
             cy.nodeHtmlLabel([{ 
                 query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', // cytoscape query selector 
-                halign: 'center', // title vertical position. Can be 'left',''center, 'right'
-                valign: 'top', // title vertical position. Can be 'top',''center, 'bottom'
-                halignBox: 'center', // title vertical position. Can be 'left',''center, 'right'
-                valignBox: 'top', // title relative box vertical position. Can be 'top',''center, 'bottom'
+                halign: 'right', // title vertical position. Can be 'left',''center, 'right'
+                valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
+                halignBox: 'right', // title vertical position. Can be 'left',''center, 'right'
+                valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
                 cssClass: '', // any classes will be as attribute of <div> container for every title
                 tpl: function(data) {
-                    if (data.extra.mark_desc) return '<span>' + data.extra.mark_desc + '</span>';
+                    if (data.extra.mark_desc) return '<span style="font-size: 14; margin-left: 3px">' + data.extra.mark_desc + '</span>';
                 }
             }]);
         }
