@@ -15,14 +15,14 @@ app.scripts.config.serve_locally = True
 app.css.config.serve_locally = True
 
 elements = [
-    {'data': {'id': 'a', 'parent': 'b'}, 'position': {'x': 215, 'y': 85}},
-    {'data': {'id': 'b'}},
-    {'data': {'id': 'c', 'parent': 'b'}, 'position': {'x': 300, 'y': 85}},
-    {'data': {'id': 'd'}, 'position': {'x': 215, 'y': 175}},
-    {'data': {'id': 'e'}},
-    {'data': {'id': 'f', 'parent': 'e'}, 'position': {'x': 300, 'y': 175}},
+    {'data': {'id': 'a', 'parent': 'b'}, 'position': {'x': 215, 'y': 85}, 'classes': 'mark1'},
+    {'data': {'id': 'b'}, 'classes': 'mark1'},
+    {'data': {'id': 'c', 'parent': 'b'}, 'position': {'x': 300, 'y': 85}, 'classes': 'mark2'},
+    {'data': {'id': 'd'}, 'position': {'x': 215, 'y': 175}, 'classes': 'mark1'},
+    {'data': {'id': 'e'}, 'classes': 'mark1'},
+    {'data': {'id': 'f', 'parent': 'e'}, 'position': {'x': 300, 'y': 175}, 'classes': 'mark1'},
     {'data': {'id': 'ad', 'source': 'a', 'target': 'd'}},
-    {'data': {'id': 'eb', 'source': 'e', 'target': 'b'}}
+    {'data': {'id': 'eb', 'source': 'e', 'target': 'b'}, 'classes': 'mark2'}
 ]
 
 # App

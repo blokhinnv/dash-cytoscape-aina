@@ -16,9 +16,9 @@ function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
     var byteString;
     if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        byteString = atob(dataURI.split(',')[1]);
+        {byteString = atob(dataURI.split(',')[1]);}
     else
-        byteString = unescape(dataURI.split(',')[1]);
+        {byteString = unescape(dataURI.split(',')[1]);}
 
     // separate out the mime component
     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -359,6 +359,22 @@ class Cytoscape extends Component {
 
         this.cyTooltipsClass = new CyTooltips(cy);
         this.cyTooltipsClass.update(this.props);
+        
+        // extension is activating when extra config was used (cyto.load_extra_layouts())
+        if (cy.nodeHtmlLabel) {
+            const regex = new RegExp('\\.mark[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
+            cy.nodeHtmlLabel([{ 
+                query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', // cytoscape query selector 
+                halign: 'right', // title vertical position. Can be 'left',''center, 'right'
+                valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
+                halignBox: 'right', // title vertical position. Can be 'left',''center, 'right'
+                valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
+                cssClass: '', // any classes will be as attribute of <div> container for every title
+                tpl: function(data) {
+                    if (data.extra.mark_desc) return '<span style="font-size: 14; margin-left: 3px">' + data.extra.mark_desc + '</span>';
+                }
+            }]);
+        }
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
@@ -420,19 +436,19 @@ class Cytoscape extends Component {
 
             if (imageType !== 'svg') {
                 if (this.cyTooltipsClass && this.cyTooltipsClass.tooltips.length > 0) {
-                    let canvas = document.createElement('canvas');
-                    let ctx = canvas.getContext('2d');
-                    let bbox = cy.elements().boundingBox();
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const bbox = cy.elements().boundingBox();
                     let minX1 = 0, minY1 = 0, maxX2 = bbox.w * 10, maxY2 = bbox.h * 10;
                     // рассчитыаем необходимые размеры холста
-                    let tooltipList = document.querySelectorAll(".popper-div");
+                    const tooltipList = document.querySelectorAll(".popper-div");
                     for (let i = 0; i < tooltipList.length; i++) {
-                        let tooltip = tooltipList[i];
-                        let position = this.cyTooltipsClass.getTooltipPosition(tooltip);
-                        let x1 = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10;
-                        let y1 = (position.y - bbox.y1) * 10;
-                        let x2 = x1 + tooltip.offsetWidth * 10;
-                        let y2 = y1 + tooltip.offsetHeight * 10;
+                        const tooltip = tooltipList[i];
+                        const position = this.cyTooltipsClass.getTooltipPosition(tooltip);
+                        const x1 = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10;
+                        const y1 = (position.y - bbox.y1) * 10;
+                        const x2 = x1 + tooltip.offsetWidth * 10;
+                        const y2 = y1 + tooltip.offsetHeight * 10;
 
                         if (x1 < minX1) {
                             minX1 = x1;
@@ -449,24 +465,24 @@ class Cytoscape extends Component {
                     }
                     canvas.width = Math.abs(minX1 - maxX2);
                     canvas.height = Math.abs(minY1 - maxY2);
-                    let img = new Image();
+                    const img = new Image();
                     img.onload = function(event) {
                         URL.revokeObjectURL(event.target.src);
                         ctx.drawImage(event.target, Math.abs(minX1), Math.abs(minY1), bbox.w * 10, bbox.h * 10);
 
-                        let tooltipList = document.querySelectorAll(".popper-div");
+                        const tooltipList = document.querySelectorAll(".popper-div");
                         for (let i = 0; i < tooltipList.length; i++) {
-                            let tooltip = tooltipList[i];
-                            let position = this.cyTooltipsClass.getTooltipPosition(tooltip);
+                            const tooltip = tooltipList[i];
+                            const position = this.cyTooltipsClass.getTooltipPosition(tooltip);
 
                             html2canvas(tooltip, {scale: 10, backgroundColor: null}).then(function (tooltipCanvas) {
                                 ctx.drawImage(tooltipCanvas, (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10 + Math.abs(minX1), (position.y - bbox.y1) * 10 + Math.abs(minY1));
-                            }.bind(this));
+                            });
                         }
 
                         setTimeout(function() {
-                            let output_base64 = canvas.toDataURL("image/png");
-                            let blob = dataURItoBlob(output_base64);
+                            const output_base64 = canvas.toDataURL("image/png");
+                            const blob = dataURItoBlob(output_base64);
                             this.downloadBlob(blob, fName + '.' + imageType);
                         }.bind(this), 500);
                     }.bind(this)

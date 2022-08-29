@@ -15,6 +15,7 @@ import popper from 'cytoscape-popper';
 import './popper.css';
 import UndoRedoList from './components/UndoRedoList.react';
 import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import cyNodeHtmlLabel from './cyNodeHtmlLabel.js';
 
 CytoscapeJS.use(coseBilkent);
 CytoscapeJS.use(fcose);
@@ -26,6 +27,7 @@ CytoscapeJS.use(spread);
 CytoscapeJS.use(svg);
 CytoscapeJS.use(contextMenus);
 CytoscapeJS.use(popper);
+CytoscapeJS.use(cyNodeHtmlLabel);
 
 export {
     Cytoscape,
