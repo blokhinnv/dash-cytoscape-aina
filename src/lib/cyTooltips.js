@@ -16,7 +16,7 @@ function uuidv4() {
 }
 
 function parseXYFromTransform(transform) {
-    const [x, y] = transform.replace('translate3d(', '').replace(')', '').replaceAll('px', '').split(',').map((item) => (parseFloat(item.trim())));
+    const [x, y] = transform.replace('translate3d(', '').replace('translate(', '').replace(')', '').replaceAll('px', '').split(',').map((item) => (parseFloat(item.trim())));
     return {x: x, y: y}
 }
 
@@ -156,6 +156,7 @@ export default class cyTooltips {
         const tooltipsDataHashNew = JSON.stringify(tooltipsData);
         // если нам передели конкретные строки, то обновляем только их
         if (tooltipsDataHashNew !== this.tooltipsDataHash) {
+            console.debug('tooltips_data changes are caught');
             const newTooltipsData = [];
             tooltipsData.forEach(tooltipsDataItem => {
                 const tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
@@ -205,6 +206,7 @@ export default class cyTooltips {
         if (tooltipsHashNew === this.tooltipsHash) {
             return;
         }
+        console.debug('tooltips changes are caught');
         this.tooltipsHash = tooltipsHashNew;
 
 
@@ -292,30 +294,30 @@ export default class cyTooltips {
                     // если event = delete, то удаляем tooltip
                     if (event == 'remove') {
                         return this.removeFree(tooltip);
-                    } 
+                    }
                         if (this.getContent(tooltip) !== content || hasPositionChanged(this.getPosition(tooltip), position)) {
                             // обновляем данные тултипа
                             return this.updateFree(tooltip, content, position);
                         }
-                    
+
                 } else {
                     // если event = delete, то удаляем этот привязанный tooltip
                     if (event == 'remove') {
                         return this.removeConnected(tooltip);
-                    } 
+                    }
                         if (this.getContent(tooltip) !== content) {
                             // устанавливаем новый контент
                             return this.updateConnected(tooltip, content);
                         }
-                    
+
                 }
             }
             else {
                 if (cy_el_id == undefined) {
                     return this.addFree(id, content, position);
-                } 
+                }
                     return this.addConnectedTooltip(id, cy_el_id, content);
-                
+
             }
         }
         // если передан cy_el_id
@@ -326,21 +328,21 @@ export default class cyTooltips {
                 // если event = delete, то удаляем этот привязанный tooltip
                 if (event == 'remove') {
                     return this.removeConnected(tooltip);
-                } 
+                }
                     if (this.getContent(tooltip) !== content) {
                         // устанавливаем новый контент
                         return this.updateConnected(tooltip, content);
                     }
-                
+
             }
             // добавляем свободный тултип
             else {
                 // генерируем случайно идентификатор тултипа
                 if (id != undefined && id.length > 0) {
                     return this.addConnected(id, cy_el_id, content);
-                } 
+                }
                     return this.addConnected(uuidv4(), cy_el_id, content);
-                
+
             }
         }
         // добавляем свободный тултип
