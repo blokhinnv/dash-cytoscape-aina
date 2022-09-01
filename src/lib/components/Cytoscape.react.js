@@ -359,12 +359,12 @@ class Cytoscape extends Component {
 
         this.cyTooltipsClass = new CyTooltips(cy);
         this.cyTooltipsClass.update(this.props);
-        
+
         // extension is activating when extra config was used (cyto.load_extra_layouts())
         if (cy.nodeHtmlLabel) {
             const regex = new RegExp('\\.mark[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
-            cy.nodeHtmlLabel([{ 
-                query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', // cytoscape query selector 
+            cy.nodeHtmlLabel([{
+                query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', // cytoscape query selector
                 halign: 'right', // title vertical position. Can be 'left',''center, 'right'
                 valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
                 halignBox: 'right', // title vertical position. Can be 'left',''center, 'right'
@@ -471,20 +471,22 @@ class Cytoscape extends Component {
                         ctx.drawImage(event.target, Math.abs(minX1), Math.abs(minY1), bbox.w * 10, bbox.h * 10);
 
                         const tooltipList = document.querySelectorAll(".popper-div");
+                        let promisesList = [];
                         for (let i = 0; i < tooltipList.length; i++) {
                             const tooltip = tooltipList[i];
                             const position = this.cyTooltipsClass.getTooltipPosition(tooltip);
 
-                            html2canvas(tooltip, {scale: 10, backgroundColor: null}).then(function (tooltipCanvas) {
+                            promisesList.push(html2canvas(tooltip, {scale: 10, backgroundColor: null}).then(function (tooltipCanvas) {
                                 ctx.drawImage(tooltipCanvas, (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10 + Math.abs(minX1), (position.y - bbox.y1) * 10 + Math.abs(minY1));
-                            });
+                            }));
                         }
 
-                        setTimeout(function() {
+                        Promise.all(promisesList).then(values => {
                             const output_base64 = canvas.toDataURL("image/png");
                             const blob = dataURItoBlob(output_base64);
                             this.downloadBlob(blob, fName + '.' + imageType);
-                        }.bind(this), 500);
+                            console.debug('Tooltips have been successfully added to the canvas when saved as an image.');
+                        });
                     }.bind(this)
                     img.src = URL.createObjectURL(output);
                 } else {
