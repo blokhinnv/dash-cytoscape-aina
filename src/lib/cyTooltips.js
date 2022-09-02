@@ -65,9 +65,8 @@ export default class cyTooltips {
         });
 
         // перемещаем все свободные тултипы при зумировании холста
-        this.cytoscape_container = cy.container();
-        this.containerOffsetTop = this.cytoscape_container.offsetTop;
-        this.containerOffsetLeft = this.cytoscape_container.offsetLeft;
+        this.containerOffsetTop = () => this.cy.container().offsetTop;
+        this.containerOffsetLeft = () => this.cy.container().offsetLeft;
         cy.on('zoom', function (event) {
             document.querySelectorAll('.popper-core').forEach(tooltip => {
                 let {x, y} = parseXYFromTransform(tooltip.style.transform);
@@ -76,8 +75,8 @@ export default class cyTooltips {
                 const lastZoom = parseFloat(tooltip.getAttribute('lastZoom'));
                 const scale = cy.zoom() / lastZoom - 1;
                 const shiftX = tooltip.getBoundingClientRect().width / 2;
-                x += (x - this.containerOffsetLeft - lastPanX + shiftX) * scale;
-                y += (y - this.containerOffsetTop - lastPanY) * scale;
+                x += (x - this.containerOffsetLeft() - lastPanX + shiftX) * scale;
+                y += (y - this.containerOffsetTop() - lastPanY) * scale;
                 tooltip.setAttribute('lastZoom', cy.zoom());
                 tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
             });
@@ -295,29 +294,26 @@ export default class cyTooltips {
                     if (event == 'remove') {
                         return this.removeFree(tooltip);
                     }
-                        if (this.getContent(tooltip) !== content || hasPositionChanged(this.getPosition(tooltip), position)) {
-                            // обновляем данные тултипа
-                            return this.updateFree(tooltip, content, position);
-                        }
-
+                    if (this.getContent(tooltip) !== content || hasPositionChanged(this.getPosition(tooltip), position)) {
+                        // обновляем данные тултипа
+                        return this.updateFree(tooltip, content, position);
+                    }
                 } else {
                     // если event = delete, то удаляем этот привязанный tooltip
                     if (event == 'remove') {
                         return this.removeConnected(tooltip);
                     }
-                        if (this.getContent(tooltip) !== content) {
-                            // устанавливаем новый контент
-                            return this.updateConnected(tooltip, content);
-                        }
-
+                    if (this.getContent(tooltip) !== content) {
+                        // устанавливаем новый контент
+                        return this.updateConnected(tooltip, content);
+                    }
                 }
             }
             else {
                 if (cy_el_id == undefined) {
                     return this.addFree(id, content, position);
                 }
-                    return this.addConnectedTooltip(id, cy_el_id, content);
-
+                return this.addConnectedTooltip(id, cy_el_id, content);
             }
         }
         // если передан cy_el_id
@@ -454,33 +450,42 @@ export default class cyTooltips {
     }
 
     addFreeTooltip(id, content, position) {
-        const popperRefObj = this.cy.popper({
-            content: () => {
-                const tooltip = document.createElement("div");
-                tooltip.classList.add("popper-div");
-                tooltip.classList.add("popper-core");
-                tooltip.setAttribute("data-tooltip-id", id);
-                tooltip.setAttribute('lastPanX', this.cy.pan().x);
-                tooltip.setAttribute('lastPanY', this.cy.pan().y);
-                tooltip.setAttribute('lastZoom', this.cy.zoom());
-                tooltip.innerHTML = '<div data-popper-arrow></div>';
-                tooltip.innerHTML = '<div data-popper-arrow></div><div class="content">' + content + '</div>';
-                tooltip.innerHTML += '<button class="remove_popper_core">X</button>';
-                document.body.appendChild(tooltip);
+        let tooltip = () => {
+            const tooltip = document.createElement("div");
+            tooltip.classList.add("popper-div");
+            tooltip.classList.add("popper-core");
+            tooltip.setAttribute("data-tooltip-id", id);
+            tooltip.setAttribute('lastPanX', this.cy.pan().x);
+            tooltip.setAttribute('lastPanY', this.cy.pan().y);
+            tooltip.setAttribute('lastZoom', this.cy.zoom());
+            tooltip.innerHTML = '<div data-popper-arrow></div>';
+            tooltip.innerHTML = '<div data-popper-arrow></div><div class="content">' + content + '</div>';
+            tooltip.innerHTML += '<button class="remove_popper_core">X</button>';
+            document.body.appendChild(tooltip);
 
-                return tooltip;
-            },
-            renderedPosition: () => ({'x': position.x * this.cy.zoom() + this.cy.pan().x, 'y': position.y * this.cy.zoom() + this.cy.pan().y}),
+            return tooltip;
+        };
+        const popperRefObj = this.cy.popper({
+            content: tooltip,
+            renderedPosition: function () {
+                if (tooltip.style.transform.length > 0) {
+                    // by the identifier of the tooltip, we determine its coordinates
+                    let tooltip_id = tooltip.getAttribute('data-tooltip-id');
+                    this.tooltips.forEach(function (tooltip, index) {
+                        if (tooltip.id == tooltip_id) {
+                            position = tooltip.position;
+                            return;
+                        }
+                    });
+                }
+                return {
+                    'x': position.x * this.cy.zoom() + this.cy.pan().x,
+                    'y': position.y * this.cy.zoom() + this.cy.pan().y
+                };
+            }.bind(this),
         });
 
-        const tooltip = popperRefObj.state.elements.popper;
-        setTimeout(() => {
-                const x = Math.ceil((position.x * this.cy.zoom() + this.cy.pan().x + this.containerOffsetLeft - tooltip.offsetWidth / 2) * 100) / 100;
-                const y = Math.ceil((position.y * this.cy.zoom() + this.cy.pan().y + this.containerOffsetTop) * 100) / 100;
-                tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-                tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
-            },
-            10);
+        tooltip = popperRefObj.state.elements.popper;
         const textarea = tooltip.querySelector('textarea');
         if (textarea != undefined) {
             if (textarea != undefined) {
@@ -508,16 +513,10 @@ export default class cyTooltips {
         tooltip.setAttribute('lastPanX', this.cy.pan().x);
         tooltip.setAttribute('lastPanY', this.cy.pan().y);
         tooltip.setAttribute('lastZoom', this.cy.zoom());
-        // let x = position.x * this.cy.zoom() + this.cy.pan().x;
-        // let y = position.y * this.cy.zoom() + this.cy.pan().y;
-        // tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-        const x = Math.ceil((position.x * this.cy.zoom() + this.cy.pan().x + this.containerOffsetLeft - tooltip.offsetWidth / 2) * 100) / 100;
-        const y = Math.ceil((position.y * this.cy.zoom() + this.cy.pan().y + this.containerOffsetTop) * 100) / 100;
+        const x = Math.ceil((position.x * this.cy.zoom() + this.cy.pan().x + this.containerOffsetLeft() - tooltip.offsetWidth / 2) * 100) / 100;
+        const y = Math.ceil((position.y * this.cy.zoom() + this.cy.pan().y + this.containerOffsetTop()) * 100) / 100;
         tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-        setTimeout(() => {
-                tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
-            },
-            100);
+        tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
 
         // отслеживаем изменение размера textarea
         const textarea = tooltip.querySelector('textarea');
@@ -561,8 +560,8 @@ export default class cyTooltips {
 
     getTooltipPosition(tooltip) {
         let {x, y} = parseXYFromTransform(tooltip.style.transform);
-        x = Math.ceil(((x - this.containerOffsetLeft - this.cy.pan().x + tooltip.offsetWidth / 2) / this.cy.zoom()) * 100) / 100;
-        y = Math.ceil(((y - this.containerOffsetTop - this.cy.pan().y) / this.cy.zoom()) * 100) / 100;
+        x = Math.ceil(((x - this.containerOffsetLeft() - this.cy.pan().x + tooltip.offsetWidth / 2) / this.cy.zoom()) * 100) / 100;
+        y = Math.ceil(((y - this.containerOffsetTop() - this.cy.pan().y) / this.cy.zoom()) * 100) / 100;
         const position = {x: x, y: y}
         return position;
     }
