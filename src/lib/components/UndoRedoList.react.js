@@ -20,13 +20,15 @@ export default function UndoRedoList(props) {
     
         function handleKeyPress(e) {
             if (e.keyCode === 13) {
-              handleClose(highlightedItem)
+              handleClick(highlightedItem)
             }
           }
         
-        function handleClose(index) {
-            setProps({undo_index: index})
-            setHighlightedItem(-1)
+        function handleClick(index) {
+            setProps({undo_index: index,
+                     n_clicks: props.n_clicks+1,
+                     n_clicks_timestamp: Date.now()})
+            setHighlightedItem(-1);
           }
 
         return (
@@ -41,8 +43,8 @@ export default function UndoRedoList(props) {
                         onMouseLeave={() => setHighlightedItem(-1)}
                         onMouseEnter={() => setHighlightedItem(index)}
                         onFocus={() => setHighlightedItem(index)}
-                        onKeyUp={(e) => handleKeyPress(e, index)}
-                        onClick={() => handleClose(index)}
+                        onKeyUp={() => handleKeyPress(highlightedItem)}
+                        onClick={() => handleClick(highlightedItem)}
                     >
                         {action}
                     </Dropdown.Item>
@@ -55,6 +57,8 @@ export default function UndoRedoList(props) {
 
 UndoRedoList.defaultProps = {
     actions: [],
+    n_clicks: 0,
+    n_clicks_timestamp: -1,
     undo_index: undefined
 };
 
@@ -73,6 +77,16 @@ UndoRedoList.propTypes = {
      * Index of event, start of which we will undo
      */
     undo_index: PropTypes.number,
+
+    /**
+     * Amount of clicks on the list
+     */
+     n_clicks: PropTypes.number,
+
+    /**
+     * Time of click on the list
+     */
+     n_clicks_timestamp: PropTypes.number,
 
     /**
      * Dash-assigned callback that should be called to report property changes

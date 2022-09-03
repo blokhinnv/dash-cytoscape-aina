@@ -1102,6 +1102,28 @@
           "computed": true
         }
       },
+      "n_clicks": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Amount of clicks on the list",
+        "defaultValue": {
+          "value": "0",
+          "computed": false
+        }
+      },
+      "n_clicks_timestamp": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Time of click on the list",
+        "defaultValue": {
+          "value": "-1",
+          "computed": false
+        }
+      },
       "setProps": {
         "type": {
           "name": "func"

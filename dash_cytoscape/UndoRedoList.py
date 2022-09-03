@@ -17,6 +17,12 @@ Keyword arguments:
 - actions (list of strings; optional):
     An array of history actions.
 
+- n_clicks (number; default 0):
+    Amount of clicks on the list.
+
+- n_clicks_timestamp (number; default -1):
+    Time of click on the list.
+
 - undo_index (number; default undefined):
     Index of event, start of which we will undo."""
     _children_props = []
@@ -24,10 +30,10 @@ Keyword arguments:
     _namespace = 'dash_cytoscape'
     _type = 'UndoRedoList'
     @_explicitize_args
-    def __init__(self, id=Component.UNDEFINED, actions=Component.UNDEFINED, undo_index=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'actions', 'undo_index']
+    def __init__(self, id=Component.UNDEFINED, actions=Component.UNDEFINED, undo_index=Component.UNDEFINED, n_clicks=Component.UNDEFINED, n_clicks_timestamp=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'actions', 'n_clicks', 'n_clicks_timestamp', 'undo_index']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'actions', 'undo_index']
+        self.available_properties = ['id', 'actions', 'n_clicks', 'n_clicks_timestamp', 'undo_index']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

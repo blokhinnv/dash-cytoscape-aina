@@ -1,9 +1,9 @@
 # AUTO GENERATED FILE - DO NOT EDIT
 
 #' @export
-cytoUndoRedoList <- function(id=NULL, actions=NULL, undo_index=NULL) {
+cytoUndoRedoList <- function(id=NULL, actions=NULL, n_clicks=NULL, n_clicks_timestamp=NULL, undo_index=NULL) {
     
-    props <- list(id=id, actions=actions, undo_index=undo_index)
+    props <- list(id=id, actions=actions, n_clicks=n_clicks, n_clicks_timestamp=n_clicks_timestamp, undo_index=undo_index)
     if (length(props) > 0) {
         props <- props[!vapply(props, is.null, logical(1))]
     }
@@ -11,7 +11,7 @@ cytoUndoRedoList <- function(id=NULL, actions=NULL, undo_index=NULL) {
         props = props,
         type = 'UndoRedoList',
         namespace = 'dash_cytoscape',
-        propNames = c('id', 'actions', 'undo_index'),
+        propNames = c('id', 'actions', 'n_clicks', 'n_clicks_timestamp', 'undo_index'),
         package = 'dashCytoscape'
         )
 

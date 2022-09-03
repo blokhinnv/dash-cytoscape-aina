@@ -1,6 +1,6 @@
-import undo_redo_list
+import dash_cytoscape as cyto
 import dash
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_html_components as html
 
 app = dash.Dash(__name__)
@@ -37,7 +37,7 @@ _options = [
 actions = [item['label'] for item in _options]
 
 app.layout = html.Div([
-    undo_redo_list.UndoRedoList(
+    cyto.UndoRedoList(
         id='undoredo_list',
         actions=actions
     ),
@@ -47,10 +47,12 @@ app.layout = html.Div([
 
 
 @app.callback(Output('output', 'children'), 
-             [Input('undoredo_list', 'undo_index')],
+             Input('undoredo_list', 'n_clicks'),
+             State('undoredo_list', 'undo_index'),
+             State('undoredo_list', 'n_clicks_timestamp'),
              prevent_initial_call=True)
-def display_output(undo_index):
-    return f'{undo_index}'
+def display_output(btn, undo_index, click_time):
+    return f'Number of click: {btn}, Index: {undo_index}, timestamp: {click_time}'
 
 
 @app.callback(Output('undoredo_list', 'actions'), 

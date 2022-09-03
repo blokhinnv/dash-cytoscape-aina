@@ -10,13 +10,18 @@ The component is showing list of items.  Elements above hover are highlighted to
 }
 
 \usage{
-cytoUndoRedoList(id=NULL, actions=NULL, undo_index=NULL)
+cytoUndoRedoList(id=NULL, actions=NULL, n_clicks=NULL,
+n_clicks_timestamp=NULL, undo_index=NULL)
 }
 
 \arguments{
 \item{id}{Character. The ID used to identify this component in Dash callbacks.}
 
 \item{actions}{List of characters. An array of history actions}
+
+\item{n_clicks}{Numeric. Amount of clicks on the list}
+
+\item{n_clicks_timestamp}{Numeric. Time of click on the list}
 
 \item{undo_index}{Numeric. Index of event, start of which we will undo}
 }
