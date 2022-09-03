@@ -27,6 +27,36 @@ function hasPositionChanged(p1, p2) {
     return true;
 }
 
+function getTextareaDimensions(textarea) {
+    let width = textarea.style.width;
+    let height = textarea.style.height;
+    if (width.length > 0 && height.length > 0) {
+        width = width.replace('px', '');
+        height = height.replace('px', '');
+    }
+    width = parseFloat(width);
+    height = parseFloat(height);
+    if (isNaN(width) || isNaN(height)) {
+        return false;
+    }
+    return {w: width, h: height}
+}
+
+function getTooltipTextareLastDimension(tooltip) {
+    let lastWidth = tooltip.getAttribute('lastWidth');
+    let lastHeight = tooltip.getAttribute('lastHeight');
+    if (lastWidth != undefined && lastHeight != undefined) {
+        lastWidth = lastWidth.replace('px', '');
+        lastHeight = lastHeight.replace('px', '');
+    }
+    lastWidth = parseFloat(lastWidth);
+    lastHeight = parseFloat(lastHeight);
+    if (isNaN(lastWidth) || isNaN(lastHeight)) {
+        return false;
+    }
+    return {w: lastWidth, h: lastHeight}
+}
+
 export default class cyTooltips {
     constructor(cy) {
         this.updateTooltips = this.update.bind(this);
@@ -113,8 +143,6 @@ export default class cyTooltips {
             const shiftX = event.clientX - tooltip.getBoundingClientRect().left;
             const shiftY = event.clientY - tooltip.getBoundingClientRect().top + 5;
 
-            moveAt(event.pageX, event.pageY);
-
             // перемещает всплывающую подсказку по координатам (pageX, pageY)
             // принимая во внимание первоначальные сдвиги тултипа
             function moveAt(pageX, pageY) {
@@ -132,10 +160,35 @@ export default class cyTooltips {
             tooltip.addEventListener('mouseup', function(tooltip) {
                 document.removeEventListener('mousemove', onMouseMove);
                 // если изменился размер textarea, то инициируем коллбек
-                if (tooltip.getAttribute('lastwidth') != tooltip.offsetWidth ||
-                    tooltip.getAttribute('lastheight') != tooltip.offsetHeight) {
-                    this.setUpdateProps(tooltip);
+                // если появились стили ширины и высоты у textarea и до этого не были установлены атрибуты lastwidth, lastheight
+                // или текущие длина и ширина отличается от предыдущих
+                // то можно считать, что изменлся размер textarea
+                let textareas = tooltip.getElementsByTagName('textarea');
+                if (textareas.length == 0) {
+                    return false;
                 }
+                let textarea = textareas[0];
+
+                let dim = getTextareaDimensions(textarea);
+                if (!dim) {
+                    return false;
+                }
+
+                let lastdim = getTooltipTextareLastDimension(tooltip);
+                if (!lastdim) {
+                    tooltip.setAttribute('lastWidth', dim.w);
+                    tooltip.setAttribute('lastHeight', dim.h);
+                    this.setUpdateProps(tooltip);
+                    return false;
+                }
+
+                if (dim.w == lastdim.w && dim.h == lastdim.h) {
+                    return;
+                }
+
+                tooltip.setAttribute('lastWidth', dim.w);
+                tooltip.setAttribute('lastHeight', dim.h);
+                this.setUpdateProps(tooltip);
             }.bind(this, tooltip))
         }.bind(this));
 
@@ -155,7 +208,7 @@ export default class cyTooltips {
         const tooltipsDataHashNew = JSON.stringify(tooltipsData);
         // если нам передели конкретные строки, то обновляем только их
         if (tooltipsDataHashNew !== this.tooltipsDataHash) {
-            console.debug('tooltips_data changes are caught');
+            console.debug('tooltips_data changes are caught (new, old)', tooltipsDataHashNew, this.tooltipsDataHash);
             const newTooltipsData = [];
             tooltipsData.forEach(tooltipsDataItem => {
                 const tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
@@ -205,33 +258,42 @@ export default class cyTooltips {
         if (tooltipsHashNew === this.tooltipsHash) {
             return;
         }
-        console.debug('tooltips changes are caught');
+        console.debug('tooltips changes are caught (new, old)', tooltipsHashNew, this.tooltipsHash);
         this.tooltipsHash = tooltipsHashNew;
-
 
         // нам передали весь массив тултипов
         // нужно понять, что изменилось и соответственно добавить, обновить, удалить
         const toAdd = [];
         const toUpdate = [];
         // обходим новые элементы
-        tooltips.forEach(function (tooltipsNewItem, newIndex) {
+        for (let newIndex = 0; newIndex < tooltips.length; newIndex++) {
+            let tooltipsNewItem = tooltips[newIndex];
             let isOld = false;
-            this.tooltips.forEach(function (tooltipsOldItem, oldIndex) {
+            // обходим старые элементы
+            for (let oldIndex = 0; oldIndex < this.tooltips.length; oldIndex++) {
+                let tooltipsOldItem = this.tooltips[oldIndex];
+                console.debug(tooltipsNewItem, tooltipsOldItem);
                 // обновляем элемент
-                if (tooltipsOldItem.cy_el_id == tooltipsNewItem.cy_el_id) {
+                if (tooltipsOldItem.cy_el_id != undefined && tooltipsOldItem.cy_el_id == tooltipsNewItem.cy_el_id) {
                     isOld = true;
                     toUpdate.push(tooltipsNewItem);
                     this.tooltips.splice(oldIndex, 1);
+                    break;
                 } else if (tooltipsOldItem.id == tooltipsNewItem.id) {
                     isOld = true;
                     toUpdate.push(tooltipsNewItem);
                     this.tooltips.splice(oldIndex, 1);
+                    break;
                 }
-            }.bind(this));
+            }
             if (!isOld) {
                 toAdd.push(tooltipsNewItem);
             }
-        }.bind(this));
+        }
+
+        console.debug('новые элементы', toAdd);
+        console.debug('элементы, которые обновились, либо не изменились', toUpdate);
+        console.debug('удаляемые элементы', this.tooltips);
 
         // в this.tooltips остались только элементы, подлежащие удалению
         const newTooltipsData = [];
@@ -253,6 +315,7 @@ export default class cyTooltips {
                 data: tooltipsItem
             }
             const tooltipEventData = this.applyTooltipsDataItem(tooltipsDataItem);
+            console.debug('toAdd', tooltipsItem, tooltipEventData);
             if (tooltipEventData == undefined) {
                 return;
             }
@@ -294,6 +357,7 @@ export default class cyTooltips {
                     if (event == 'remove') {
                         return this.removeFree(tooltip);
                     }
+                    console.debug('applyTooltipsDataItem', tooltipsDataItem, this.getContent(tooltip), content, hasPositionChanged(this.getPosition(tooltip), position));
                     if (this.getContent(tooltip) !== content || hasPositionChanged(this.getPosition(tooltip), position)) {
                         // обновляем данные тултипа
                         return this.updateFree(tooltip, content, position);
@@ -348,7 +412,13 @@ export default class cyTooltips {
     }
 
     addConnectedTooltip(id, cy_el_id, content) {
+        console.debug('this.cy.elements()', this.cy.elements());
+        // генерируем promise на появление элемента
+            // получаем элемент
+            // если его нет, то напротяжении 10 секунд раз в секунду проверяем его появление
+        // добавляем тултип, когда promise успешно отработал
         const element = this.cy.$id(cy_el_id);
+        console.debug('addConnectedTooltip', id, cy_el_id, element);
         if (!element.isNode() && !element.isEdge()) {
             return;
         }
@@ -516,7 +586,9 @@ export default class cyTooltips {
         const x = Math.ceil((position.x * this.cy.zoom() + this.cy.pan().x + this.containerOffsetLeft() - tooltip.offsetWidth / 2) * 100) / 100;
         const y = Math.ceil((position.y * this.cy.zoom() + this.cy.pan().y + this.containerOffsetTop()) * 100) / 100;
         tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-        tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
+        setTimeout(() => {
+            tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
+        }, 100);
 
         // отслеживаем изменение размера textarea
         const textarea = tooltip.querySelector('textarea');
@@ -648,7 +720,7 @@ export default class cyTooltips {
                         id: tooltip_data.id,
                         last_update_time: last_update_time
                     }
-                }]
+                }];
                 if (cy_el_id != '') {
                     tooltipsData[0].data.cy_el_id = cy_el_id;
                     const element = this.cy.$id(cy_el_id);
@@ -688,36 +760,5 @@ export default class cyTooltips {
             const position = tooltip.offsetWidth / 2 - 8;
             arrow.style.transform = 'translate3d(' + (position) + 'px, 0px, 0)';
         }
-
-        // определяем, изменился ли размер тултипа
-        let width = textarea.style.width;
-        let height = textarea.style.height;
-        if (width.length > 0 && height.length > 0) {
-            width = width.replace('px', '');
-            height = height.replace('px', '');
-        }
-        width = parseFloat(width);
-        height = parseFloat(height);
-        if (isNaN(width) || isNaN(height)) {
-            return false;
-        }
-        let lastWidth = tooltip.getAttribute('lastWidth');
-        let lastHeight = tooltip.getAttribute('lastHeight');
-        if (lastWidth != undefined && lastHeight != undefined) {
-            lastWidth = lastWidth.replace('px', '');
-            lastHeight = lastHeight.replace('px', '');
-        }
-        lastWidth = parseFloat(lastWidth);
-        lastHeight = parseFloat(lastHeight);
-        if (isNaN(lastWidth) || isNaN(lastHeight)) {
-            tooltip.setAttribute('lastWidth', width);
-            tooltip.setAttribute('lastHeight', height);
-            return false;
-        }
-        if (width == lastWidth && height == lastHeight) {
-            return;
-        }
-        tooltip.setAttribute('lastWidth', width);
-        tooltip.setAttribute('lastHeight', height);
     }
 }
