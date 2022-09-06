@@ -27,6 +27,9 @@ function hasPositionChanged(p1, p2) {
     return true;
 }
 
+// returns a Promise that resolves after "ms" Milliseconds
+const timer = ms => new Promise(res => setTimeout(res, ms));
+
 function getTextareaDimensions(textarea) {
     let width = textarea.style.width;
     let height = textarea.style.height;
@@ -79,6 +82,8 @@ export default class cyTooltips {
         this.tooltipsHash = JSON.stringify(this.tooltips);
         this.tooltipsDataHash = JSON.stringify([]);
         this.setProps = null;
+        this.queue = [];
+        this.queue_in_work = false;
 
         // перемещаем все свободный тултипы при перемещении по холсту
         cy.on('pan', function (event) {
@@ -130,8 +135,8 @@ export default class cyTooltips {
                 }
                 var tooltip = event.target.parentNode.parentNode;
                 var textarea = event.target;
-                if (event.clientX > tooltip.getBoundingClientRect().right - 25 &&
-                    event.clientY > textarea.getBoundingClientRect().bottom - 25) {
+                if (event.clientX > tooltip.getBoundingClientRect().right - 30 &&
+                    event.clientY > textarea.getBoundingClientRect().bottom - 30) {
                     return;
                 }
             } else if (event.target.className == 'popper-div popper-core') {
@@ -159,35 +164,15 @@ export default class cyTooltips {
             // отпускаем всплывающую подсказку, удаляем ненужные обработчики
             tooltip.addEventListener('mouseup', function(tooltip) {
                 document.removeEventListener('mousemove', onMouseMove);
-                // если изменился размер textarea, то инициируем коллбек
-                // если появились стили ширины и высоты у textarea и до этого не были установлены атрибуты lastwidth, lastheight
-                // или текущие длина и ширина отличается от предыдущих
-                // то можно считать, что изменлся размер textarea
                 let textareas = tooltip.getElementsByTagName('textarea');
-                if (textareas.length == 0) {
-                    return false;
+                if (textareas.length != 0) {
+                    let textarea = textareas[0];
+                    let dim = getTextareaDimensions(textarea);
+                    if (dim) {
+                        tooltip.setAttribute('lastWidth', dim.w);
+                        tooltip.setAttribute('lastHeight', dim.h);
+                    }
                 }
-                let textarea = textareas[0];
-
-                let dim = getTextareaDimensions(textarea);
-                if (!dim) {
-                    return false;
-                }
-
-                let lastdim = getTooltipTextareLastDimension(tooltip);
-                if (!lastdim) {
-                    tooltip.setAttribute('lastWidth', dim.w);
-                    tooltip.setAttribute('lastHeight', dim.h);
-                    this.setUpdateProps(tooltip);
-                    return false;
-                }
-
-                if (dim.w == lastdim.w && dim.h == lastdim.h) {
-                    return;
-                }
-
-                tooltip.setAttribute('lastWidth', dim.w);
-                tooltip.setAttribute('lastHeight', dim.h);
                 this.setUpdateProps(tooltip);
             }.bind(this, tooltip))
         }.bind(this));
@@ -199,15 +184,26 @@ export default class cyTooltips {
     }
 
     update(props) {
-        const {cy, setProps, tooltips, tooltipsData} = props;
+        let {cy, setProps, tooltips, tooltipsData} = props;
         this.setProps = setProps;
 
         if (typeof tooltips !== 'object' || !this.cy) {
             return;
         }
+
+        // если в очереди что-то есть, то кладем в очередь и завершаем работу
+        // если очередь пуста, то обрабатываем обновление в обычном режиме
+        if (this.queue_in_work) {
+            this.queue.push({tooltips, tooltipsData});
+            return;
+        } else if (this.queue.length != 0) {
+            tooltips = this.queue[0].tooltips;
+            tooltipsData = this.queue[0].tooltipsData;
+        }
         const tooltipsDataHashNew = JSON.stringify(tooltipsData);
         // если нам передели конкретные строки, то обновляем только их
         if (tooltipsDataHashNew !== this.tooltipsDataHash) {
+            this.queue_in_work = true;
             console.debug('tooltips_data changes are caught (new, old)', tooltipsDataHashNew, this.tooltipsDataHash);
             let newTooltipsData = [];
             let promises = [];
@@ -254,7 +250,14 @@ export default class cyTooltips {
                 this.tooltipsDataHash = JSON.stringify(newTooltipsData);
                 this.tooltipsHash = JSON.stringify(tooltips);
                 this.tooltips = tooltips;
+                // по окончанию обработки проверяем очередь
+                this.queue_in_work = false;
+                this.queue.splice(0);
                 this.setProps({tooltipsData: newTooltipsData, tooltips: tooltips});
+                // если в очереди что-то есть, то продолжаем обработку
+                if (this.queue.length !== 0) {
+                    this.forceUpdate();
+                }
             });
             return;
         }
@@ -263,6 +266,7 @@ export default class cyTooltips {
         if (tooltipsHashNew === this.tooltipsHash) {
             return;
         }
+        this.queue_in_work = true;
         console.debug('tooltips changes are caught (new, old)', tooltipsHashNew, this.tooltipsHash);
         this.tooltipsHash = tooltipsHashNew;
 
@@ -277,7 +281,7 @@ export default class cyTooltips {
             // обходим старые элементы
             for (let oldIndex = 0; oldIndex < this.tooltips.length; oldIndex++) {
                 let tooltipsOldItem = this.tooltips[oldIndex];
-                console.debug('(old, new)', tooltipsNewItem, tooltipsOldItem);
+                console.debug(tooltipsNewItem, tooltipsOldItem);
                 // обновляем элемент
                 if (tooltipsOldItem.cy_el_id != undefined && tooltipsOldItem.cy_el_id == tooltipsNewItem.cy_el_id) {
                     isOld = true;
@@ -325,7 +329,6 @@ export default class cyTooltips {
                     data: tooltipsItem
                 }
                 const tooltipEventData = await this.applyTooltipsDataItem(tooltipsDataItem);
-                console.debug('toAdd', tooltipsItem, tooltipEventData);
                 if (tooltipEventData == undefined) {
                     return;
                 }
@@ -351,7 +354,14 @@ export default class cyTooltips {
             this.tooltipsDataHash = JSON.stringify(newTooltipsData);
             this.tooltipsHash = JSON.stringify(tooltips);
             this.tooltips = tooltips;
+            // по окончанию обработки проверяем очередь
+            this.queue_in_work = false;
+            this.queue.splice(0);
             this.setProps({tooltipsData: newTooltipsData, tooltips});
+            // если в очереди что-то есть, то продолжаем обработку
+            if (this.queue.length !== 0) {
+                this.forceUpdate();
+            }
         });
     }
 
@@ -372,8 +382,8 @@ export default class cyTooltips {
                     if (event == 'remove') {
                         return this.removeFree(tooltip);
                     }
-                    console.debug('applyTooltipsDataItem', tooltipsDataItem, this.getContent(tooltip), content, hasPositionChanged(this.getPosition(tooltip), position));
-                    if (this.getContent(tooltip) !== content || hasPositionChanged(this.getPosition(tooltip), position)) {
+                    console.debug('applyTooltipsDataItem', tooltipsDataItem, this.getContent(tooltip), content, hasPositionChanged(await this.getPosition(tooltip), position));
+                    if (this.getContent(tooltip) !== content || hasPositionChanged(await this.getPosition(tooltip), position)) {
                         // обновляем данные тултипа
                         return this.updateFree(tooltip, content, position);
                     }
@@ -427,8 +437,6 @@ export default class cyTooltips {
     }
 
     async addConnectedTooltip(id, cy_el_id, content) {
-        // returns a Promise that resolves after "ms" Milliseconds
-        const timer = ms => new Promise(res => setTimeout(res, ms));
         let attempt_count = 20;
         // get the element
         let element = this.cy.$id(cy_el_id);
@@ -539,7 +547,7 @@ export default class cyTooltips {
         return tooltipEventData
     }
 
-    addFreeTooltip(id, content, position) {
+    async addFreeTooltip(id, content, position) {
         let tooltip = () => {
             const tooltip = document.createElement("div");
             tooltip.classList.add("popper-div");
@@ -549,7 +557,7 @@ export default class cyTooltips {
             tooltip.setAttribute('lastPanY', this.cy.pan().y);
             tooltip.setAttribute('lastZoom', this.cy.zoom());
             tooltip.innerHTML = '<div data-popper-arrow></div>';
-            tooltip.innerHTML = '<div data-popper-arrow></div><div class="content">' + content + '</div>';
+            tooltip.innerHTML += '<div class="content">' + content + '</div>';
             tooltip.innerHTML += '<button class="remove_popper_core">X</button>';
             document.body.appendChild(tooltip);
 
@@ -585,20 +593,19 @@ export default class cyTooltips {
                 this.addObserverToTextArea(textarea)
             }
         }
-
         const tooltipEventData = {
             event: 'add',
             data: {
                 id: id,
                 content: content,
-                position: position,
+                position: await this.getPosition(tooltip),
                 last_update_time: new Date().getTime()
             }
         }
         return tooltipEventData
     }
 
-    updateFreeTooltip(tooltip, content, position) {
+    async updateFreeTooltip(tooltip, content, position) {
         tooltip.querySelector('.content').innerHTML = content;
         tooltip.setAttribute('lastPanX', this.cy.pan().x);
         tooltip.setAttribute('lastPanY', this.cy.pan().y);
@@ -606,9 +613,6 @@ export default class cyTooltips {
         const x = Math.ceil((position.x * this.cy.zoom() + this.cy.pan().x + this.containerOffsetLeft() - tooltip.offsetWidth / 2) * 100) / 100;
         const y = Math.ceil((position.y * this.cy.zoom() + this.cy.pan().y + this.containerOffsetTop()) * 100) / 100;
         tooltip.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
-        setTimeout(() => {
-            tooltip.querySelector('[data-popper-arrow]').style.transform = 'translate3d(' + (tooltip.offsetWidth / 2 - 4) + 'px, 0px, 0)';
-        }, 100);
 
         // отслеживаем изменение размера textarea
         const textarea = tooltip.querySelector('textarea');
@@ -624,7 +628,7 @@ export default class cyTooltips {
             data: {
                 id: tooltip.getAttribute('data-tooltip-id'),
                 content: content,
-                position: position,
+                position: await this.getPosition(tooltip),
                 last_update_time: new Date().getTime()
             }
         }
@@ -650,7 +654,11 @@ export default class cyTooltips {
         return tooltip.querySelector('.content').innerHTML;
     }
 
-    getTooltipPosition(tooltip) {
+    async getTooltipPosition(tooltip) {
+        let attempt_count = 20;
+        while (tooltip.style.transform.length == 0 && --attempt_count) {
+            await timer(500);
+        }
         let {x, y} = parseXYFromTransform(tooltip.style.transform);
         x = Math.ceil(((x - this.containerOffsetLeft() - this.cy.pan().x + tooltip.offsetWidth / 2) / this.cy.zoom()) * 100) / 100;
         y = Math.ceil(((y - this.containerOffsetTop() - this.cy.pan().y) / this.cy.zoom()) * 100) / 100;
@@ -683,7 +691,7 @@ export default class cyTooltips {
     setUpdateTooltipProps(tooltip) {
         // обходим весь список тултипов
         const tooltips = this.tooltips;
-        tooltips.forEach(function (tooltip_data, index) {
+        tooltips.forEach(async function (tooltip_data, index) {
             if (tooltip.getAttribute('data-tooltip-cy-el-id') != undefined &&
                 tooltip_data.cy_el_id == tooltip.getAttribute('data-tooltip-cy-el-id')) {
                 if (tooltip_data.content != this.getContent(tooltip)) {
@@ -706,20 +714,20 @@ export default class cyTooltips {
                 }
             } else if (tooltip_data.id == tooltip.getAttribute('data-tooltip-id')) {
                 if (tooltip_data.content != this.getContent(tooltip) ||
-                    hasPositionChanged(this.getPosition(tooltip), tooltip_data.position)) {
+                    hasPositionChanged(await this.getPosition(tooltip), tooltip_data.position)) {
                     const last_update_time = new Date().getTime();
                     const tooltipsData = [{
                         event: 'update',
                         data: {
                             id: tooltip.getAttribute('data-tooltip-id'),
                             content: this.getContent(tooltip),
-                            position: this.getPosition(tooltip),
+                            position: await this.getPosition(tooltip),
                             last_update_time: last_update_time
                         }
                     }]
-                    tooltips[index].content = this.getContent(tooltip);
-                    tooltips[index].position = this.getPosition(tooltip);
-                    tooltips[index].last_update_time = last_update_time;
+                    tooltips[index].content = tooltipsData[0].data.content;
+                    tooltips[index].position = tooltipsData[0].data.position;
+                    tooltips[index].last_update_time = tooltipsData[0].data.last_update_time;
                     this.tooltipsDataHash = JSON.stringify(tooltipsData);
                     this.tooltipsHash = JSON.stringify(tooltips);
                     this.setProps({tooltipsData, tooltips});
@@ -777,7 +785,7 @@ export default class cyTooltips {
         else {
             // размещаем стрелку по центру контейнера тултипа
             const arrow = tooltip.querySelector('[data-popper-arrow]');
-            const position = tooltip.offsetWidth / 2 - 8;
+            const position = tooltip.offsetWidth / 2 - 4;
             arrow.style.transform = 'translate3d(' + (position) + 'px, 0px, 0)';
         }
     }
