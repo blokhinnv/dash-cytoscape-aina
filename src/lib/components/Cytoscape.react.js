@@ -436,59 +436,67 @@ class Cytoscape extends Component {
             let minX1 = 0, minY1 = 0, maxX2 = bbox.w * 10, maxY2 = bbox.h * 10;
             // calculate the required canvas sizes
             const tooltipList = document.querySelectorAll(".popper-div");
+            let promisesList = [];
             for (let i = 0; i < tooltipList.length; i++) {
                 const tooltip = tooltipList[i];
-                const position = this.cyTooltipsClass.getTooltipPosition(tooltip);
-                const x1 = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10;
-                const y1 = (position.y - bbox.y1) * 10;
-                const x2 = x1 + tooltip.offsetWidth * 10;
-                const y2 = y1 + tooltip.offsetHeight * 10;
+                promisesList.push(new Promise(async (resolve, reject) => {
+                    const position = await this.cyTooltipsClass.getTooltipPosition(tooltip);
+                    const x1 = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10;
+                    const y1 = (position.y - bbox.y1) * 10;
+                    const x2 = x1 + tooltip.offsetWidth * 10;
+                    const y2 = y1 + tooltip.offsetHeight * 10;
 
-                if (x1 < minX1) {
-                    minX1 = x1;
-                }
-                if (y1 < minY1) {
-                    minY1 = y1;
-                }
-                if (x2 > maxX2) {
-                    maxX2 = x2;
-                }
-                if (y2 > maxY2) {
-                    maxY2 = y2;
-                }
+                    if (x1 < minX1) {
+                        minX1 = x1;
+                    }
+                    if (y1 < minY1) {
+                        minY1 = y1;
+                    }
+                    if (x2 > maxX2) {
+                        maxX2 = x2;
+                    }
+                    if (y2 > maxY2) {
+                        maxY2 = y2;
+                    }
+                    resolve(true);
+                }));
             }
-            canvas.width = Math.abs(minX1 - maxX2);
-            canvas.height = Math.abs(minY1 - maxY2);
-            const img = new Image();
-            img.onload = function(event) {
-                URL.revokeObjectURL(event.target.src);
-                ctx.drawImage(event.target, Math.abs(minX1), Math.abs(minY1), bbox.w * 10, bbox.h * 10);
+            Promise.all(promisesList).then(values => {
+                canvas.width = Math.abs(minX1 - maxX2);
+                canvas.height = Math.abs(minY1 - maxY2);
+                const img = new Image();
+                img.onload = function (event) {
+                    URL.revokeObjectURL(event.target.src);
+                    ctx.drawImage(event.target, Math.abs(minX1), Math.abs(minY1), bbox.w * 10, bbox.h * 10);
 
-                const tooltipList = document.querySelectorAll(".popper-div");
-                let promisesList = [];
-                for (let i = 0; i < tooltipList.length; i++) {
-                    const tooltip = tooltipList[i];
-                    const position = this.cyTooltipsClass.getTooltipPosition(tooltip);
+                    const tooltipList = document.querySelectorAll(".popper-div");
+                    promisesList = [];
+                    for (let i = 0; i < tooltipList.length; i++) {
+                        promisesList.push(new Promise((resolve, reject) => {
+                            const tooltip = tooltipList[i];
+                            html2canvas(tooltip, {scale: 10, backgroundColor: null}).then(async (tooltipCanvas) => {
+                                const position = await this.cyTooltipsClass.getTooltipPosition(tooltip);
+                                ctx.drawImage(tooltipCanvas, (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10 + Math.abs(minX1), (position.y - bbox.y1) * 10 + Math.abs(minY1));
+                                resolve(true);
+                            });
+                        }));
+                    }
 
-                    promisesList.push(html2canvas(tooltip, {scale: 10, backgroundColor: null}).then(function (tooltipCanvas) {
-                        ctx.drawImage(tooltipCanvas, (position.x - bbox.x1 - tooltip.offsetWidth / 2) * 10 + Math.abs(minX1), (position.y - bbox.y1) * 10 + Math.abs(minY1));
-                    }));
+                    Promise.all(promisesList).then(values => {
+                        canvas.toBlob(function (blob) {
+                            this.downloadBlob(blob, fName + '.' + imageType);
+                        }.bind(this));
+
+                        console.debug('Tooltips have been successfully added to the canvas when saved as an image.');
+                    });
+                }.bind(this);
+                if (output && output.size > 0) {
+                    img.src = URL.createObjectURL(output);
+                } else {
+                    // image from a single pixel
+                    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
                 }
-
-                Promise.all(promisesList).then(values => {
-                    canvas.toBlob(function(blob) {
-                        this.downloadBlob(blob, fName + '.' + imageType);
-                    }.bind(this));
-
-                    console.debug('Tooltips have been successfully added to the canvas when saved as an image.');
-                });
-            }.bind(this);
-            if (output && output.size > 0) {
-                img.src = URL.createObjectURL(output);
-            } else {
-                // image from a single pixel
-                img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
-            }
+            });
         }
         /*
          * If output is empty because of bad options or a cytoscape error,
