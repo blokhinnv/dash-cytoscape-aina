@@ -24,7 +24,7 @@
     "build:backends": "dash-generate-components ./src/lib/components dash_cytoscape --r-prefix 'cyto' --jl-prefix 'cyto'",
     "build:all": "npm run build:js-all && npm run build:backends",
     "build:all-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:all)",
-    "watch": "webpack --mode development --watch"
+    "watch": "webpack --config webpack.dev.extra.config.js --watch"
   },
   "author": "The Plotly Team <cytoscape@plotly.com>",
   "author-email": "cytoscape@plotly.com",
