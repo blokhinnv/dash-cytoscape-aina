@@ -581,6 +581,14 @@ export default class cyTooltips {
                     'y': position.y * this.cy.zoom() + this.cy.pan().y
                 };
             }.bind(this),
+            popper: {
+                modifiers: [
+                    {
+                        name: 'flip',
+                        enabled: false,
+                    },
+                ],
+            }
         });
 
         tooltip = popperRefObj.state.elements.popper;
