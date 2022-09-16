@@ -17,9 +17,7 @@
     border-radius: 15px;
     text-align: center;
     vertical-align: center;
-    /*resize: both;*/
     resize: none;
-    /*border: 1px solid #000;*/
     min-width: 100px;
     min-height: 50px;
 }
@@ -77,22 +75,6 @@
   top: 0px;
   left: 0px;
 }
-
-/*.popper-div[data-popper-placement^='top'] {*/
-/*  margin-bottom: 5px !important;*/
-/*}*/
-
-/*.popper-div[data-popper-placement^='bottom'] {*/
-/*  margin-top: 5px !important;*/
-/*}*/
-
-/*.popper-div[data-popper-placement^='left'] {*/
-/*  margin-right: 5px !important;*/
-/*}*/
-
-/*.popper-div[data-popper-placement^='right'] {*/
-/*  margin-left: 5px !important;*/
-/*}*/
 
 .popper-div[data-popper-placement^='top'] > div[data-popper-arrow] {
   bottom: -4px;
