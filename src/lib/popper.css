@@ -17,7 +17,31 @@
     border-radius: 15px;
     text-align: center;
     vertical-align: center;
-    resize: both;
+    resize: none;
+    min-width: 100px;
+    min-height: 50px;
+}
+
+.popper-div .content:after {
+  content: '';
+  display: block;
+  height: 19px;
+  position: absolute;
+  width: 19px;
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  -webkit-transform: rotate(0);
+  bottom: 10px;
+  right: 9px;
+  background-color: transparent;
+  border: 10px solid transparent;
+  border-right: 10px solid #ccc;
+  border-bottom: 10px solid #ccc;
+  cursor: pointer;
+}
+
+.popper-div.popper-core .content:after {
+  bottom: 26px;
 }
 
 .remove_popper_core {
@@ -50,22 +74,6 @@
 .remove_popper_core:hover:after {
   top: 0px;
   left: 0px;
-}
-
-.popper-div[data-popper-placement^='top'] {
-  margin-bottom: 5px !important;
-}
-
-.popper-div[data-popper-placement^='bottom'] {
-  margin-top: 5px !important;
-}
-
-.popper-div[data-popper-placement^='left'] {
-  margin-right: 5px !important;
-}
-
-.popper-div[data-popper-placement^='right'] {
-  margin-left: 5px !important;
 }
 
 .popper-div[data-popper-placement^='top'] > div[data-popper-arrow] {
