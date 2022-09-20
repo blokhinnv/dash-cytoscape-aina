@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import CyResponsive from '../cyResponsive.js';
 import CyCxtMenu from '../cyContextmenu.js';
-import CyTooltips, {parseXYFromTransform} from '../cyTooltips.js';
+import CyTooltips from '../cyTooltips.js';
 import html2canvas from 'html2canvas';
 
 function dataURItoBlob(dataURI) {
