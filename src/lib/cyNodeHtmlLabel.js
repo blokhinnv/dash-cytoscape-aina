@@ -70,17 +70,22 @@ var LabelElement = (function () {
     };
     LabelElement.prototype._renderPosition = function (position) {
         var prev = this._position;
-        var x = position.x + this._align[0] * position.w;
-        var y = position.y + this._align[1] * position.h;
+        var origX = position.x + this._align[0] * position.w;
+        var origY = position.y + this._align[1] * position.h;
+        var x = origX * window.cy.zoom() + window.cy.pan().x + this._node.offsetWidth * (window.cy.zoom() - 1) / 2;
+        var y = origY * window.cy.zoom() + window.cy.pan().y;
         if (!prev || prev[0] !== x || prev[1] !== y) {
             this._position = [x, y];
             var valRel = "translate(" + this._align[2] + "%," + this._align[3] + "%) ";
             var valAbs = "translate(" + x.toFixed(2) + "px," + y.toFixed(2) + "px) ";
-            var val = valRel + valAbs;
+            var valScale = "scale(" + window.cy.zoom() + ") ";
+            var val = valRel + valAbs + valScale;
             var stl = this._node.style;
             stl.webkitTransform = val;
             stl.msTransform = val;
             stl.transform = val;
+            this._node.setAttribute('position-x', origX);
+            this._node.setAttribute('position-y', origY);
         }
     };
     return LabelElement;
@@ -122,15 +127,21 @@ var LabelContainer = (function () {
     };
     LabelContainer.prototype.updatePanZoom = function (_a) {
         var pan = _a.pan, zoom = _a.zoom;
-        var val = "translate(" + pan.x + "px," + pan.y + "px) scale(" + zoom + ")";
+        //var val = "translate(" + pan.x + "px," + pan.y + "px) scale(" + zoom + ")";
         var stl = this._node.style;
         var origin = "top left";
-        stl.webkitTransform = val;
-        stl.msTransform = val;
-        stl.transform = val;
+        //stl.webkitTransform = val;
+        //stl.msTransform = val;
+        //stl.transform = val;
         stl.webkitTransformOrigin = origin;
         stl.msTransformOrigin = origin;
         stl.transformOrigin = origin;
+
+        // инициируем перерендеринг всех лейблов
+        for (const [id, element] of Object.entries(this._elements)) {
+            element.updatePosition(getNodePosition(window.cy.$id(id)));
+        }
+
     };
     return LabelContainer;
 }());
@@ -233,14 +244,14 @@ function cyNodeHtmlLabel(_cy, params, options) {
             zoom: cy.zoom()
         });
     }
-    function getNodePosition(node) {
-        return {
-            w: node.width(),
-            h: node.height(),
-            x: node.position("x"),
-            y: node.position("y")
-        };
-    }
+}
+function getNodePosition(node) {
+    return {
+        w: node.width(),
+        h: node.height(),
+        x: node.position("x"),
+        y: node.position("y")
+    };
 }
 var register = function (cy) {
     if (!cy) {

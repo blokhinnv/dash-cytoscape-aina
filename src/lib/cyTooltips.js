@@ -15,7 +15,7 @@ function uuidv4() {
     );
 }
 
-function parseXYFromTransform(transform) {
+export function parseXYFromTransform(transform) {
     let scaleIndex = transform.indexOf('scale');
     if (scaleIndex == -1) {
         scaleIndex = transform.length;

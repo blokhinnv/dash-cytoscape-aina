@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import CyResponsive from '../cyResponsive.js';
 import CyCxtMenu from '../cyContextmenu.js';
-import CyTooltips from '../cyTooltips.js';
+import CyTooltips, {parseXYFromTransform} from '../cyTooltips.js';
 import html2canvas from 'html2canvas';
 
 function dataURItoBlob(dataURI) {
@@ -428,19 +428,29 @@ class Cytoscape extends Component {
                 const y1 = (position.y - bbox.y1) * window.devicePixelRatio;
                 const x2 = x1 + tooltip.offsetWidth * window.devicePixelRatio;
                 const y2 = y1 + tooltip.offsetHeight * window.devicePixelRatio;
-
-                if (x1 < minX1) {
-                    minX1 = x1;
+                minX1 = Math.min(minX1, x1);
+                minY1 = Math.min(minY1, y1);
+                maxX2 = Math.max(maxX2, x2);
+                maxY2 = Math.max(maxY2, y2);
+                resolve(true);
+            }));
+        }
+        const markerList = document.querySelectorAll(".marked_container");
+        for (let i = 0; i < markerList.length; i++) {
+            promisesList.push(new Promise((resolve, reject) => {
+                const marker = markerList[i];
+                let position = {
+                    x: marker.getAttribute('position-x'),
+                    y: marker.getAttribute('position-y') - marker.offsetHeight / 2,
                 }
-                if (y1 < minY1) {
-                    minY1 = y1;
-                }
-                if (x2 > maxX2) {
-                    maxX2 = x2;
-                }
-                if (y2 > maxY2) {
-                    maxY2 = y2;
-                }
+                const x1 = (position.x - bbox.x1) * window.devicePixelRatio;
+                const y1 = (position.y - bbox.y1) * window.devicePixelRatio;
+                const x2 = x1 + marker.offsetWidth * window.devicePixelRatio;
+                const y2 = y1 + marker.offsetHeight * window.devicePixelRatio;
+                minX1 = Math.min(minX1, x1);
+                minY1 = Math.min(minY1, y1);
+                maxX2 = Math.max(maxX2, x2);
+                maxY2 = Math.max(maxY2, y2);
                 resolve(true);
             }));
         }
@@ -469,7 +479,6 @@ class Cytoscape extends Component {
             img.onload = function (event) {
                 URL.revokeObjectURL(event.target.src);
                 ctx.drawImage(event.target, Math.abs(minX1) * scale, Math.abs(minY1) * scale);
-                const tooltipList = document.querySelectorAll(".popper-div");
                 promisesList = [];
                 for (let i = 0; i < tooltipList.length; i++) {
                     promisesList.push(new Promise((resolve, reject) => {
@@ -482,6 +491,25 @@ class Cytoscape extends Component {
                             const dx = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * scale * window.devicePixelRatio + Math.abs(minX1) * scale;
                             const dy = (position.y - bbox.y1) * scale * window.devicePixelRatio + Math.abs(minY1) * scale;
                             ctx.drawImage(tooltipCanvas, dx, dy);
+                            resolve(true);
+                        });
+                    }));
+                }
+                // по отдельности каждую отметку html2canvas не генерит
+                for (let i = 0; i < markerList.length; i++) {
+                    promisesList.push(new Promise((resolve, reject) => {
+                        const marker = markerList[i];
+                        html2canvas(marker, {
+                            scale: scale * window.devicePixelRatio / cy.zoom(),
+                            backgroundColor: null
+                        }).then((markerCanvas) => {
+                            let position = {
+                                x: marker.getAttribute('position-x'),
+                                y: marker.getAttribute('position-y') - marker.offsetHeight / 2,
+                            }
+                            const dx = (position.x - bbox.x1) * scale * window.devicePixelRatio + Math.abs(minX1) * scale;
+                            const dy = (position.y - bbox.y1) * scale * window.devicePixelRatio + Math.abs(minY1) * scale;
+                            ctx.drawImage(markerCanvas, dx, dy);
                             resolve(true);
                         });
                     }));
