@@ -495,7 +495,6 @@ class Cytoscape extends Component {
                         });
                     }));
                 }
-                // по отдельности каждую отметку html2canvas не генерит
                 for (let i = 0; i < markerList.length; i++) {
                     promisesList.push(new Promise((resolve, reject) => {
                         const marker = markerList[i];
