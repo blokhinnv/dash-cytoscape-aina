@@ -88,8 +88,8 @@ BRp.findSegmentsPoints = function( edge, pairInfo ){
     };
 
     rs.segpts.push(
-      adjustedMidpt.x + vectorNormInverse.x * d,
-      adjustedMidpt.y + vectorNormInverse.y * d
+        adjustedMidpt.x + vectorNormInverse.x * d,
+        adjustedMidpt.y + vectorNormInverse.y * d
     );
   }
 
@@ -237,8 +237,8 @@ BRp.findBezierPoints = function( edge, pairInfo, i, edgeIsUnbundled, edgeIsSwapp
     };
 
     rs.ctrlpts.push(
-      adjustedMidpt.x + vectorNormInverse.x * distanceFromMidpoint,
-      adjustedMidpt.y + vectorNormInverse.y * distanceFromMidpoint
+        adjustedMidpt.x + vectorNormInverse.x * distanceFromMidpoint,
+        adjustedMidpt.y + vectorNormInverse.y * distanceFromMidpoint
     );
   }
 };
@@ -304,13 +304,13 @@ BRp.findTaxiPoints = function( edge, pairInfo ){
 
   let forcedDir = false;
   if(
-    !(isExplicitDir && (turnIsPercent || turnIsNegative)) // forcing in this case would cause weird growing in the opposite direction
-    && (
-      (rawTaxiDir === DOWNWARD && pl < 0)
-      || (rawTaxiDir === UPWARD && pl > 0)
-      || (rawTaxiDir === LEFTWARD && pl > 0)
-      || (rawTaxiDir === RIGHTWARD && pl < 0)
-    )
+      !(isExplicitDir && (turnIsPercent || turnIsNegative)) // forcing in this case would cause weird growing in the opposite direction
+      && (
+          (rawTaxiDir === DOWNWARD && pl < 0)
+          || (rawTaxiDir === UPWARD && pl > 0)
+          || (rawTaxiDir === LEFTWARD && pl > 0)
+          || (rawTaxiDir === RIGHTWARD && pl < 0)
+      )
   ){
     sgnL *= -1;
     l = sgnL * Math.abs(l);
@@ -424,7 +424,7 @@ BRp.tryToCorrectInvalidPoints = function( edge, pairInfo ){
 
     let minCpADistFactor = 3;
     let arrowW = this.getArrowWidth( edge.pstyle( 'width' ).pfValue, edge.pstyle( 'arrow-scale' ).value )
-      * this.arrowShapeWidth;
+        * this.arrowShapeWidth;
     let minCpADist = minCpADistFactor * arrowW;
 
     let startACpDist = math.dist( { x: rs.ctrlpts[0], y: rs.ctrlpts[1] }, { x: rs.startX, y: rs.startY } );
@@ -455,13 +455,13 @@ BRp.tryToCorrectInvalidPoints = function( edge, pairInfo ){
       };
 
       let srcCtrlPtIntn = srcShape.intersectLine(
-        srcPos.x,
-        srcPos.y,
-        srcW,
-        srcH,
-        cpProj.x,
-        cpProj.y,
-        0
+          srcPos.x,
+          srcPos.y,
+          srcW,
+          srcH,
+          cpProj.x,
+          cpProj.y,
+          0
       );
 
       if( closeStartACp ){
@@ -494,13 +494,13 @@ BRp.tryToCorrectInvalidPoints = function( edge, pairInfo ){
       };
 
       let tgtCtrlPtIntn = tgtShape.intersectLine(
-        tgtPos.x,
-        tgtPos.y,
-        tgtW,
-        tgtH,
-        cpProj.x,
-        cpProj.y,
-        0
+          tgtPos.x,
+          tgtPos.y,
+          tgtW,
+          tgtH,
+          cpProj.x,
+          cpProj.y,
+          0
       );
 
       if( closeEndACp ){
@@ -689,15 +689,16 @@ BRp.findEdgeControlPoints = function( edges ){
     let swappedpairInfo;
 
     //if( !pairInfo.hasUnbundled ){
-      //let pllEdges = pairInfo.eles[0].parallelEdges().filter(e => e.isBundledBezier());
-      let pllEdges = pairInfo.eles[0].parallelEdges();
+    //let pllEdges = pairInfo.eles[0].parallelEdges().filter(e => e.isBundledBezier());
+    let pllEdges = pairInfo.eles[0].parallelEdges();
 
-      util.clearArray( pairInfo.eles );
+    util.clearArray( pairInfo.eles );
 
-      pllEdges.forEach( edge => pairInfo.eles.push(edge) );
+    pllEdges.forEach( edge => pairInfo.eles.push(edge) );
 
-      // for each pair id, the edges should be sorted by index
-      pairInfo.eles.sort( (edge1, edge2) => edge1.poolIndex() - edge2.poolIndex() );
+    // for each pair id, the edges should be sorted by index
+    //pairInfo.eles.sort( (edge1, edge2) => edge1.poolIndex() - edge2.poolIndex() );
+    pairInfo.eles.sort( (edge1, edge2) => edge1.data('id') > edge2.data('id') );
     //}
 
     let firstEdge = pairInfo.eles[0];
@@ -748,20 +749,20 @@ BRp.findEdgeControlPoints = function( edges ){
 
         // pt outside src shape to calc distance/displacement from src to tgt
         let srcOutside = srcShape.intersectLine(
-          srcPos.x, srcPos.y,
-          srcW, srcH,
-          tgtPos.x, tgtPos.y,
-          0
+            srcPos.x, srcPos.y,
+            srcW, srcH,
+            tgtPos.x, tgtPos.y,
+            0
         );
 
         let srcIntn = pairInfo.srcIntn = srcOutside;
 
         // pt outside tgt shape to calc distance/displacement from src to tgt
         let tgtOutside = tgtShape.intersectLine(
-          tgtPos.x, tgtPos.y,
-          tgtW, tgtH,
-          srcPos.x, srcPos.y,
-          0
+            tgtPos.x, tgtPos.y,
+            tgtW, tgtH,
+            srcPos.x, srcPos.y,
+            0
         );
 
         let tgtIntn = pairInfo.tgtIntn = tgtOutside;
@@ -801,9 +802,9 @@ BRp.findEdgeControlPoints = function( edges ){
 
         // if node shapes overlap, then no ctrl pts to draw
         pairInfo.nodesOverlap = (
-          !is.number(l)
-          || tgtShape.checkPoint( srcOutside[0], srcOutside[1], 0, tgtW, tgtH, tgtPos.x, tgtPos.y )
-          || srcShape.checkPoint( tgtOutside[0], tgtOutside[1], 0, srcW, srcH, srcPos.x, srcPos.y )
+            !is.number(l)
+            || tgtShape.checkPoint( srcOutside[0], srcOutside[1], 0, tgtW, tgtH, tgtPos.x, tgtPos.y )
+            || srcShape.checkPoint( tgtOutside[0], tgtOutside[1], 0, srcW, srcH, srcPos.x, srcPos.y )
         );
 
         pairInfo.vectorNormInverse = vectorNormInverse;
@@ -846,9 +847,9 @@ BRp.findEdgeControlPoints = function( edges ){
       rs.tgtIntn = passedPairInfo.tgtIntn;
 
       if(
-        hasCompounds &&
-        ( src.isParent() || src.isChild() || tgt.isParent() || tgt.isChild() ) &&
-        ( src.parents().anySame(tgt) || tgt.parents().anySame(src) || (src.same(tgt) && src.isParent()) )
+          hasCompounds &&
+          ( src.isParent() || src.isChild() || tgt.isParent() || tgt.isChild() ) &&
+          ( src.parents().anySame(tgt) || tgt.parents().anySame(src) || (src.same(tgt) && src.isParent()) )
       ){
         this.findCompoundLoopPoints(edge, passedPairInfo, i, edgeIsUnbundled);
 
@@ -862,12 +863,12 @@ BRp.findEdgeControlPoints = function( edges ){
         this.findTaxiPoints(edge, passedPairInfo);
 
       } else if(
-        curveStyle === 'straight'
-        || (
-          !edgeIsUnbundled
-          && pairInfo.eles.length % 2 === 1
-          && i === Math.floor( pairInfo.eles.length / 2 )
-        )
+          curveStyle === 'straight'
+          || (
+              !edgeIsUnbundled
+              && pairInfo.eles.length % 2 === 1
+              && i === Math.floor( pairInfo.eles.length / 2 )
+          )
       ){
         this.findStraightEdgePoints(edge);
       } else {
