@@ -1,4 +1,6 @@
 # AUTO GENERATED FILE - DO NOT EDIT
 
+export('cyto'Cytoscape)
+export('cyto'UndoRedoList)
 export(cytoCytoscape)
 export(cytoUndoRedoList)

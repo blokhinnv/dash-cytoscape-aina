@@ -44,7 +44,7 @@
   bottom: 26px;
 }
 
-.remove_popper_core {
+/* .remove_popper_core {
   font-size: 12px;
   letter-spacing: 1px;
   outline: 0;
@@ -74,7 +74,7 @@
 .remove_popper_core:hover:after {
   top: 0px;
   left: 0px;
-}
+} */
 
 .popper-div[data-popper-placement^='top'] > div[data-popper-arrow] {
   bottom: -4px;
