@@ -447,6 +447,9 @@ export default class cyTooltips {
                 if (id != undefined && id.length > 0) {
                     return this.addConnected(id, cy_el_id, content);
                 }
+                if (event == 'remove'){
+                    return
+                }
                     return this.addConnected(uuidv4(), cy_el_id, content);
 
             }
