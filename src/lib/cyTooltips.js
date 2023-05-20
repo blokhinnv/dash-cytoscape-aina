@@ -118,6 +118,11 @@ export default class cyTooltips {
 
         // move a free tooltip using the drag & drop method
         document.body.addEventListener('mousedown', function (event) {
+
+            if(event.which == 3 || event.which == 2){
+                return
+            }
+
             if (event.target.tagName == 'TEXTAREA') {
                 var tooltip = event.target.parentNode.parentNode;
                 var textarea = event.target;
