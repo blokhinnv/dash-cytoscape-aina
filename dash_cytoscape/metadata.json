@@ -1,6 +1,6 @@
 {
   "src/lib/components/Cytoscape.react.js": {
-    "description": "A Component Library for Dash aimed at facilitating network visualization in\nPython, wrapped around [Cytoscape.js](http://js.cytoscape.org/).",
+    "description": "A Component Library for Dash aimed at facilitating network visualization in\r\nPython, wrapped around [Cytoscape.js](http://js.cytoscape.org/).",
     "displayName": "Cytoscape",
     "methods": [
       {
@@ -78,6 +78,18 @@
           }
         ],
         "returns": null
+      },
+      {
+        "name": "updateDegrees",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "cy",
+            "type": null
+          }
+        ],
+        "returns": null
       }
     ],
     "props": {
@@ -93,7 +105,7 @@
           "name": "string"
         },
         "required": false,
-        "description": "Sets the class name of the element (the value of an element's html\nclass attribute)."
+        "description": "Sets the class name of the element (the value of an element's html\r\nclass attribute)."
       },
       "style": {
         "type": {
@@ -111,7 +123,7 @@
           "name": "func"
         },
         "required": false,
-        "description": "Dash-assigned callback that should be called whenever any of the\nproperties change."
+        "description": "Dash-assigned callback that should be called whenever any of the\r\nproperties change."
       },
       "elements": {
         "type": {
@@ -137,7 +149,7 @@
                       },
                       "label": {
                         "name": "string",
-                        "description": "Optional name for the element, useful when `data(label)` is given to a style's `content`\nor `label`. It is only a convention.",
+                        "description": "Optional name for the element, useful when `data(label)` is given to a style's `content`\r\nor `label`. It is only a convention.",
                         "required": false
                       },
                       "parent": {
@@ -198,7 +210,7 @@
                   },
                   "classes": {
                     "name": "string",
-                    "description": "Space separated string of class names of the element. Those classes can be selected\nby a style selector.",
+                    "description": "Space separated string of class names of the element. Those classes can be selected\r\nby a style selector.",
                     "required": false
                   }
                 }
@@ -220,7 +232,7 @@
           ]
         },
         "required": false,
-        "description": "A list of dictionaries representing the elements of the networks. Each dictionary describes an element, and\nspecifies its purpose. The [official Cytoscape.js documentation](https://js.cytoscape.org/#notation/elements-json)\noffers an extensive overview and examples of element declaration.\nAlternatively, a dictionary with the format { 'nodes': [], 'edges': [] } is allowed at initialization,\nbut arrays remain the recommended format.",
+        "description": "A list of dictionaries representing the elements of the networks. Each dictionary describes an element, and\r\nspecifies its purpose. The [official Cytoscape.js documentation](https://js.cytoscape.org/#notation/elements-json)\r\noffers an extensive overview and examples of element declaration.\r\nAlternatively, a dictionary with the format { 'nodes': [], 'edges': [] } is allowed at initialization,\r\nbut arrays remain the recommended format.",
         "defaultValue": {
           "value": "[]",
           "computed": false
@@ -234,19 +246,19 @@
             "value": {
               "selector": {
                 "name": "string",
-                "description": "Which elements you are styling. Generally, you select a group of elements (node, edges, both),\na class (that you declare in the element dictionary), or an element by ID.",
+                "description": "Which elements you are styling. Generally, you select a group of elements (node, edges, both),\r\na class (that you declare in the element dictionary), or an element by ID.",
                 "required": true
               },
               "style": {
                 "name": "object",
-                "description": "What aspects of the elements you want to modify. This could be the size or\ncolor of a node, the shape of an edge arrow, or many more.",
+                "description": "What aspects of the elements you want to modify. This could be the size or\r\ncolor of a node, the shape of an edge arrow, or many more.",
                 "required": true
               }
             }
           }
         },
         "required": false,
-        "description": "A list of dictionaries representing the styles of the elements.\nEach dictionary requires the following keys: `selector` and `style`.\n\nBoth the [selector](https://js.cytoscape.org/#selectors) and\nthe [style](https://js.cytoscape.org/#style/node-body) are\nexhaustively documented in the Cytoscape.js docs. Although methods such\nas `cy.elements(...)` and `cy.filter(...)` are not available, the selector\nstring syntax stays the same."
+        "description": "A list of dictionaries representing the styles of the elements.\r\nEach dictionary requires the following keys: `selector` and `style`.\r\n\r\nBoth the [selector](https://js.cytoscape.org/#selectors) and\r\nthe [style](https://js.cytoscape.org/#style/node-body) are\r\nexhaustively documented in the Cytoscape.js docs. Although methods such\r\nas `cy.elements(...)` and `cy.filter(...)` are not available, the selector\r\nstring syntax stays the same."
       },
       "layout": {
         "type": {
@@ -312,7 +324,7 @@
                   "computed": false
                 }
               ],
-              "description": "The layouts available by default are:\n  `random`: Randomly assigns positions.\n  `preset`: Assigns position based on the `position` key in element dictionaries.\n  `circle`: Single-level circle, with optional radius.\n  `concentric`: Multi-level circle, with optional radius.\n  `grid`: Square grid, optionally with numbers of `rows` and `cols`.\n  `breadthfirst`: Tree structure built using BFS, with optional `roots`.\n  `cose`: Force-directed physics simulation.\n\nSome external layouts are also included. To use them, run\n  `dash_cytoscape.load_extra_layouts()` before creating your Dash app. Be careful about\n  using the extra layouts when not necessary, since they require supplementary bandwidth\n  for loading, which impacts the startup time of the app.\n  The external layouts are:\n  [cose-bilkent](https://github.com/cytoscape/cytoscape.js-cose-bilkent),\n  [fcose](https://github.com/iVis-at-Bilkent/cytoscape.js-fcose),\n  [cola](https://github.com/cytoscape/cytoscape.js-cola),\n  [euler](https://github.com/cytoscape/cytoscape.js-dagre),\n  [spread](https://github.com/cytoscape/cytoscape.js-spread),\n  [dagre](https://github.com/cytoscape/cytoscape.js-dagre),\n  [klay](https://github.com/cytoscape/cytoscape.js-klay),",
+              "description": "The layouts available by default are:\r\n  `random`: Randomly assigns positions.\r\n  `preset`: Assigns position based on the `position` key in element dictionaries.\r\n  `circle`: Single-level circle, with optional radius.\r\n  `concentric`: Multi-level circle, with optional radius.\r\n  `grid`: Square grid, optionally with numbers of `rows` and `cols`.\r\n  `breadthfirst`: Tree structure built using BFS, with optional `roots`.\r\n  `cose`: Force-directed physics simulation.\r\n\r\nSome external layouts are also included. To use them, run\r\n  `dash_cytoscape.load_extra_layouts()` before creating your Dash app. Be careful about\r\n  using the extra layouts when not necessary, since they require supplementary bandwidth\r\n  for loading, which impacts the startup time of the app.\r\n  The external layouts are:\r\n  [cose-bilkent](https://github.com/cytoscape/cytoscape.js-cose-bilkent),\r\n  [fcose](https://github.com/iVis-at-Bilkent/cytoscape.js-fcose),\r\n  [cola](https://github.com/cytoscape/cytoscape.js-cola),\r\n  [euler](https://github.com/cytoscape/cytoscape.js-dagre),\r\n  [spread](https://github.com/cytoscape/cytoscape.js-spread),\r\n  [dagre](https://github.com/cytoscape/cytoscape.js-dagre),\r\n  [klay](https://github.com/cytoscape/cytoscape.js-klay),",
               "required": true
             },
             "fit": {
@@ -337,13 +349,13 @@
             },
             "boundingBox": {
               "name": "object",
-              "description": "How to constrain the layout in a specific area. Keys accepted are either\n`x1, y1, x2, y2` or `x1, y1, w, h`, all of which receive a pixel value.",
+              "description": "How to constrain the layout in a specific area. Keys accepted are either\r\n`x1, y1, x2, y2` or `x1, y1, w, h`, all of which receive a pixel value.",
               "required": false
             }
           }
         },
         "required": false,
-        "description": "A dictionary specifying how to set the position of the elements in your\ngraph. The `'name'` key is required, and indicates which layout (algorithm) to\nuse. The keys accepted by `layout` vary depending on the algorithm, but these\nkeys are accepted by all layouts: `fit`,  `padding`, `animate`, `animationDuration`,\n`boundingBox`.\n\n The complete list of layouts and their accepted options are available on the\n [Cytoscape.js docs](https://js.cytoscape.org/#layouts) . For the external layouts,\nthe options are listed in the \"API\" section of the  README.\n Note that certain keys are not supported in Dash since the value is a JavaScript\n function or a callback. Please visit this\n[issue](https://github.com/plotly/dash-cytoscape/issues/25) for more information.",
+        "description": "A dictionary specifying how to set the position of the elements in your\r\ngraph. The `'name'` key is required, and indicates which layout (algorithm) to\r\nuse. The keys accepted by `layout` vary depending on the algorithm, but these\r\nkeys are accepted by all layouts: `fit`,  `padding`, `animate`, `animationDuration`,\r\n`boundingBox`.\r\n\r\n The complete list of layouts and their accepted options are available on the\r\n [Cytoscape.js docs](https://js.cytoscape.org/#layouts) . For the external layouts,\r\nthe options are listed in the \"API\" section of the  README.\r\n Note that certain keys are not supported in Dash since the value is a JavaScript\r\n function or a callback. Please visit this\r\n[issue](https://github.com/plotly/dash-cytoscape/issues/25) for more information.",
         "defaultValue": {
           "value": "{name: 'grid'}",
           "computed": false
@@ -366,7 +378,7 @@
           }
         },
         "required": false,
-        "description": "Dictionary indicating the initial panning position of the graph. The\nfollowing keys are accepted:",
+        "description": "Dictionary indicating the initial panning position of the graph. The\r\nfollowing keys are accepted:",
         "defaultValue": {
           "value": "{x: 0, y: 0}",
           "computed": false
@@ -377,7 +389,7 @@
           "name": "number"
         },
         "required": false,
-        "description": "The initial zoom level of the graph. You can set `minZoom` and\n`maxZoom` to set restrictions on the zoom level.",
+        "description": "The initial zoom level of the graph. You can set `minZoom` and\r\n`maxZoom` to set restrictions on the zoom level.",
         "defaultValue": {
           "value": "1",
           "computed": false
@@ -388,7 +400,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether panning the graph is enabled (i.e., the position of the graph is\nmutable overall).",
+        "description": "Whether panning the graph is enabled (i.e., the position of the graph is\r\nmutable overall).",
         "defaultValue": {
           "value": "true",
           "computed": false
@@ -399,7 +411,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether user events (e.g. dragging the graph background) are allowed to\npan the graph.",
+        "description": "Whether user events (e.g. dragging the graph background) are allowed to\r\npan the graph.",
         "defaultValue": {
           "value": "true",
           "computed": false
@@ -410,7 +422,7 @@
           "name": "number"
         },
         "required": false,
-        "description": "A minimum bound on the zoom level of the graph. The viewport can not be\nscaled smaller than this zoom level.",
+        "description": "A minimum bound on the zoom level of the graph. The viewport can not be\r\nscaled smaller than this zoom level.",
         "defaultValue": {
           "value": "1e-50",
           "computed": false
@@ -421,7 +433,7 @@
           "name": "number"
         },
         "required": false,
-        "description": "A maximum bound on the zoom level of the graph. The viewport can not be\nscaled larger than this zoom level.",
+        "description": "A maximum bound on the zoom level of the graph. The viewport can not be\r\nscaled larger than this zoom level.",
         "defaultValue": {
           "value": "1e50",
           "computed": false
@@ -432,7 +444,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether zooming the graph is enabled (i.e., the zoom level of the graph\nis mutable overall).",
+        "description": "Whether zooming the graph is enabled (i.e., the zoom level of the graph\r\nis mutable overall).",
         "defaultValue": {
           "value": "true",
           "computed": false
@@ -443,7 +455,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether user events (e.g. dragging the graph background) are allowed\nto pan the graph.",
+        "description": "Whether user events (e.g. dragging the graph background) are allowed\r\nto pan the graph.",
         "defaultValue": {
           "value": "true",
           "computed": false
@@ -454,7 +466,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether box selection (i.e. drag a box overlay around, and release it\nto select) is enabled. If enabled, the user must taphold to pan the graph.",
+        "description": "Whether box selection (i.e. drag a box overlay around, and release it\r\nto select) is enabled. If enabled, the user must taphold to pan the graph.",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -465,7 +477,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether nodes should be ungrabified (not grabbable by user) by\ndefault (if true, overrides individual node state).",
+        "description": "Whether nodes should be ungrabified (not grabbable by user) by\r\ndefault (if true, overrides individual node state).",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -476,7 +488,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether nodes should be locked (not draggable at all) by default\n(if true, overrides individual node state).",
+        "description": "Whether nodes should be locked (not draggable at all) by default\r\n(if true, overrides individual node state).",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -487,7 +499,7 @@
           "name": "bool"
         },
         "required": false,
-        "description": "Whether nodes should be unselectified (immutable selection state) by\ndefault (if true, overrides individual element state).",
+        "description": "Whether nodes should be unselectified (immutable selection state) by\r\ndefault (if true, overrides individual element state).",
         "defaultValue": {
           "value": "false",
           "computed": false
@@ -785,14 +797,14 @@
           "name": "array"
         },
         "required": false,
-        "description": "The list of data dictionaries of all selected nodes (e.g. using\nShift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only."
+        "description": "The list of data dictionaries of all selected nodes (e.g. using\r\nShift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only."
       },
       "selectedEdgeData": {
         "type": {
           "name": "array"
         },
         "required": false,
-        "description": "The list of data dictionaries of all selected edges (e.g. using\nShift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only."
+        "description": "The list of data dictionaries of all selected edges (e.g. using\r\nShift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only."
       },
       "grabNodeData": {
         "type": {
@@ -844,7 +856,7 @@
             },
             "options": {
               "name": "object",
-              "description": "Dictionary of options to cy.png() / cy.jpg() or cy.svg() for image generation.\nSee https://js.cytoscape.org/#core/export for details. For `'output'`, only 'base64'\nand 'base64uri' are supported. Default: `{'output': 'base64uri'}`.",
+              "description": "Dictionary of options to cy.png() / cy.jpg() or cy.svg() for image generation.\r\nSee https://js.cytoscape.org/#core/export for details. For `'output'`, only 'base64'\r\nand 'base64uri' are supported. Default: `{'output': 'base64uri'}`.",
               "required": false
             },
             "action": {
@@ -863,7 +875,7 @@
                   "computed": false
                 }
               ],
-              "description": "`'store'`: Stores the image data (only jpg and png are supported)\nin `imageData` and invokes server-side Dash callbacks. `'download'`: Downloads the image\nas a file with all data handling done client-side. No `imageData` callbacks are fired.\n`'both'`: Stores image data and downloads image as file. The default is `'store'`",
+              "description": "`'store'`: Stores the image data (only jpg and png are supported)\r\nin `imageData` and invokes server-side Dash callbacks. `'download'`: Downloads the image\r\nas a file with all data handling done client-side. No `imageData` callbacks are fired.\r\n`'both'`: Stores image data and downloads image as file. The default is `'store'`",
               "required": false
             },
             "filename": {
@@ -874,7 +886,7 @@
           }
         },
         "required": false,
-        "description": "Dictionary specifying options to generate an image of the current cytoscape graph.\nValue is cleared after data is received and image is generated. This property will\nbe ignored on the initial creation of the cytoscape object and must be invoked through\na callback after it has been rendered.\n\nIf the app does not need the image data server side and/or it will only be used to download\nthe image, it may be prudent to invoke `'download'` for `action` instead of\n`'store'` to improve performance by preventing transfer of data to the server.",
+        "description": "Dictionary specifying options to generate an image of the current cytoscape graph.\r\nValue is cleared after data is received and image is generated. This property will\r\nbe ignored on the initial creation of the cytoscape object and must be invoked through\r\na callback after it has been rendered.\r\n\r\nIf the app does not need the image data server side and/or it will only be used to download\r\nthe image, it may be prudent to invoke `'download'` for `action` instead of\r\n`'store'` to improve performance by preventing transfer of data to the server.",
         "defaultValue": {
           "value": "{}",
           "computed": false
@@ -885,7 +897,7 @@
           "name": "string"
         },
         "required": false,
-        "description": "String representation of the image requested with generateImage. Null if no\nimage was requested yet or the previous request failed. Read-only.",
+        "description": "String representation of the image requested with generateImage. Null if no\r\nimage was requested yet or the previous request failed. Read-only.",
         "defaultValue": {
           "value": "null",
           "computed": false
@@ -915,7 +927,7 @@
               },
               "selector": {
                 "name": "string",
-                "description": "Determines which Cytoscape elements the option is attached to. Takes in a Cytoscape selector\n(see Cytoscape documentation for more information). Examples of valid selectors include node,\nedge, and core.",
+                "description": "Determines which Cytoscape elements the option is attached to. Takes in a Cytoscape selector\r\n(see Cytoscape documentation for more information). Examples of valid selectors include node,\r\nedge, and core.",
                 "required": false
               },
               "content": {
@@ -937,7 +949,7 @@
           }
         },
         "required": false,
-        "description": "Displays a context menu on right click. Requires extra layouts loaded.\nAccepts a list of dictionaries, each of which describes a context\nmenu option. Options are rendered in the order presented."
+        "description": "Displays a context menu on right click. Requires extra layouts loaded.\r\nAccepts a list of dictionaries, each of which describes a context\r\nmenu option. Options are rendered in the order presented."
       },
       "contextmenuData": {
         "type": {
@@ -970,7 +982,7 @@
             },
             "target": {
               "name": "object",
-              "description": "Dictionary containing information about the selected item. Information provided varies depending\non the type of the selected item (node, edge, core, etc.).",
+              "description": "Dictionary containing information about the selected item. Information provided varies depending\r\non the type of the selected item (node, edge, core, etc.).",
               "required": false
             },
             "coordinates": {
@@ -1004,7 +1016,7 @@
               },
               "content": {
                 "name": "string",
-                "description": "\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439. \u0421\u043e\u0434\u0435\u0440\u0436\u0438\u043c\u043e\u0435 \u0442\u0443\u043b\u0442\u0438\u043f\u0430. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043b\u044e\u0431\u043e\u0439 html. \u0412 \u0441\u043b\u0443\u0447\u0430\u0435 \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0435 \u0442\u0435\u0433\u0430 textarea,\n\u043f\u0440\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0438 \u0442\u0435\u043a\u0441\u0442\u0430 \u0432 textarea \u0438\u043b\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0438 \u0440\u0430\u0437\u043c\u0435\u0440\u043e\u0432 (\u0448\u0438\u0440\u0438\u043d\u044b \u0438 \u0432\u044b\u0441\u043e\u0442\u044b) textarea\n\u0431\u0443\u0434\u0443\u0442 \u0438\u0437\u043c\u0435\u043d\u044f\u0442\u044c\u0441\u044f \u0438 tooltip, \u0438 tooltipsData.",
+                "description": "\u041e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439. \u0421\u043e\u0434\u0435\u0440\u0436\u0438\u043c\u043e\u0435 \u0442\u0443\u043b\u0442\u0438\u043f\u0430. \u041c\u043e\u0436\u0435\u0442 \u0441\u043e\u0434\u0435\u0440\u0436\u0430\u0442\u044c \u043b\u044e\u0431\u043e\u0439 html. \u0412 \u0441\u043b\u0443\u0447\u0430\u0435 \u043f\u0435\u0440\u0435\u0434\u0430\u0447\u0435 \u0442\u0435\u0433\u0430 textarea,\r\n\u043f\u0440\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0438 \u0442\u0435\u043a\u0441\u0442\u0430 \u0432 textarea \u0438\u043b\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u0438 \u0440\u0430\u0437\u043c\u0435\u0440\u043e\u0432 (\u0448\u0438\u0440\u0438\u043d\u044b \u0438 \u0432\u044b\u0441\u043e\u0442\u044b) textarea\r\n\u0431\u0443\u0434\u0443\u0442 \u0438\u0437\u043c\u0435\u043d\u044f\u0442\u044c\u0441\u044f \u0438 tooltip, \u0438 tooltipsData.",
                 "required": false
               },
               "position": {
@@ -1019,12 +1031,12 @@
                     "required": false
                   }
                 },
-                "description": "\u041d\u0435\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439. \u041f\u043e\u0437\u0438\u0446\u0438\u044f \u0441\u0432\u043e\u0431\u043e\u0434\u043d\u043e\u0433\u043e \u0442\u0443\u043b\u0442\u0438\u043f\u0430 \u0432 \u043a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0442\u0430\u0445 cytoscape.\n\u0423 \u043f\u0440\u0438\u0432\u044f\u0437\u0430\u043d\u043d\u043e\u0433\u043e \u0442\u0443\u043b\u0442\u0438\u043f\u0430 \u0442\u0430\u043a\u043e\u0433\u043e \u043f\u043e\u043b\u044f \u043d\u0435\u0442.",
+                "description": "\u041d\u0435\u043e\u0431\u044f\u0437\u0430\u0442\u0435\u043b\u044c\u043d\u044b\u0439. \u041f\u043e\u0437\u0438\u0446\u0438\u044f \u0441\u0432\u043e\u0431\u043e\u0434\u043d\u043e\u0433\u043e \u0442\u0443\u043b\u0442\u0438\u043f\u0430 \u0432 \u043a\u043e\u043e\u0440\u0434\u0438\u043d\u0430\u0442\u0430\u0445 cytoscape.\r\n\u0423 \u043f\u0440\u0438\u0432\u044f\u0437\u0430\u043d\u043d\u043e\u0433\u043e \u0442\u0443\u043b\u0442\u0438\u043f\u0430 \u0442\u0430\u043a\u043e\u0433\u043e \u043f\u043e\u043b\u044f \u043d\u0435\u0442.",
                 "required": false
               },
               "last_update_time": {
                 "name": "number",
-                "description": "\u0412\u0440\u0435\u043c\u044f \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0433\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u0432 unix \u0444\u043e\u0440\u043c\u0430\u0442\u0435.\n\u0418\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u043f\u0440\u0438 \u043f\u043e\u043f\u044b\u0442\u043a\u0438 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u044d\u0442\u043e\u0433\u043e \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u0430 \u0441 \u0431\u0435\u043a\u0435\u043d\u0434\u0430.",
+                "description": "\u0412\u0440\u0435\u043c\u044f \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0435\u0433\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u0432 unix \u0444\u043e\u0440\u043c\u0430\u0442\u0435.\r\n\u0418\u0433\u043d\u043e\u0440\u0438\u0440\u0443\u0435\u0442\u0441\u044f \u043f\u0440\u0438 \u043f\u043e\u043f\u044b\u0442\u043a\u0438 \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u044d\u0442\u043e\u0433\u043e \u0441\u0432\u043e\u0439\u0441\u0442\u0432\u0430 \u0441 \u0431\u0435\u043a\u0435\u043d\u0434\u0430.",
                 "required": false
               }
             }
@@ -1057,16 +1069,38 @@
           }
         },
         "required": false,
-        "description": "\u041f\u0435\u0440\u0435\u0447\u0435\u043d\u044c \u0442\u0443\u043b\u0442\u0438\u043f\u043e\u0432, \u0434\u0430\u043d\u043d\u044b\u0435 \u043a\u043e\u0442\u043e\u0440\u044b\u0445 \u0438\u0437\u043c\u0435\u043d\u0438\u043b\u0438\u0441\u044c \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0440\u0430\u0437.\n\u041c\u043e\u0436\u043d\u043e \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c \u0434\u043b\u044f \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u044b\u0445 \u0442\u0443\u043b\u0442\u0438\u043f\u043e\u0432, \u0430 \u043d\u0435 \u043f\u0435\u0440\u0435\u0434\u0430\u0432\u0430\u0442\u044c \u0432\u0435\u0441\u044c \u0441\u043f\u0438\u0441\u043e\u043a, \u043a\u0430\u043a \u0432 \u0441\u043b\u0443\u0447\u0430\u0435 \u0441 tooltips.",
+        "description": "\u041f\u0435\u0440\u0435\u0447\u0435\u043d\u044c \u0442\u0443\u043b\u0442\u0438\u043f\u043e\u0432, \u0434\u0430\u043d\u043d\u044b\u0435 \u043a\u043e\u0442\u043e\u0440\u044b\u0445 \u0438\u0437\u043c\u0435\u043d\u0438\u043b\u0438\u0441\u044c \u043f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0440\u0430\u0437.\r\n\u041c\u043e\u0436\u043d\u043e \u0438\u0441\u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u044c \u0434\u043b\u044f \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u044f \u043a\u043e\u043d\u043a\u0440\u0435\u0442\u043d\u044b\u0445 \u0442\u0443\u043b\u0442\u0438\u043f\u043e\u0432, \u0430 \u043d\u0435 \u043f\u0435\u0440\u0435\u0434\u0430\u0432\u0430\u0442\u044c \u0432\u0435\u0441\u044c \u0441\u043f\u0438\u0441\u043e\u043a, \u043a\u0430\u043a \u0432 \u0441\u043b\u0443\u0447\u0430\u0435 \u0441 tooltips.",
         "defaultValue": {
           "value": "[]",
+          "computed": false
+        }
+      },
+      "degrees": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "\u041e\u0431\u044a\u0435\u043a\u0442 \u0441\u043e \u0441\u0442\u0435\u043f\u0435\u043d\u044f\u043c\u0438 \u0443\u0437\u043b\u043e\u0432. \u041a\u043b\u044e\u0447 - ID \u0443\u0437\u043b\u0430, \u0437\u043d\u0430\u0447\u0435\u043d\u0438\u0435 - \u0440\u0430\u0437\u043d\u044b\u0435 \u0442\u0438\u043f\u044b \u0441\u0442\u0435\u043f\u0435\u043d\u0435\u0439 (degree, in\\out\\total degree).",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "includeLoopInDegree": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "\u0415\u0441\u043b\u0438 true, \u0442\u043e \u043f\u0435\u0442\u043b\u0438 \u0443\u0447\u0438\u0442\u044b\u0432\u0430\u044e\u0442\u0441\u044f \u043f\u0440\u0438 \u043f\u043e\u0434\u0441\u0447\u0435\u0442\u0435 \u0441\u0442\u0435\u043f\u0435\u043d\u0435\u0439.",
+        "defaultValue": {
+          "value": "false",
           "computed": false
         }
       }
     }
   },
   "src/lib/components/UndoRedoList.react.js": {
-    "description": "The component is showing list of items. \nElements above hover are highlighted too.\nExpected usage is for undo/redo list demonstration.",
+    "description": "The component is showing list of items. \r\nElements above hover are highlighted too.\r\nExpected usage is for undo/redo list demonstration.",
     "displayName": "UndoRedoList",
     "methods": [],
     "props": {
@@ -1129,7 +1163,7 @@
           "name": "func"
         },
         "required": false,
-        "description": "Dash-assigned callback that should be called to report property changes\nto Dash, to make them available for callbacks."
+        "description": "Dash-assigned callback that should be called to report property changes\r\nto Dash, to make them available for callbacks."
       }
     }
   }

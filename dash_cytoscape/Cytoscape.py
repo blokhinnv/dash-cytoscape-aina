@@ -27,12 +27,12 @@ Keyword arguments:
 
 - autounselectify (boolean; default False):
     Whether nodes should be unselectified (immutable selection state)
-    by default (if True, overrides individual element state).
+    by  default (if True, overrides individual element state).
 
 - boxSelectionEnabled (boolean; default False):
     Whether box selection (i.e. drag a box overlay around, and release
-    it to select) is enabled. If enabled, the user must taphold to pan
-    the graph.
+    it  to select) is enabled. If enabled, the user must taphold to
+    pan the graph.
 
 - className (string; optional):
     Sets the class name of the element (the value of an element's html
@@ -40,8 +40,8 @@ Keyword arguments:
 
 - contextmenu (list of dicts; optional):
     Displays a context menu on right click. Requires extra layouts
-    loaded. Accepts a list of dictionaries, each of which describes a
-    context menu option. Options are rendered in the order presented.
+    loaded.  Accepts a list of dictionaries, each of which describes a
+    context  menu option. Options are rendered in the order presented.
 
     `contextmenu` is a list of dicts with keys:
 
@@ -56,9 +56,9 @@ Keyword arguments:
 
     - selector (string; optional):
         Determines which Cytoscape elements the option is attached to.
-        Takes in a Cytoscape selector (see Cytoscape documentation for
-        more information). Examples of valid selectors include node,
-        edge, and core.
+        Takes in a Cytoscape selector  (see Cytoscape documentation
+        for more information). Examples of valid selectors include
+        node,  edge, and core.
 
     - tooltipText (string; optional):
         Hover tooltip text assigned to option.
@@ -87,30 +87,34 @@ Keyword arguments:
 
     - target (dict; optional):
         Dictionary containing information about the selected item.
-        Information provided varies depending on the type of the
+        Information provided varies depending  on the type of the
         selected item (node, edge, core, etc.).
 
     - timestamp (number; optional):
         Time the option was selected.
+
+- degrees (dict; optional):
+    Объект со степенями узлов. Ключ - ID узла, значение - разные типы
+    степеней (degree, in\out\total degree).
 
 - dragNodeData (list; optional):
     drag - схватили и перетаскиваем.
 
 - elements (list of dicts; optional):
     A list of dictionaries representing the elements of the networks.
-    Each dictionary describes an element, and specifies its purpose.
+    Each dictionary describes an element, and  specifies its purpose.
     The [official Cytoscape.js
     documentation](https://js.cytoscape.org/#notation/elements-json)
     offers an extensive overview and examples of element declaration.
     Alternatively, a dictionary with the format { 'nodes': [],
-    'edges': [] } is allowed at initialization, but arrays remain the
+    'edges': [] } is allowed at initialization,  but arrays remain the
     recommended format.
 
     `elements` is a list of dicts with keys:
 
     - classes (string; optional):
         Space separated string of class names of the element. Those
-        classes can be selected by a style selector.
+        classes can be selected  by a style selector.
 
     - data (dict; optional):
         Element specific data.
@@ -123,7 +127,7 @@ Keyword arguments:
 
         - label (string; optional):
             Optional name for the element, useful when `data(label)`
-            is given to a style's `content` or `label`. It is only a
+            is given to a style's `content`  or `label`. It is only a
             convention.
 
         - parent (string; optional):
@@ -174,23 +178,23 @@ Keyword arguments:
 
 - generateImage (dict; optional):
     Dictionary specifying options to generate an image of the current
-    cytoscape graph. Value is cleared after data is received and image
-    is generated. This property will be ignored on the initial
-    creation of the cytoscape object and must be invoked through a
-    callback after it has been rendered.  If the app does not need the
-    image data server side and/or it will only be used to download the
-    image, it may be prudent to invoke `'download'` for `action`
-    instead of `'store'` to improve performance by preventing transfer
-    of data to the server.
+    cytoscape graph.  Value is cleared after data is received and
+    image is generated. This property will  be ignored on the initial
+    creation of the cytoscape object and must be invoked through  a
+    callback after it has been rendered.    If the app does not need
+    the image data server side and/or it will only be used to download
+    the image, it may be prudent to invoke `'download'` for `action`
+    instead of  `'store'` to improve performance by preventing
+    transfer of data to the server.
 
     `generateImage` is a dict with keys:
 
     - action (a value equal to: 'store', 'download', 'both'; optional):
         `'store'`: Stores the image data (only jpg and png are
-        supported) in `imageData` and invokes server-side Dash
-        callbacks. `'download'`: Downloads the image as a file with
+        supported)  in `imageData` and invokes server-side Dash
+        callbacks. `'download'`: Downloads the image  as a file with
         all data handling done client-side. No `imageData` callbacks
-        are fired. `'both'`: Stores image data and downloads image as
+        are fired.  `'both'`: Stores image data and downloads image as
         file. The default is `'store'`.
 
     - filename (string; optional):
@@ -198,9 +202,9 @@ Keyword arguments:
 
     - options (dict; optional):
         Dictionary of options to cy.png() / cy.jpg() or cy.svg() for
-        image generation. See https://js.cytoscape.org/#core/export
-        for details. For `'output'`, only 'base64' and 'base64uri' are
-        supported. Default: `{'output': 'base64uri'}`.
+        image generation.  See https://js.cytoscape.org/#core/export
+        for details. For `'output'`, only 'base64'  and 'base64uri'
+        are supported. Default: `{'output': 'base64uri'}`.
 
     - type (a value equal to: 'svg', 'png', 'jpg', 'jpeg'; optional):
         File type to output.
@@ -210,22 +214,25 @@ Keyword arguments:
 
 - imageData (string; optional):
     String representation of the image requested with generateImage.
-    Null if no image was requested yet or the previous request failed.
-    Read-only.
+    Null if no  image was requested yet or the previous request
+    failed. Read-only.
+
+- includeLoopInDegree (boolean; default False):
+    Если True, то петли учитываются при подсчете степеней.
 
 - layout (dict; default {name: 'grid'}):
     A dictionary specifying how to set the position of the elements in
-    your graph. The `'name'` key is required, and indicates which
-    layout (algorithm) to use. The keys accepted by `layout` vary
-    depending on the algorithm, but these keys are accepted by all
+    your  graph. The `'name'` key is required, and indicates which
+    layout (algorithm) to  use. The keys accepted by `layout` vary
+    depending on the algorithm, but these  keys are accepted by all
     layouts: `fit`,  `padding`, `animate`, `animationDuration`,
-    `boundingBox`.   The complete list of layouts and their accepted
-    options are available on the  [Cytoscape.js
+    `boundingBox`.     The complete list of layouts and their accepted
+    options are available on the   [Cytoscape.js
     docs](https://js.cytoscape.org/#layouts) . For the external
-    layouts, the options are listed in the \"API\" section of the
-    README.  Note that certain keys are not supported in Dash since
-    the value is a JavaScript  function or a callback. Please visit
-    this [issue](https://github.com/plotly/dash-cytoscape/issues/25)
+    layouts,  the options are listed in the \"API\" section of the
+    README.   Note that certain keys are not supported in Dash since
+    the value is a JavaScript   function or a callback. Please visit
+    this  [issue](https://github.com/plotly/dash-cytoscape/issues/25)
     for more information.
 
     `layout` is a dict with keys:
@@ -238,26 +245,26 @@ Keyword arguments:
 
     - boundingBox (dict; optional):
         How to constrain the layout in a specific area. Keys accepted
-        are either `x1, y1, x2, y2` or `x1, y1, w, h`, all of which
+        are either  `x1, y1, x2, y2` or `x1, y1, w, h`, all of which
         receive a pixel value.
 
     - fit (boolean; optional):
         Whether to render the nodes in order to fit the canvas.
 
     - name (a value equal to: 'random', 'preset', 'circle', 'concentric', 'grid', 'breadthfirst', 'cose', 'cose-bilkent', 'fcose', 'cola', 'euler', 'spread', 'dagre', 'klay'; required):
-        The layouts available by default are:   `random`: Randomly
-        assigns positions.   `preset`: Assigns position based on the
-        `position` key in element dictionaries.   `circle`:
-        Single-level circle, with optional radius.   `concentric`:
-        Multi-level circle, with optional radius.   `grid`: Square
+        The layouts available by default are:    `random`: Randomly
+        assigns positions.    `preset`: Assigns position based on the
+        `position` key in element dictionaries.    `circle`:
+        Single-level circle, with optional radius.    `concentric`:
+        Multi-level circle, with optional radius.    `grid`: Square
         grid, optionally with numbers of `rows` and `cols`.
         `breadthfirst`: Tree structure built using BFS, with optional
-        `roots`.   `cose`: Force-directed physics simulation.  Some
+        `roots`.    `cose`: Force-directed physics simulation.    Some
         external layouts are also included. To use them, run
         `dash_cytoscape.load_extra_layouts()` before creating your
-        Dash app. Be careful about   using the extra layouts when not
-        necessary, since they require supplementary bandwidth   for
-        loading, which impacts the startup time of the app.   The
+        Dash app. Be careful about    using the extra layouts when not
+        necessary, since they require supplementary bandwidth    for
+        loading, which impacts the startup time of the app.    The
         external layouts are:
         [cose-bilkent](https://github.com/cytoscape/cytoscape.js-cose-bilkent),
         [fcose](https://github.com/iVis-at-Bilkent/cytoscape.js-fcose),
@@ -272,11 +279,11 @@ Keyword arguments:
 
 - maxZoom (number; default 1e50):
     A maximum bound on the zoom level of the graph. The viewport can
-    not be scaled larger than this zoom level.
+    not be  scaled larger than this zoom level.
 
 - minZoom (number; default 1e-50):
     A minimum bound on the zoom level of the graph. The viewport can
-    not be scaled smaller than this zoom level.
+    not be  scaled smaller than this zoom level.
 
 - mouseoverEdgeData (dict; optional):
     The data dictionary of an edge returned when you hover over it.
@@ -288,7 +295,7 @@ Keyword arguments:
 
 - pan (dict; default {x: 0, y: 0}):
     Dictionary indicating the initial panning position of the graph.
-    The following keys are accepted:.
+    The  following keys are accepted:.
 
     `pan` is a dict with keys:
 
@@ -300,7 +307,7 @@ Keyword arguments:
 
 - panningEnabled (boolean; default True):
     Whether panning the graph is enabled (i.e., the position of the
-    graph is mutable overall).
+    graph is  mutable overall).
 
 - responsive (boolean; default False):
     Toggles intelligent responsive resize of Cytoscape graph with
@@ -325,22 +332,23 @@ Keyword arguments:
 - stylesheet (list of dicts; optional):
     A list of dictionaries representing the styles of the elements.
     Each dictionary requires the following keys: `selector` and
-    `style`.  Both the [selector](https://js.cytoscape.org/#selectors)
-    and the [style](https://js.cytoscape.org/#style/node-body) are
+    `style`.    Both the
+    [selector](https://js.cytoscape.org/#selectors) and  the
+    [style](https://js.cytoscape.org/#style/node-body) are
     exhaustively documented in the Cytoscape.js docs. Although methods
-    such as `cy.elements(...)` and `cy.filter(...)` are not available,
-    the selector string syntax stays the same.
+    such  as `cy.elements(...)` and `cy.filter(...)` are not
+    available, the selector  string syntax stays the same.
 
     `stylesheet` is a list of dicts with keys:
 
     - selector (string; required):
         Which elements you are styling. Generally, you select a group
-        of elements (node, edges, both), a class (that you declare in
+        of elements (node, edges, both),  a class (that you declare in
         the element dictionary), or an element by ID.
 
     - style (dict; required):
         What aspects of the elements you want to modify. This could be
-        the size or color of a node, the shape of an edge arrow, or
+        the size or  color of a node, the shape of an edge arrow, or
         many more.
 
 - tapEdge (dict; optional):
@@ -484,7 +492,7 @@ Keyword arguments:
 
     - content (string; optional):
         Обязательный. Содержимое тултипа. Может содержать любой html.
-        В случае передаче тега textarea, при изменении текста в
+        В случае передаче тега textarea,  при изменении текста в
         textarea или изменении размеров (ширины и высоты) textarea
         будут изменяться и tooltip, и tooltipsData.
 
@@ -497,12 +505,12 @@ Keyword arguments:
         значения генерируется автоматически.
 
     - last_update_time (number; optional):
-        Время последнего обновления в unix формате. Игнорируется при
+        Время последнего обновления в unix формате.  Игнорируется при
         попытки обновления этого свойства с бекенда.
 
     - position (dict; optional):
         Необязательный. Позиция свободного тултипа в координатах
-        cytoscape. У привязанного тултипа такого поля нет.
+        cytoscape.  У привязанного тултипа такого поля нет.
 
         `position` is a dict with keys:
 
@@ -511,7 +519,7 @@ Keyword arguments:
         - y (number; optional)
 
 - tooltipsData (list of dicts; optional):
-    Перечень тултипов, данные которых изменились последний раз. Можно
+    Перечень тултипов, данные которых изменились последний раз.  Можно
     использовать для обновления конкретных тултипов, а не передавать
     весь список, как в случае с tooltips.
 
@@ -527,11 +535,11 @@ Keyword arguments:
 
 - userPanningEnabled (boolean; default True):
     Whether user events (e.g. dragging the graph background) are
-    allowed to pan the graph.
+    allowed to  pan the graph.
 
 - userZoomingEnabled (boolean; default True):
     Whether user events (e.g. dragging the graph background) are
-    allowed to pan the graph.
+    allowed  to pan the graph.
 
 - zoom (number; default 1):
     The initial zoom level of the graph. You can set `minZoom` and
@@ -539,16 +547,16 @@ Keyword arguments:
 
 - zoomingEnabled (boolean; default True):
     Whether zooming the graph is enabled (i.e., the zoom level of the
-    graph is mutable overall)."""
+    graph  is mutable overall)."""
     _children_props = []
     _base_nodes = ['children']
     _namespace = 'dash_cytoscape'
     _type = 'Cytoscape'
     @_explicitize_args
-    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, degrees=Component.UNDEFINED, includeLoopInDegree=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

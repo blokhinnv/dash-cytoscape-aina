@@ -252,7 +252,6 @@ class Cytoscape extends Component {
             }
         });
 
-
         cy.on('dragfree', 'node', (event) => {
             const nodeObject = this.generateNode(event);
 
@@ -341,6 +340,7 @@ class Cytoscape extends Component {
 
         cy.on('add remove', () => {
             refreshLayout();
+            this.updateDegrees(cy)
         });
 
         cy.on('zoom', event => {
@@ -375,6 +375,7 @@ class Cytoscape extends Component {
                 }
             }]);
         }
+        this.updateDegrees(cy)
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
@@ -588,6 +589,19 @@ class Cytoscape extends Component {
         window.URL.revokeObjectURL(url);
 
         document.body.removeChild(downloadLink);
+    }
+
+    updateDegrees(cy){
+        const degrees = cy.nodes().reduce((degrees, node) => {
+            degrees[node.id()] = {
+                degree: node.degree(this.props.includeLoopInDegree),
+                inDegree: node.indegree(this.props.includeLoopInDegree),
+                outDegree: node.outdegree(this.props.includeLoopInDegree),
+                totalDegree: node.totalDegree(this.props.includeLoopInDegree),
+            }
+            return degrees
+        }, {})
+        this.props.setProps({ degrees })
     }
 
     render() {
@@ -1202,6 +1216,15 @@ Cytoscape.propTypes = {
             data: PropTypes.object,
         }),
     ),
+
+    /**
+     * Объект со степенями узлов. Ключ - ID узла, значение - разные типы степеней (degree, in\out\total degree).
+     */
+    degrees: PropTypes.object,
+    /**
+     * Если true, то петли учитываются при подсчете степеней.
+     */
+    includeLoopInDegree: PropTypes.bool,
 };
 
 Cytoscape.defaultProps = {
@@ -1225,7 +1248,9 @@ Cytoscape.defaultProps = {
     responsive: false,
     elements: [],
     tooltips: [],
-    tooltipsData: []
+    tooltipsData: [],
+    degrees: {},
+    includeLoopInDegree: false,
 };
 
 export default Cytoscape;
