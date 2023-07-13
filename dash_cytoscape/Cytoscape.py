@@ -93,6 +93,10 @@ Keyword arguments:
     - timestamp (number; optional):
         Time the option was selected.
 
+- degrees (dict; optional):
+    Объект со степенями узлов. Ключ - ID узла, значение - разные типы
+    степеней (degree, in\out\total degree).
+
 - dragNodeData (list; optional):
     drag - схватили и перетаскиваем.
 
@@ -212,6 +216,9 @@ Keyword arguments:
     String representation of the image requested with generateImage.
     Null if no  image was requested yet or the previous request
     failed. Read-only.
+
+- includeLoopInDegree (boolean; default False):
+    Если True, то петли учитываются при подсчете степеней.
 
 - layout (dict; default {name: 'grid'}):
     A dictionary specifying how to set the position of the elements in
@@ -546,10 +553,10 @@ Keyword arguments:
     _namespace = 'dash_cytoscape'
     _type = 'Cytoscape'
     @_explicitize_args
-    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, degrees=Component.UNDEFINED, includeLoopInDegree=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

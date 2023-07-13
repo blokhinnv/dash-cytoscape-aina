@@ -21,8 +21,11 @@
     "build:js-dev-extra": "webpack --config webpack.dev.extra.config.js",
     "build:js-extra": "webpack --config webpack.prod.extra.config.js",
     "build:js-all": "npm run build:js && npm run build:js-dev && npm run build:js-dev-extra && npm run build:js-extra",
-    "build:backends": "dash-generate-components ./src/lib/components dash_cytoscape",
+    "build:backends": "dash-generate-components ./src/lib/components dash_cytoscape --r-prefix 'cyto' --jl-prefix 'cyto'",
+    "build:backends-win": "SET PYTHONIOENCODING=UTF-8&&set PYTHONUTF8=1&& dash-generate-components ./src/lib/components dash_cytoscape --r-prefix 'cyto' --jl-prefix 'cyto'",
+    "build:modify-cyto-win": "copy /y .\\arrows_five_colors\\canvas-arrow-shapes.js .\\node_modules\\cytoscape\\src\\extensions\\renderer\\canvas\\arrow-shapes.js && copy /y .\\arrows_five_colors\\base-arrow-shapes.js .\\node_modules\\cytoscape\\src\\extensions\\renderer\\base\\arrow-shapes.js && copy /y .\\arrows_five_colors\\properties.js .\\node_modules\\cytoscape\\src\\style\\properties.js && copy /y .\\fix_edges_rendrering\\edge-control-points.js .\\node_modules\\cytoscape\\src\\extensions\\renderer\\base\\coord-ele-math\\edge-control-points.js",
     "build:all": "npm run build:js-all && npm run build:backends",
+    "build:all-win": "SET NODE_OPTIONS=--openssl-legacy-provider && npm run build:modify-cyto-win && npm run build:js-all && npm run build:backends-win",
     "build:all-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:all)",
     "watch": "webpack --config webpack.dev.extra.config.js --watch"
   },

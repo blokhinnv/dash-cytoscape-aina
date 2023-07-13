@@ -13,16 +13,17 @@ A Component Library for Dash aimed at facilitating network visualization in Pyt
 'cyto'Cytoscape(id=NULL, autoRefreshLayout=NULL, autolock=NULL,
 autoungrabify=NULL, autounselectify=NULL,
 boxSelectionEnabled=NULL, className=NULL, contextmenu=NULL,
-contextmenuData=NULL, dragNodeData=NULL, elements=NULL,
-generateImage=NULL, grabNodeData=NULL, imageData=NULL,
-layout=NULL, maxZoom=NULL, minZoom=NULL,
-mouseoverEdgeData=NULL, mouseoverNodeData=NULL, pan=NULL,
-panningEnabled=NULL, responsive=NULL, scrollZoom=NULL,
-selectedEdgeData=NULL, selectedNodeData=NULL, style=NULL,
-stylesheet=NULL, tapEdge=NULL, tapEdgeData=NULL,
-tapNode=NULL, tapNodeData=NULL, tooltips=NULL,
-tooltipsData=NULL, userPanningEnabled=NULL,
-userZoomingEnabled=NULL, zoom=NULL, zoomingEnabled=NULL)
+contextmenuData=NULL, degrees=NULL, dragNodeData=NULL,
+elements=NULL, generateImage=NULL, grabNodeData=NULL,
+imageData=NULL, includeLoopInDegree=NULL, layout=NULL,
+maxZoom=NULL, minZoom=NULL, mouseoverEdgeData=NULL,
+mouseoverNodeData=NULL, pan=NULL, panningEnabled=NULL,
+responsive=NULL, scrollZoom=NULL, selectedEdgeData=NULL,
+selectedNodeData=NULL, style=NULL, stylesheet=NULL,
+tapEdge=NULL, tapEdgeData=NULL, tapNode=NULL,
+tapNodeData=NULL, tooltips=NULL, tooltipsData=NULL,
+userPanningEnabled=NULL, userZoomingEnabled=NULL, zoom=NULL,
+zoomingEnabled=NULL)
 }
 
 \arguments{
@@ -69,7 +70,9 @@ those elements have the following types:
 on the type of the selected item (node, edge, core, etc.).
   - coordinates (list of numerics; optional): array containing latitude and longitude where context menu was opened if leaflet is enabled.. Dictionary returned when a context menu option is selected. Read-only.}
 
-\item{dragNodeData}{Unnamed list. drag - схватили и перетаскиваем}
+\item{degrees}{Named list. РћР±СЉРµРєС‚ СЃРѕ СЃС‚РµРїРµРЅСЏРјРё СѓР·Р»РѕРІ. РљР»СЋС‡ - ID СѓР·Р»Р°, Р·РЅР°С‡РµРЅРёРµ - СЂР°Р·РЅС‹Рµ С‚РёРїС‹ СЃС‚РµРїРµРЅРµР№ (degree, in\out\total degree).}
+
+\item{dragNodeData}{Unnamed list. drag - СЃС…РІР°С‚РёР»Рё Рё РїРµСЂРµС‚Р°СЃРєРёРІР°РµРј}
 
 \item{elements}{List of lists containing elements 'group', 'data', 'position', 'selected', 'selectable', 'locked', 'grabbable', 'classes'.
 those elements have the following types:
@@ -119,10 +122,12 @@ If the app does not need the image data server side and/or it will only be used 
 the image, it may be prudent to invoke `'download'` for `action` instead of
 `'store'` to improve performance by preventing transfer of data to the server.}
 
-\item{grabNodeData}{Unnamed list. grab - только схватили}
+\item{grabNodeData}{Unnamed list. grab - С‚РѕР»СЊРєРѕ СЃС…РІР°С‚РёР»Рё}
 
 \item{imageData}{Character. String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.}
+
+\item{includeLoopInDegree}{Logical. Р•СЃР»Рё true, С‚Рѕ РїРµС‚Р»Рё СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ РїСЂРё РїРѕРґСЃС‡РµС‚Рµ СЃС‚РµРїРµРЅРµР№.}
 
 \item{layout}{Lists containing elements 'name', 'fit', 'padding', 'animate', 'animationduration', 'boundingbox'.
 those elements have the following types:
@@ -186,7 +191,7 @@ mutable overall).}
 
 \item{responsive}{Logical. Toggles intelligent responsive resize of Cytoscape graph with viewport size change}
 
-\item{scrollZoom}{Numeric. значение зума при зумировании колесиком мыши}
+\item{scrollZoom}{Numeric. Р·РЅР°С‡РµРЅРёРµ Р·СѓРјР° РїСЂРё Р·СѓРјРёСЂРѕРІР°РЅРёРё РєРѕР»РµСЃРёРєРѕРј РјС‹С€Рё}
 
 \item{selectedEdgeData}{Unnamed list. The list of data dictionaries of all selected edges (e.g. using
 Shift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only.}
@@ -260,24 +265,24 @@ those elements have the following types:
 
 \item{tooltips}{List of lists containing elements 'id', 'cy_el_id', 'content', 'position', 'last_update_time'.
 those elements have the following types:
-  - id (character; optional): необязательный. идентификатор тултипа; при передаче пустого значения генерируется автоматически.
-  - cy_el_id (character; optional): необязательный. идентификатор элемента графа, обязательно для создания привязанного тултипа.
-  - content (character; optional): обязательный. содержимое тултипа. может содержать любой html. в случае передаче тега textarea,
-при изменении текста в textarea или изменении размеров (ширины и высоты) textarea
-будут изменяться и tooltip, и tooltipsdata.
-  - position (optional): необязательный. позиция свободного тултипа в координатах cytoscape.
-у привязанного тултипа такого поля нет.. position has the following type: lists containing elements 'x', 'y'.
+  - id (character; optional): РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚СѓР»С‚РёРїР°; РїСЂРё РїРµСЂРµРґР°С‡Рµ РїСѓСЃС‚РѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РіРµРЅРµСЂРёСЂСѓРµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.
+  - cy_el_id (character; optional): РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЌР»РµРјРµРЅС‚Р° РіСЂР°С„Р°, РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РїСЂРёРІСЏР·Р°РЅРЅРѕРіРѕ С‚СѓР»С‚РёРїР°.
+  - content (character; optional): РѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. СЃРѕРґРµСЂР¶РёРјРѕРµ С‚СѓР»С‚РёРїР°. РјРѕР¶РµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ Р»СЋР±РѕР№ html. РІ СЃР»СѓС‡Р°Рµ РїРµСЂРµРґР°С‡Рµ С‚РµРіР° textarea,
+РїСЂРё РёР·РјРµРЅРµРЅРёРё С‚РµРєСЃС‚Р° РІ textarea РёР»Рё РёР·РјРµРЅРµРЅРёРё СЂР°Р·РјРµСЂРѕРІ (С€РёСЂРёРЅС‹ Рё РІС‹СЃРѕС‚С‹) textarea
+Р±СѓРґСѓС‚ РёР·РјРµРЅСЏС‚СЊСЃСЏ Рё tooltip, Рё tooltipsdata.
+  - position (optional): РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РїРѕР·РёС†РёСЏ СЃРІРѕР±РѕРґРЅРѕРіРѕ С‚СѓР»С‚РёРїР° РІ РєРѕРѕСЂРґРёРЅР°С‚Р°С… cytoscape.
+Сѓ РїСЂРёРІСЏР·Р°РЅРЅРѕРіРѕ С‚СѓР»С‚РёРїР° С‚Р°РєРѕРіРѕ РїРѕР»СЏ РЅРµС‚.. position has the following type: lists containing elements 'x', 'y'.
 those elements have the following types:
   - x (numeric; optional)
   - y (numeric; optional)
-  - last_update_time (numeric; optional): время последнего обновления в unix формате.
-игнорируется при попытки обновления этого свойства с бекенда.s. Содержит полную информацию о всех тултипах; список словарей.}
+  - last_update_time (numeric; optional): РІСЂРµРјСЏ РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РІ unix С„РѕСЂРјР°С‚Рµ.
+РёРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ РїСЂРё РїРѕРїС‹С‚РєРё РѕР±РЅРѕРІР»РµРЅРёСЏ СЌС‚РѕРіРѕ СЃРІРѕР№СЃС‚РІР° СЃ Р±РµРєРµРЅРґР°.s. РЎРѕРґРµСЂР¶РёС‚ РїРѕР»РЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІСЃРµС… С‚СѓР»С‚РёРїР°С…; СЃРїРёСЃРѕРє СЃР»РѕРІР°СЂРµР№.}
 
 \item{tooltipsData}{List of lists containing elements 'event', 'data'.
 those elements have the following types:
-  - event (character; optional): информация о типе совершенного изменения. возможные значения: add, update, delete.
-  - data (named list; optional): cодержит данные, описывающие тултип, имеет тот же формат, что и элемент списка tooltips.s. Перечень тултипов, данные которых изменились последний раз.
-Можно использовать для обновления конкретных тултипов, а не передавать весь список, как в случае с tooltips.}
+  - event (character; optional): РёРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РёРїРµ СЃРѕРІРµСЂС€РµРЅРЅРѕРіРѕ РёР·РјРµРЅРµРЅРёСЏ. РІРѕР·РјРѕР¶РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ: add, update, delete.
+  - data (named list; optional): cРѕРґРµСЂР¶РёС‚ РґР°РЅРЅС‹Рµ, РѕРїРёСЃС‹РІР°СЋС‰РёРµ С‚СѓР»С‚РёРї, РёРјРµРµС‚ С‚РѕС‚ Р¶Рµ С„РѕСЂРјР°С‚, С‡С‚Рѕ Рё СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР° tooltips.s. РџРµСЂРµС‡РµРЅСЊ С‚СѓР»С‚РёРїРѕРІ, РґР°РЅРЅС‹Рµ РєРѕС‚РѕСЂС‹С… РёР·РјРµРЅРёР»РёСЃСЊ РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·.
+РњРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РєРѕРЅРєСЂРµС‚РЅС‹С… С‚СѓР»С‚РёРїРѕРІ, Р° РЅРµ РїРµСЂРµРґР°РІР°С‚СЊ РІРµСЃСЊ СЃРїРёСЃРѕРє, РєР°Рє РІ СЃР»СѓС‡Р°Рµ СЃ tooltips.}
 
 \item{userPanningEnabled}{Logical. Whether user events (e.g. dragging the graph background) are allowed to
 pan the graph.}

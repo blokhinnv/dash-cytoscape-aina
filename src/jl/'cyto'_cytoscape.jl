@@ -43,7 +43,8 @@ Those elements have the following types:
   - `target` (Dict; optional): Dictionary containing information about the selected item. Information provided varies depending
 on the type of the selected item (node, edge, core, etc.).
   - `coordinates` (Array of Reals; optional): Array containing latitude and longitude where context menu was opened if leaflet is enabled.
-- `dragNodeData` (Array; optional): drag - схватили и перетаскиваем
+- `degrees` (Dict; optional): РћР±СЉРµРєС‚ СЃРѕ СЃС‚РµРїРµРЅСЏРјРё СѓР·Р»РѕРІ. РљР»СЋС‡ - ID СѓР·Р»Р°, Р·РЅР°С‡РµРЅРёРµ - СЂР°Р·РЅС‹Рµ С‚РёРїС‹ СЃС‚РµРїРµРЅРµР№ (degree, in\out\total degree).
+- `dragNodeData` (Array; optional): drag - СЃС…РІР°С‚РёР»Рё Рё РїРµСЂРµС‚Р°СЃРєРёРІР°РµРј
 - `elements` (optional): A list of dictionaries representing the elements of the networks. Each dictionary describes an element, and
 specifies its purpose. The [official Cytoscape.js documentation](https://js.cytoscape.org/#notation/elements-json)
 offers an extensive overview and examples of element declaration.
@@ -90,9 +91,10 @@ in `imageData` and invokes server-side Dash callbacks. `'download'`: Downloads t
 as a file with all data handling done client-side. No `imageData` callbacks are fired.
 `'both'`: Stores image data and downloads image as file. The default is `'store'`
   - `filename` (String; optional): Name for the file to be downloaded. Default: 'cyto'.
-- `grabNodeData` (Array; optional): grab - только схватили
+- `grabNodeData` (Array; optional): grab - С‚РѕР»СЊРєРѕ СЃС…РІР°С‚РёР»Рё
 - `imageData` (String; optional): String representation of the image requested with generateImage. Null if no
 image was requested yet or the previous request failed. Read-only.
+- `includeLoopInDegree` (Bool; optional): Р•СЃР»Рё true, С‚Рѕ РїРµС‚Р»Рё СѓС‡РёС‚С‹РІР°СЋС‚СЃСЏ РїСЂРё РїРѕРґСЃС‡РµС‚Рµ СЃС‚РµРїРµРЅРµР№.
 - `layout` (optional): A dictionary specifying how to set the position of the elements in your
 graph. The `'name'` key is required, and indicates which layout (algorithm) to
 use. The keys accepted by `layout` vary depending on the algorithm, but these
@@ -147,7 +149,7 @@ Those elements have the following types:
 - `panningEnabled` (Bool; optional): Whether panning the graph is enabled (i.e., the position of the graph is
 mutable overall).
 - `responsive` (Bool; optional): Toggles intelligent responsive resize of Cytoscape graph with viewport size change
-- `scrollZoom` (Real; optional): значение зума при зумировании колесиком мыши
+- `scrollZoom` (Real; optional): Р·РЅР°С‡РµРЅРёРµ Р·СѓРјР° РїСЂРё Р·СѓРјРёСЂРѕРІР°РЅРёРё РєРѕР»РµСЃРёРєРѕРј РјС‹С€Рё
 - `selectedEdgeData` (Array; optional): The list of data dictionaries of all selected edges (e.g. using
 Shift+Click to select multiple nodes, or Shift+Drag to use box selection). Read-only.
 - `selectedNodeData` (Array; optional): The list of data dictionaries of all selected nodes (e.g. using
@@ -210,25 +212,25 @@ Those elements have the following types:
   - `isOrphan` (Bool; optional): Item for compound nodes
   - `relativePosition` (Dict; optional): Item for compound nodes
 - `tapNodeData` (Dict; optional): The data dictionary of a node returned when you tap or click it. Read-only.
-- `tooltips` (optional): Содержит полную информацию о всех тултипах; список словарей.. tooltips has the following type: Array of lists containing elements 'id', 'cy_el_id', 'content', 'position', 'last_update_time'.
+- `tooltips` (optional): РЎРѕРґРµСЂР¶РёС‚ РїРѕР»РЅСѓСЋ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РІСЃРµС… С‚СѓР»С‚РёРїР°С…; СЃРїРёСЃРѕРє СЃР»РѕРІР°СЂРµР№.. tooltips has the following type: Array of lists containing elements 'id', 'cy_el_id', 'content', 'position', 'last_update_time'.
 Those elements have the following types:
-  - `id` (String; optional): Необязательный. Идентификатор тултипа; при передаче пустого значения генерируется автоматически.
-  - `cy_el_id` (String; optional): Необязательный. Идентификатор элемента графа, обязательно для создания привязанного тултипа.
-  - `content` (String; optional): Обязательный. Содержимое тултипа. Может содержать любой html. В случае передаче тега textarea,
-при изменении текста в textarea или изменении размеров (ширины и высоты) textarea
-будут изменяться и tooltip, и tooltipsData.
-  - `position` (optional): Необязательный. Позиция свободного тултипа в координатах cytoscape.
-У привязанного тултипа такого поля нет.. position has the following type: lists containing elements 'x', 'y'.
+  - `id` (String; optional): РќРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ С‚СѓР»С‚РёРїР°; РїСЂРё РїРµСЂРµРґР°С‡Рµ РїСѓСЃС‚РѕРіРѕ Р·РЅР°С‡РµРЅРёСЏ РіРµРЅРµСЂРёСЂСѓРµС‚СЃСЏ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё.
+  - `cy_el_id` (String; optional): РќРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РРґРµРЅС‚РёС„РёРєР°С‚РѕСЂ СЌР»РµРјРµРЅС‚Р° РіСЂР°С„Р°, РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ РґР»СЏ СЃРѕР·РґР°РЅРёСЏ РїСЂРёРІСЏР·Р°РЅРЅРѕРіРѕ С‚СѓР»С‚РёРїР°.
+  - `content` (String; optional): РћР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РЎРѕРґРµСЂР¶РёРјРѕРµ С‚СѓР»С‚РёРїР°. РњРѕР¶РµС‚ СЃРѕРґРµСЂР¶Р°С‚СЊ Р»СЋР±РѕР№ html. Р’ СЃР»СѓС‡Р°Рµ РїРµСЂРµРґР°С‡Рµ С‚РµРіР° textarea,
+РїСЂРё РёР·РјРµРЅРµРЅРёРё С‚РµРєСЃС‚Р° РІ textarea РёР»Рё РёР·РјРµРЅРµРЅРёРё СЂР°Р·РјРµСЂРѕРІ (С€РёСЂРёРЅС‹ Рё РІС‹СЃРѕС‚С‹) textarea
+Р±СѓРґСѓС‚ РёР·РјРµРЅСЏС‚СЊСЃСЏ Рё tooltip, Рё tooltipsData.
+  - `position` (optional): РќРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Р№. РџРѕР·РёС†РёСЏ СЃРІРѕР±РѕРґРЅРѕРіРѕ С‚СѓР»С‚РёРїР° РІ РєРѕРѕСЂРґРёРЅР°С‚Р°С… cytoscape.
+РЈ РїСЂРёРІСЏР·Р°РЅРЅРѕРіРѕ С‚СѓР»С‚РёРїР° С‚Р°РєРѕРіРѕ РїРѕР»СЏ РЅРµС‚.. position has the following type: lists containing elements 'x', 'y'.
 Those elements have the following types:
   - `x` (Real; optional)
   - `y` (Real; optional)
-  - `last_update_time` (Real; optional): Время последнего обновления в unix формате.
-Игнорируется при попытки обновления этого свойства с бекенда.s
-- `tooltipsData` (optional): Перечень тултипов, данные которых изменились последний раз.
-Можно использовать для обновления конкретных тултипов, а не передавать весь список, как в случае с tooltips.. tooltipsData has the following type: Array of lists containing elements 'event', 'data'.
+  - `last_update_time` (Real; optional): Р’СЂРµРјСЏ РїРѕСЃР»РµРґРЅРµРіРѕ РѕР±РЅРѕРІР»РµРЅРёСЏ РІ unix С„РѕСЂРјР°С‚Рµ.
+РРіРЅРѕСЂРёСЂСѓРµС‚СЃСЏ РїСЂРё РїРѕРїС‹С‚РєРё РѕР±РЅРѕРІР»РµРЅРёСЏ СЌС‚РѕРіРѕ СЃРІРѕР№СЃС‚РІР° СЃ Р±РµРєРµРЅРґР°.s
+- `tooltipsData` (optional): РџРµСЂРµС‡РµРЅСЊ С‚СѓР»С‚РёРїРѕРІ, РґР°РЅРЅС‹Рµ РєРѕС‚РѕСЂС‹С… РёР·РјРµРЅРёР»РёСЃСЊ РїРѕСЃР»РµРґРЅРёР№ СЂР°Р·.
+РњРѕР¶РЅРѕ РёСЃРїРѕР»СЊР·РѕРІР°С‚СЊ РґР»СЏ РѕР±РЅРѕРІР»РµРЅРёСЏ РєРѕРЅРєСЂРµС‚РЅС‹С… С‚СѓР»С‚РёРїРѕРІ, Р° РЅРµ РїРµСЂРµРґР°РІР°С‚СЊ РІРµСЃСЊ СЃРїРёСЃРѕРє, РєР°Рє РІ СЃР»СѓС‡Р°Рµ СЃ tooltips.. tooltipsData has the following type: Array of lists containing elements 'event', 'data'.
 Those elements have the following types:
-  - `event` (String; optional): Информация о типе совершенного изменения. Возможные значения: add, update, delete.
-  - `data` (Dict; optional): Cодержит данные, описывающие тултип, имеет тот же формат, что и элемент списка tooltips.s
+  - `event` (String; optional): РРЅС„РѕСЂРјР°С†РёСЏ Рѕ С‚РёРїРµ СЃРѕРІРµСЂС€РµРЅРЅРѕРіРѕ РёР·РјРµРЅРµРЅРёСЏ. Р’РѕР·РјРѕР¶РЅС‹Рµ Р·РЅР°С‡РµРЅРёСЏ: add, update, delete.
+  - `data` (Dict; optional): CРѕРґРµСЂР¶РёС‚ РґР°РЅРЅС‹Рµ, РѕРїРёСЃС‹РІР°СЋС‰РёРµ С‚СѓР»С‚РёРї, РёРјРµРµС‚ С‚РѕС‚ Р¶Рµ С„РѕСЂРјР°С‚, С‡С‚Рѕ Рё СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР° tooltips.s
 - `userPanningEnabled` (Bool; optional): Whether user events (e.g. dragging the graph background) are allowed to
 pan the graph.
 - `userZoomingEnabled` (Bool; optional): Whether user events (e.g. dragging the graph background) are allowed
@@ -239,7 +241,7 @@ to pan the graph.
 is mutable overall).
 """
 function 'cyto'_cytoscape(; kwargs...)
-        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :tooltips, :tooltipsData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
+        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :degrees, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :includeLoopInDegree, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :tooltips, :tooltipsData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
         wild_props = Symbol[]
         return Component("'cyto'_cytoscape", "Cytoscape", "dash_cytoscape", available_props, wild_props; kwargs...)
 end
