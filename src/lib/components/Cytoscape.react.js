@@ -271,6 +271,7 @@ class Cytoscape extends Component {
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
                     dragNodeData: dragData,
+                    extent: cy.extent(),
                 });
             }
         });
@@ -344,16 +345,29 @@ class Cytoscape extends Component {
         cy.on('add remove', () => {
             refreshLayout();
             this.updateDegrees(cy);
-            console.log('trulalla', cy.extent());
+            if (typeof this.props.setProps === 'function') {
+                this.props.setProps({
+                    extent: cy.extent(),
+                });
+            }
         });
 
         cy.on('zoom', (event) => {
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
                     scrollZoom: Math.floor(event.target.zoom() * 100) / 100,
+                    extent: cy.extent(),
                 });
             }
         });
+
+        cy.on('render', () => {
+            if (typeof this.props.setProps === 'function') {
+                this.props.setProps({
+                    extent: cy.extent(),
+                });
+            }
+        })
 
         this.cyResponsiveClass = new CyResponsive(cy);
         this.cyResponsiveClass.toggle(this.props.responsive);
@@ -1307,6 +1321,18 @@ Cytoscape.propTypes = {
      * Если true, то петли учитываются при подсчете степеней.
      */
     includeLoopInDegree: PropTypes.bool,
+    /**     
+     * extent of the viewport, a bounding box in model co-ordinates 
+     * that lets you know what model positions are visible in the viewport. 
+     */
+    extent: PropTypes.exact({
+        x1: PropTypes.number,
+        x2: PropTypes.number,
+        y1: PropTypes.number,
+        y2: PropTypes.number,
+        w: PropTypes.number,
+        h: PropTypes.number,
+    })
 };
 
 Cytoscape.defaultProps = {
@@ -1333,6 +1359,7 @@ Cytoscape.defaultProps = {
     tooltipsData: [],
     degrees: {},
     includeLoopInDegree: false,
+    extent: {},
 };
 
 export default Cytoscape;

@@ -1096,6 +1096,43 @@
           "value": "false",
           "computed": false
         }
+      },
+      "extent": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "x1": {
+              "name": "number",
+              "required": false
+            },
+            "x2": {
+              "name": "number",
+              "required": false
+            },
+            "y1": {
+              "name": "number",
+              "required": false
+            },
+            "y2": {
+              "name": "number",
+              "required": false
+            },
+            "w": {
+              "name": "number",
+              "required": false
+            },
+            "h": {
+              "name": "number",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "extent of the viewport, a bounding box in model co-ordinates \r\nthat lets you know what model positions are visible in the viewport.",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
       }
     }
   },

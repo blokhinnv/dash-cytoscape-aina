@@ -14,16 +14,16 @@ A Component Library for Dash aimed at facilitating network visualization in Pyt
 autoungrabify=NULL, autounselectify=NULL,
 boxSelectionEnabled=NULL, className=NULL, contextmenu=NULL,
 contextmenuData=NULL, degrees=NULL, dragNodeData=NULL,
-elements=NULL, generateImage=NULL, grabNodeData=NULL,
-imageData=NULL, includeLoopInDegree=NULL, layout=NULL,
-maxZoom=NULL, minZoom=NULL, mouseoverEdgeData=NULL,
-mouseoverNodeData=NULL, pan=NULL, panningEnabled=NULL,
-responsive=NULL, scrollZoom=NULL, selectedEdgeData=NULL,
-selectedNodeData=NULL, style=NULL, stylesheet=NULL,
-tapEdge=NULL, tapEdgeData=NULL, tapNode=NULL,
-tapNodeData=NULL, tooltips=NULL, tooltipsData=NULL,
-userPanningEnabled=NULL, userZoomingEnabled=NULL, zoom=NULL,
-zoomingEnabled=NULL)
+elements=NULL, extent=NULL, generateImage=NULL,
+grabNodeData=NULL, imageData=NULL, includeLoopInDegree=NULL,
+layout=NULL, maxZoom=NULL, minZoom=NULL,
+mouseoverEdgeData=NULL, mouseoverNodeData=NULL, pan=NULL,
+panningEnabled=NULL, responsive=NULL, scrollZoom=NULL,
+selectedEdgeData=NULL, selectedNodeData=NULL, style=NULL,
+stylesheet=NULL, tapEdge=NULL, tapEdgeData=NULL,
+tapNode=NULL, tapNodeData=NULL, tooltips=NULL,
+tooltipsData=NULL, userPanningEnabled=NULL,
+userZoomingEnabled=NULL, zoom=NULL, zoomingEnabled=NULL)
 }
 
 \arguments{
@@ -102,6 +102,16 @@ specifies its purpose. The [official Cytoscape.js documentation](https://js.cyto
 offers an extensive overview and examples of element declaration.
 Alternatively, a dictionary with the format { 'nodes': [], 'edges': [] } is allowed at initialization,
 but arrays remain the recommended format.}
+
+\item{extent}{Lists containing elements 'x1', 'x2', 'y1', 'y2', 'w', 'h'.
+those elements have the following types:
+  - x1 (numeric; optional)
+  - x2 (numeric; optional)
+  - y1 (numeric; optional)
+  - y2 (numeric; optional)
+  - w (numeric; optional)
+  - h (numeric; optional). extent of the viewport, a bounding box in model co-ordinates 
+that lets you know what model positions are visible in the viewport.}
 
 \item{generateImage}{Lists containing elements 'type', 'options', 'action', 'filename'.
 those elements have the following types:

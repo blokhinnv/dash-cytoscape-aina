@@ -73,6 +73,15 @@ by a style selector.s | lists containing elements 'nodes', 'edges'.
 Those elements have the following types:
   - `nodes` (Array; optional)
   - `edges` (Array; optional)
+- `extent` (optional): extent of the viewport, a bounding box in model co-ordinates 
+that lets you know what model positions are visible in the viewport.. extent has the following type: lists containing elements 'x1', 'x2', 'y1', 'y2', 'w', 'h'.
+Those elements have the following types:
+  - `x1` (Real; optional)
+  - `x2` (Real; optional)
+  - `y1` (Real; optional)
+  - `y2` (Real; optional)
+  - `w` (Real; optional)
+  - `h` (Real; optional)
 - `generateImage` (optional): Dictionary specifying options to generate an image of the current cytoscape graph.
 Value is cleared after data is received and image is generated. This property will
 be ignored on the initial creation of the cytoscape object and must be invoked through
@@ -241,7 +250,7 @@ to pan the graph.
 is mutable overall).
 """
 function 'cyto'_cytoscape(; kwargs...)
-        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :degrees, :dragNodeData, :elements, :generateImage, :grabNodeData, :imageData, :includeLoopInDegree, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :tooltips, :tooltipsData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
+        available_props = Symbol[:id, :autoRefreshLayout, :autolock, :autoungrabify, :autounselectify, :boxSelectionEnabled, :className, :contextmenu, :contextmenuData, :degrees, :dragNodeData, :elements, :extent, :generateImage, :grabNodeData, :imageData, :includeLoopInDegree, :layout, :maxZoom, :minZoom, :mouseoverEdgeData, :mouseoverNodeData, :pan, :panningEnabled, :responsive, :scrollZoom, :selectedEdgeData, :selectedNodeData, :style, :stylesheet, :tapEdge, :tapEdgeData, :tapNode, :tapNodeData, :tooltips, :tooltipsData, :userPanningEnabled, :userZoomingEnabled, :zoom, :zoomingEnabled]
         wild_props = Symbol[]
         return Component("'cyto'_cytoscape", "Cytoscape", "dash_cytoscape", available_props, wild_props; kwargs...)
 end
