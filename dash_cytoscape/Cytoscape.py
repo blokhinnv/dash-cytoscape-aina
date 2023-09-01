@@ -176,6 +176,25 @@ Keyword arguments:
 
     - nodes (list; optional)
 
+- extent (dict; optional):
+    extent of the viewport, a bounding box in model co-ordinates
+    that lets you know what model positions are visible in the
+    viewport.
+
+    `extent` is a dict with keys:
+
+    - h (number; optional)
+
+    - w (number; optional)
+
+    - x1 (number; optional)
+
+    - x2 (number; optional)
+
+    - y1 (number; optional)
+
+    - y2 (number; optional)
+
 - generateImage (dict; optional):
     Dictionary specifying options to generate an image of the current
     cytoscape graph.  Value is cleared after data is received and
@@ -553,10 +572,10 @@ Keyword arguments:
     _namespace = 'dash_cytoscape'
     _type = 'Cytoscape'
     @_explicitize_args
-    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, degrees=Component.UNDEFINED, includeLoopInDegree=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+    def __init__(self, id=Component.UNDEFINED, className=Component.UNDEFINED, style=Component.UNDEFINED, elements=Component.UNDEFINED, stylesheet=Component.UNDEFINED, layout=Component.UNDEFINED, pan=Component.UNDEFINED, zoom=Component.UNDEFINED, panningEnabled=Component.UNDEFINED, userPanningEnabled=Component.UNDEFINED, minZoom=Component.UNDEFINED, maxZoom=Component.UNDEFINED, zoomingEnabled=Component.UNDEFINED, userZoomingEnabled=Component.UNDEFINED, boxSelectionEnabled=Component.UNDEFINED, autoungrabify=Component.UNDEFINED, autolock=Component.UNDEFINED, autounselectify=Component.UNDEFINED, autoRefreshLayout=Component.UNDEFINED, tapNode=Component.UNDEFINED, tapNodeData=Component.UNDEFINED, tapEdge=Component.UNDEFINED, tapEdgeData=Component.UNDEFINED, mouseoverNodeData=Component.UNDEFINED, mouseoverEdgeData=Component.UNDEFINED, selectedNodeData=Component.UNDEFINED, selectedEdgeData=Component.UNDEFINED, grabNodeData=Component.UNDEFINED, dragNodeData=Component.UNDEFINED, scrollZoom=Component.UNDEFINED, generateImage=Component.UNDEFINED, imageData=Component.UNDEFINED, responsive=Component.UNDEFINED, contextmenu=Component.UNDEFINED, contextmenuData=Component.UNDEFINED, tooltips=Component.UNDEFINED, tooltipsData=Component.UNDEFINED, degrees=Component.UNDEFINED, includeLoopInDegree=Component.UNDEFINED, extent=Component.UNDEFINED, **kwargs):
+        self._prop_names = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'extent', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
+        self.available_properties = ['id', 'autoRefreshLayout', 'autolock', 'autoungrabify', 'autounselectify', 'boxSelectionEnabled', 'className', 'contextmenu', 'contextmenuData', 'degrees', 'dragNodeData', 'elements', 'extent', 'generateImage', 'grabNodeData', 'imageData', 'includeLoopInDegree', 'layout', 'maxZoom', 'minZoom', 'mouseoverEdgeData', 'mouseoverNodeData', 'pan', 'panningEnabled', 'responsive', 'scrollZoom', 'selectedEdgeData', 'selectedNodeData', 'style', 'stylesheet', 'tapEdge', 'tapEdgeData', 'tapNode', 'tapNodeData', 'tooltips', 'tooltipsData', 'userPanningEnabled', 'userZoomingEnabled', 'zoom', 'zoomingEnabled']
         self.available_wildcard_properties =            []
         _explicit_args = kwargs.pop('_explicit_args')
         _locals = locals()

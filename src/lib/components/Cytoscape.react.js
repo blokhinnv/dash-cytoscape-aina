@@ -12,13 +12,15 @@ import CyCxtMenu from '../cyContextmenu.js';
 import CyTooltips from '../cyTooltips.js';
 import html2canvas from 'html2canvas';
 
+// eslint-disable-next-line no-unused-vars
 function dataURItoBlob(dataURI) {
     // convert base64/URLEncoded data component to raw binary data held in a string
     var byteString;
-    if (dataURI.split(',')[0].indexOf('base64') >= 0)
-        {byteString = atob(dataURI.split(',')[1]);}
-    else
-        {byteString = unescape(dataURI.split(',')[1]);}
+    if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+        byteString = atob(dataURI.split(',')[1]);
+    } else {
+        byteString = unescape(dataURI.split(',')[1]);
+    }
 
     // separate out the mime component
     var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
@@ -29,7 +31,7 @@ function dataURItoBlob(dataURI) {
         ia[i] = byteString.charCodeAt(i);
     }
 
-    return new Blob([ia], {type:mimeString});
+    return new Blob([ia], {type: mimeString});
 }
 
 /**
@@ -61,19 +63,19 @@ class Cytoscape extends Component {
             style = ele.style();
 
         // Trim down the element objects to only the data contained
-        const edgesData = ele.connectedEdges().map(ele => {
+        const edgesData = ele.connectedEdges().map((ele) => {
                 return ele.data();
             }),
-            childrenData = ele.children().map(ele => {
+            childrenData = ele.children().map((ele) => {
                 return ele.data();
             }),
-            ancestorsData = ele.ancestors().map(ele => {
+            ancestorsData = ele.ancestors().map((ele) => {
                 return ele.data();
             }),
-            descendantsData = ele.descendants().map(ele => {
+            descendantsData = ele.descendants().map((ele) => {
                 return ele.data();
             }),
-            siblingsData = ele.siblings().map(ele => {
+            siblingsData = ele.siblings().map((ele) => {
                 return ele.data();
             });
 
@@ -86,7 +88,7 @@ class Cytoscape extends Component {
             locked,
             position,
             selected,
-            selectable
+            selectable,
         } = ele.json();
 
         let parentData;
@@ -122,7 +124,7 @@ class Cytoscape extends Component {
             isOrphan,
             relativePosition,
             // Styling
-            style
+            style,
         };
         return nodeObject;
     }
@@ -140,15 +142,8 @@ class Cytoscape extends Component {
             targetEndpoint = ele.targetEndpoint();
 
         const {timeStamp} = event;
-        const {
-            classes,
-            data,
-            grabbable,
-            group,
-            locked,
-            selectable,
-            selected
-        } = ele.json();
+        const {classes, data, grabbable, group, locked, selectable, selected} =
+            ele.json();
 
         const edgeObject = {
             // Edges attributes
@@ -169,7 +164,7 @@ class Cytoscape extends Component {
             selectable,
             selected,
             // Styling
-            style
+            style,
         };
 
         return edgeObject;
@@ -212,37 +207,41 @@ class Cytoscape extends Component {
              added/removed from the selectedNodes collection, and then updates
              the selectedNodeData prop.
              */
-            const nodeData = selectedNodes.map(el => el.data());
+            const nodeData = selectedNodes.map((el) => el.data());
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
-                    selectedNodeData: nodeData
+                    selectedNodeData: nodeData,
                 });
             }
         }, SELECT_THRESHOLD);
 
         const sendSelectedEdgesData = _.debounce(() => {
-            const edgeData = selectedEdges.map(el => el.data());
+            const edgeData = selectedEdges.map((el) => el.data());
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
-                    selectedEdgeData: edgeData
+                    selectedEdgeData: edgeData,
                 });
             }
         }, SELECT_THRESHOLD);
 
         // /////////////////////////////////////// EVENTS //////////////////////////////////////////
-        cy.on('grab', 'node', event => {
+        cy.on('grab', 'node', (event) => {
             const nodeObject = this.generateNode(event);
 
             let grabData;
             if (nodeObject.selected && selectedNodes.length) {
-                grabData = selectedNodes.map(el => {
-                    return {node: el.data(), oldCoords: el.relativePosition()}
+                grabData = selectedNodes.map((el) => {
+                    return {node: el.data(), oldCoords: el.relativePosition()};
                 });
             } else {
-                grabData = [{node: nodeObject.data,
-                             oldCoords: nodeObject.relativePosition}]
+                grabData = [
+                    {
+                        node: nodeObject.data,
+                        oldCoords: nodeObject.relativePosition,
+                    },
+                ];
             }
 
             if (typeof this.props.setProps === 'function') {
@@ -257,81 +256,86 @@ class Cytoscape extends Component {
 
             let dragData;
             if (nodeObject.selected && selectedNodes.length) {
-                dragData = selectedNodes.map(el => {
-                    return {node: el.data(), newCoords: el.relativePosition()}
+                dragData = selectedNodes.map((el) => {
+                    return {node: el.data(), newCoords: el.relativePosition()};
                 });
             } else {
-                dragData = [{node: nodeObject.data,
-                             newCoords: nodeObject.relativePosition}]
+                dragData = [
+                    {
+                        node: nodeObject.data,
+                        newCoords: nodeObject.relativePosition,
+                    },
+                ];
             }
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
                     dragNodeData: dragData,
+                    extent: cy.extent(),
                 });
             }
         });
 
-        cy.on('tap', 'node', event => {
+        cy.on('tap', 'node', (event) => {
             const nodeObject = this.generateNode(event);
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
                     tapNode: nodeObject,
-                    tapNodeData: nodeObject.data
+                    tapNodeData: nodeObject.data,
                 });
             }
         });
 
-        cy.on('tap', 'edge', event => {
+        cy.on('tap', 'edge', (event) => {
             const edgeObject = this.generateEdge(event);
 
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
                     tapEdge: edgeObject,
-                    tapEdgeData: edgeObject.data
+                    tapEdgeData: edgeObject.data,
                 });
             }
         });
 
-        cy.on('mouseover', 'node', event => {
+        cy.on('mouseover', 'node', (event) => {
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
-                    mouseoverNodeData: event.target.data()
+                    mouseoverNodeData: event.target.data(),
                 });
             }
         });
 
-        cy.on('mouseover', 'edge', event => {
+        cy.on('mouseover', 'edge', (event) => {
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
-                    mouseoverEdgeData: event.target.data()
+                    mouseoverEdgeData: event.target.data(),
                 });
             }
         });
 
-        cy.on('select', 'node', event => {
+        cy.on('select', 'node', (event) => {
             const ele = event.target;
 
             selectedNodes.merge(ele);
             sendSelectedNodesData();
         });
 
-        cy.on('unselect remove', 'node', event => {
+        cy.on('unselect remove', 'node', (event) => {
             const ele = event.target;
 
             selectedNodes.unmerge(ele);
             sendSelectedNodesData();
         });
 
-        cy.on('select', 'edge', event => {
+        cy.on('select', 'edge', (event) => {
             const ele = event.target;
 
             selectedEdges.merge(ele);
             sendSelectedEdgesData();
         });
 
-        cy.on('unselect remove', 'edge', event => {
+        cy.on('unselect remove', 'edge', (event) => {
             const ele = event.target;
 
             selectedEdges.unmerge(ele);
@@ -340,16 +344,30 @@ class Cytoscape extends Component {
 
         cy.on('add remove', () => {
             refreshLayout();
-            this.updateDegrees(cy)
-        });
-
-        cy.on('zoom', event => {
+            this.updateDegrees(cy);
             if (typeof this.props.setProps === 'function') {
                 this.props.setProps({
-                    scrollZoom: Math.floor(event.target.zoom() * 100) / 100,
+                    extent: cy.extent(),
                 });
             }
         });
+
+        cy.on('zoom', (event) => {
+            if (typeof this.props.setProps === 'function') {
+                this.props.setProps({
+                    scrollZoom: Math.floor(event.target.zoom() * 100) / 100,
+                    extent: cy.extent(),
+                });
+            }
+        });
+
+        cy.on('render', () => {
+            if (typeof this.props.setProps === 'function') {
+                this.props.setProps({
+                    extent: cy.extent(),
+                });
+            }
+        })
 
         this.cyResponsiveClass = new CyResponsive(cy);
         this.cyResponsiveClass.toggle(this.props.responsive);
@@ -362,20 +380,34 @@ class Cytoscape extends Component {
 
         // extension is activating when extra config was used (cyto.load_extra_layouts())
         if (cy.nodeHtmlLabel) {
-            const regex = new RegExp('\\.mark[0-9]+', 'gm') // REGEXP: \.marked[0-9]+
-            cy.nodeHtmlLabel([{
-                query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', // cytoscape query selector
-                halign: 'right', // title vertical position. Can be 'left',''center, 'right'
-                valign: 'center', // title vertical position. Can be 'top',''center, 'bottom'
-                halignBox: 'right', // title vertical position. Can be 'left',''center, 'right'
-                valignBox: 'center', // title relative box vertical position. Can be 'top',''center, 'bottom'
-                cssClass: 'marked_container', // any classes will be as attribute of <div> container for every title
-                tpl: function(data) {
-                    if (data.extra.mark_desc) return '<span style="font-size: 14; margin-left: 3px">' + data.extra.mark_desc + '</span>';
-                }
-            }]);
+            cy.nodeHtmlLabel([
+                {
+                    // cytoscape query selector
+                    query: '.mark1, .mark2, .mark3, .mark4, .mark5, .mark6, .mark7, .mark8, .mark9, .mark10', 
+                    // title vertical position. Can be 'left',''center, 'right'
+                    halign: 'right',
+                    // title vertical position. Can be 'top',''center, 'bottom'
+                    valign: 'center',
+                    // title vertical position. Can be 'left',''center, 'right'
+                    halignBox: 'right',
+                    // title relative box vertical position. Can be 'top',''center, 'bottom'
+                    valignBox: 'center',
+                    // any classes will be as attribute of <div> container for every title
+                    cssClass: 'marked_container',
+                    tpl: function (data) {
+                        if (data.extra.mark_desc) {
+                            return (
+                                '<span style="font-size: 14; margin-left: 3px">' +
+                                data.extra.mark_desc +
+                                '</span>'
+                            );
+                        }
+                        return null;
+                    },
+                },
+            ]);
         }
-        this.updateDegrees(cy)
+        this.updateDegrees(cy);
     }
 
     handleImageGeneration(imageType, imageOptions, actionsToPerform, fileName) {
@@ -413,62 +445,80 @@ class Cytoscape extends Component {
         if (!fileName) {
             fName = 'cyto';
         }
+        const cy = this._cy;
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         const bbox = cy.elements().boundingBox();
-        let minX1 = 0, minY1 = 0, maxX2 = bbox.w * window.devicePixelRatio,
+        let minX1 = 0,
+            minY1 = 0,
+            maxX2 = bbox.w * window.devicePixelRatio,
             maxY2 = bbox.h * window.devicePixelRatio;
         // calculate the required canvas sizes
-        const tooltipList = document.querySelectorAll(".popper-div");
+        const tooltipList = document.querySelectorAll('.popper-div');
         let promisesList = [];
         for (let i = 0; i < tooltipList.length; i++) {
             const tooltip = tooltipList[i];
-            promisesList.push(new Promise(async (resolve, reject) => {
-                const position = await this.cyTooltipsClass.getTooltipPosition(tooltip);
-                const x1 = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * window.devicePixelRatio;
-                const y1 = (position.y - bbox.y1) * window.devicePixelRatio;
-                const x2 = x1 + tooltip.offsetWidth * window.devicePixelRatio;
-                const y2 = y1 + tooltip.offsetHeight * window.devicePixelRatio;
-                minX1 = Math.min(minX1, x1);
-                minY1 = Math.min(minY1, y1);
-                maxX2 = Math.max(maxX2, x2);
-                maxY2 = Math.max(maxY2, y2);
-                resolve(true);
-            }));
+            promisesList.push(
+                // eslint-disable-next-line no-loop-func
+                new Promise(async (resolve) => {
+                    const position =
+                        await this.cyTooltipsClass.getTooltipPosition(tooltip);
+                    const x1 =
+                        (position.x - bbox.x1 - tooltip.offsetWidth / 2) *
+                        window.devicePixelRatio;
+                    const y1 = (position.y - bbox.y1) * window.devicePixelRatio;
+                    const x2 =
+                        x1 + tooltip.offsetWidth * window.devicePixelRatio;
+                    const y2 =
+                        y1 + tooltip.offsetHeight * window.devicePixelRatio;
+                    minX1 = Math.min(minX1, x1);
+                    minY1 = Math.min(minY1, y1);
+                    maxX2 = Math.max(maxX2, x2);
+                    maxY2 = Math.max(maxY2, y2);
+                    resolve(true);
+                })
+            );
         }
-        const markerList = document.querySelectorAll(".marked_container");
+        const markerList = document.querySelectorAll('.marked_container');
         for (let i = 0; i < markerList.length; i++) {
-            promisesList.push(new Promise((resolve, reject) => {
-                const marker = markerList[i];
-                let position = {
-                    x: marker.getAttribute('position-x'),
-                    y: marker.getAttribute('position-y') - marker.offsetHeight / 2,
-                }
-                const x1 = (position.x - bbox.x1) * window.devicePixelRatio;
-                const y1 = (position.y - bbox.y1) * window.devicePixelRatio;
-                const x2 = x1 + marker.offsetWidth * window.devicePixelRatio;
-                const y2 = y1 + marker.offsetHeight * window.devicePixelRatio;
-                minX1 = Math.min(minX1, x1);
-                minY1 = Math.min(minY1, y1);
-                maxX2 = Math.max(maxX2, x2);
-                maxY2 = Math.max(maxY2, y2);
-                resolve(true);
-            }));
+            promisesList.push(
+                // eslint-disable-next-line no-loop-func
+                new Promise((resolve) => {
+                    const marker = markerList[i];
+                    const position = {
+                        x: marker.getAttribute('position-x'),
+                        y:
+                            marker.getAttribute('position-y') -
+                            marker.offsetHeight / 2,
+                    };
+                    const x1 = (position.x - bbox.x1) * window.devicePixelRatio;
+                    const y1 = (position.y - bbox.y1) * window.devicePixelRatio;
+                    const x2 =
+                        x1 + marker.offsetWidth * window.devicePixelRatio;
+                    const y2 =
+                        y1 + marker.offsetHeight * window.devicePixelRatio;
+                    minX1 = Math.min(minX1, x1);
+                    minY1 = Math.min(minY1, y1);
+                    maxX2 = Math.max(maxX2, x2);
+                    maxY2 = Math.max(maxY2, y2);
+                    resolve(true);
+                })
+            );
         }
-        Promise.all(promisesList).then(values => {
+        Promise.all(promisesList).then(() => {
             canvas.width = Math.ceil(Math.abs(minX1 - maxX2));
             canvas.height = Math.ceil(Math.abs(minY1 - maxY2));
             let scale = 1;
             // look at the maximum allowable canvas size and calculate the scale factor
             if (canvas.width > options.maxWidth) {
-                let localScale = canvas.width / options.maxWidth;
+                const localScale = canvas.width / options.maxWidth;
                 scale /= localScale;
                 // we bring the current size to the maximum allowed width
                 canvas.width /= localScale;
                 canvas.height /= localScale;
             }
             if (canvas.height > options.maxHeight) {
-                let localScale = canvas.height / options.maxHeight;
+                const localScale = canvas.height / options.maxHeight;
                 scale /= localScale;
                 // we bring the current size to the maximum allowed height
                 canvas.width /= localScale;
@@ -479,46 +529,88 @@ class Cytoscape extends Component {
             const img = new Image();
             img.onload = function (event) {
                 URL.revokeObjectURL(event.target.src);
-                ctx.drawImage(event.target, Math.abs(minX1) * scale, Math.abs(minY1) * scale);
+                ctx.drawImage(
+                    event.target,
+                    Math.abs(minX1) * scale,
+                    Math.abs(minY1) * scale
+                );
                 promisesList = [];
                 for (let i = 0; i < tooltipList.length; i++) {
-                    promisesList.push(new Promise((resolve, reject) => {
-                        const tooltip = tooltipList[i];
-                        html2canvas(tooltip, {
-                            scale: scale * window.devicePixelRatio / cy.zoom(),
-                            backgroundColor: null
-                        }).then(async (tooltipCanvas) => {
-                            const position = await this.cyTooltipsClass.getTooltipPosition(tooltip);
-                            const dx = (position.x - bbox.x1 - tooltip.offsetWidth / 2) * scale * window.devicePixelRatio + Math.abs(minX1) * scale;
-                            const dy = (position.y - bbox.y1) * scale * window.devicePixelRatio + Math.abs(minY1) * scale;
-                            ctx.drawImage(tooltipCanvas, dx, dy);
-                            resolve(true);
-                        });
-                    }));
+                    promisesList.push(
+                        // eslint-disable-next-line no-loop-func
+                        new Promise((resolve) => {
+                            const tooltip = tooltipList[i];
+                            html2canvas(tooltip, {
+                                scale:
+                                    (scale * window.devicePixelRatio) /
+                                    cy.zoom(),
+                                backgroundColor: null,
+                            }).then(async (tooltipCanvas) => {
+                                const position =
+                                    await this.cyTooltipsClass.getTooltipPosition(
+                                        tooltip
+                                    );
+                                const dx =
+                                    (position.x -
+                                        bbox.x1 -
+                                        tooltip.offsetWidth / 2) *
+                                        scale *
+                                        window.devicePixelRatio +
+                                    Math.abs(minX1) * scale;
+                                const dy =
+                                    (position.y - bbox.y1) *
+                                        scale *
+                                        window.devicePixelRatio +
+                                    Math.abs(minY1) * scale;
+                                ctx.drawImage(tooltipCanvas, dx, dy);
+                                resolve(true);
+                            });
+                        })
+                    );
                 }
                 for (let i = 0; i < markerList.length; i++) {
-                    promisesList.push(new Promise((resolve, reject) => {
-                        const marker = markerList[i];
-                        html2canvas(marker, {
-                            scale: scale * window.devicePixelRatio / cy.zoom(),
-                            backgroundColor: null
-                        }).then((markerCanvas) => {
-                            let position = {
-                                x: marker.getAttribute('position-x'),
-                                y: marker.getAttribute('position-y') - marker.offsetHeight / 2,
-                            }
-                            const dx = (position.x - bbox.x1) * scale * window.devicePixelRatio + Math.abs(minX1) * scale;
-                            const dy = (position.y - bbox.y1) * scale * window.devicePixelRatio + Math.abs(minY1) * scale;
-                            ctx.drawImage(markerCanvas, dx, dy);
-                            resolve(true);
-                        });
-                    }));
+                    promisesList.push(
+                        // eslint-disable-next-line no-loop-func
+                        new Promise((resolve) => {
+                            const marker = markerList[i];
+                            html2canvas(marker, {
+                                scale:
+                                    (scale * window.devicePixelRatio) /
+                                    cy.zoom(),
+                                backgroundColor: null,
+                            }).then((markerCanvas) => {
+                                const position = {
+                                    x: marker.getAttribute('position-x'),
+                                    y:
+                                        marker.getAttribute('position-y') -
+                                        marker.offsetHeight / 2,
+                                };
+                                const dx =
+                                    (position.x - bbox.x1) *
+                                        scale *
+                                        window.devicePixelRatio +
+                                    Math.abs(minX1) * scale;
+                                const dy =
+                                    (position.y - bbox.y1) *
+                                        scale *
+                                        window.devicePixelRatio +
+                                    Math.abs(minY1) * scale;
+                                ctx.drawImage(markerCanvas, dx, dy);
+                                resolve(true);
+                            });
+                        })
+                    );
                 }
                 if (downloadImage) {
-                    Promise.all(promisesList).then(values => {
-                        canvas.toBlob(function (blob) {
-                            this.downloadBlob(blob, fName + '.' + imageType);
-                        }.bind(this));
+                    Promise.all(promisesList).then(() => {
+                        canvas.toBlob(
+                            function (blob) {
+                                this.downloadBlob(
+                                    blob,
+                                    fName + '.' + imageType
+                                );
+                            }.bind(this)
+                        );
                     });
                 }
             }.bind(this);
@@ -532,7 +624,8 @@ class Cytoscape extends Component {
                 img.src = output;
             } else {
                 // image from a single pixel
-                img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+                img.src =
+                    'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
             }
         });
 
@@ -591,17 +684,17 @@ class Cytoscape extends Component {
         document.body.removeChild(downloadLink);
     }
 
-    updateDegrees(cy){
+    updateDegrees(cy) {
         const degrees = cy.nodes().reduce((degrees, node) => {
             degrees[node.id()] = {
                 degree: node.degree(this.props.includeLoopInDegree),
                 inDegree: node.indegree(this.props.includeLoopInDegree),
                 outDegree: node.outdegree(this.props.includeLoopInDegree),
                 totalDegree: node.totalDegree(this.props.includeLoopInDegree),
-            }
-            return degrees
-        }, {})
-        this.props.setProps({ degrees })
+            };
+            return degrees;
+        }, {});
+        this.props.setProps({degrees});
     }
 
     render() {
@@ -631,7 +724,7 @@ class Cytoscape extends Component {
             // Image handling
             generateImage,
             // Responsive graphs
-            responsive
+            responsive,
         } = this.props;
 
         if (Object.keys(generateImage).length > 0) {
@@ -742,14 +835,14 @@ Cytoscape.propTypes = {
                     /** Only for edges. The id of the source node, which is where the edge starts. */
                     source: PropTypes.string,
                     /** Only for edges. The id of the target node, where the edge ends. */
-                    target: PropTypes.string
+                    target: PropTypes.string,
                 }),
                 /** Only for nodes. The position of the node. */
                 position: PropTypes.shape({
                     /** The x-coordinate of the node. */
                     x: PropTypes.number,
                     /** The y-coordinate of the node. */
-                    y: PropTypes.number
+                    y: PropTypes.number,
                 }),
                 /** If the element is selected upon initialisation. */
                 selected: PropTypes.bool,
@@ -763,13 +856,13 @@ Cytoscape.propTypes = {
                  * Space separated string of class names of the element. Those classes can be selected
                  * by a style selector.
                  */
-                classes: PropTypes.string
+                classes: PropTypes.string,
             })
         ),
         PropTypes.exact({
             nodes: PropTypes.array,
-            edges: PropTypes.array
-        })
+            edges: PropTypes.array,
+        }),
     ]),
 
     /**
@@ -793,7 +886,7 @@ Cytoscape.propTypes = {
              * What aspects of the elements you want to modify. This could be the size or
              * color of a node, the shape of an edge arrow, or many more.
              */
-            style: PropTypes.object.isRequired
+            style: PropTypes.object.isRequired,
         })
     ),
 
@@ -849,7 +942,7 @@ Cytoscape.propTypes = {
             'euler',
             'spread',
             'dagre',
-            'klay'
+            'klay',
         ]).isRequired,
         /**  Whether to render the nodes in order to fit the canvas. */
         fit: PropTypes.bool,
@@ -863,7 +956,7 @@ Cytoscape.propTypes = {
          * How to constrain the layout in a specific area. Keys accepted are either
          * `x1, y1, x2, y2` or `x1, y1, w, h`, all of which receive a pixel value.
          */
-        boundingBox: PropTypes.object
+        boundingBox: PropTypes.object,
     }),
 
     // Viewport Manipulation
@@ -876,7 +969,7 @@ Cytoscape.propTypes = {
         /** The x-coordinate of the node */
         x: PropTypes.number,
         /** The y-coordinate of the node  */
-        y: PropTypes.number
+        y: PropTypes.number,
     }),
 
     /**
@@ -986,7 +1079,10 @@ Cytoscape.propTypes = {
         /** Item for compound nodes */
         childrenData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
         /** Item for compound nodes */
-        descendantsData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+        descendantsData: PropTypes.oneOfType([
+            PropTypes.object,
+            PropTypes.array,
+        ]),
         /** Item for compound nodes */
         parentData: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
         /** Item for compound nodes */
@@ -1000,7 +1096,7 @@ Cytoscape.propTypes = {
         /** Item for compound nodes */
         isOrphan: PropTypes.bool,
         /** Item for compound nodes */
-        relativePosition: PropTypes.object
+        relativePosition: PropTypes.object,
     }),
 
     /**
@@ -1043,7 +1139,7 @@ Cytoscape.propTypes = {
         /** General item (for all elements) */
         selected: PropTypes.bool,
         /** General item (for all elements) */
-        style: PropTypes.object
+        style: PropTypes.object,
     }),
 
     /**
@@ -1113,7 +1209,7 @@ Cytoscape.propTypes = {
          */
         action: PropTypes.oneOf(['store', 'download', 'both']),
         /** Name for the file to be downloaded. Default: 'cyto'.*/
-        filename: PropTypes.string
+        filename: PropTypes.string,
     }),
 
     /**
@@ -1147,7 +1243,7 @@ Cytoscape.propTypes = {
             /** Hover tooltip text assigned to option. */
             tooltipText: PropTypes.string,
             /** Toggles option disabled (greyed out). */
-            disabled: PropTypes.bool
+            disabled: PropTypes.bool,
         })
     ),
 
@@ -1214,7 +1310,7 @@ Cytoscape.propTypes = {
             event: PropTypes.string,
             /** Cодержит данные, описывающие тултип, имеет тот же формат, что и элемент списка tooltips. */
             data: PropTypes.object,
-        }),
+        })
     ),
 
     /**
@@ -1225,6 +1321,18 @@ Cytoscape.propTypes = {
      * Если true, то петли учитываются при подсчете степеней.
      */
     includeLoopInDegree: PropTypes.bool,
+    /**     
+     * extent of the viewport, a bounding box in model co-ordinates 
+     * that lets you know what model positions are visible in the viewport. 
+     */
+    extent: PropTypes.exact({
+        x1: PropTypes.number,
+        x2: PropTypes.number,
+        y1: PropTypes.number,
+        y2: PropTypes.number,
+        w: PropTypes.number,
+        h: PropTypes.number,
+    })
 };
 
 Cytoscape.defaultProps = {
@@ -1251,6 +1359,7 @@ Cytoscape.defaultProps = {
     tooltipsData: [],
     degrees: {},
     includeLoopInDegree: false,
+    extent: {},
 };
 
 export default Cytoscape;
